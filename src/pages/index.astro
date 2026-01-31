@@ -1,0 +1,48 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import About from '../components/About.astro';
+import Experience from '../components/Experience.astro';
+import Publications from '../components/Publications.astro';
+import Projects from '../components/Projects.astro';
+import Skills from '../components/Skills.astro';
+import Contact from '../components/Contact.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="Jaime Yan - Senior Statistical Programmer & AI Researcher">
+	<Hero />
+	<About />
+	<Experience />
+	<Publications />
+	<Projects />
+	<Skills />
+	<Contact />
+	<Footer />
+</Layout>
+
+<script>
+	// Smooth scrolling for anchor links
+	document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+		anchor.addEventListener('click', function (e) {
+			const href = this.getAttribute('href');
+			if (href && href !== '#') {
+				e.preventDefault();
+				const target = document.querySelector(href);
+				if (target) {
+					target.scrollIntoView({
+						behavior: 'smooth',
+						block: 'start'
+					});
+				}
+			}
+		});
+	});
+</script>
+
+<style>
+	/* Smooth scroll behavior */
+	html {
+		scroll-behavior: smooth;
+	}
+</style>
