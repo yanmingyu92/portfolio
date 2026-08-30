@@ -1,0 +1,51 @@
+# Syndication pipeline — cross-post blog articles to external platforms.
+#
+# Runs on push to main touching content/posts/**, or manually via workflow_dispatch.
+# API platforms only publish when their secrets are configured; otherwise each
+# adapter runs in dry-run mode and exits 0. Manual platforms always regenerate
+# human-review drafts in review/, uploaded as the `review-drafts` artifact.
+#
+# Required repo secrets (ALL optional — missing secrets just mean dry-run):
+#   DEV_TO_API_KEY           dev.to API key            https://dev.to/settings/extensions
+#   HASHNODE_TOKEN           Hashnode PAT (needs Pro)  https://hashnode.com/settings/developer
+#   HASHNODE_PUBLICATION_ID  Hashnode publication ObjectId
+#   WECHAT_APPID             WeChat Official Account AppID     (mp.weixin.qq.com)
+#   WECHAT_SECRET            WeChat Official Account AppSecret (mp.weixin.qq.com)
+
+name: syndicate
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'content/posts/**'
+
+permissions:
+  contents: read
+
+jobs:
+  syndicate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run syndication pipeline
+        env:
+          DEV_TO_API_KEY: ${{ secrets.DEV_TO_API_KEY }}
+          HASHNODE_TOKEN: ${{ secrets.HASHNODE_TOKEN }}
+          HASHNODE_PUBLICATION_ID: ${{ secrets.HASHNODE_PUBLICATION_ID }}
+          WECHAT_APPID: ${{ secrets.WECHAT_APPID }}
+          WECHAT_SECRET: ${{ secrets.WECHAT_SECRET }}
+        run: node scripts/syndicate/run.mjs
+
+      - name: Upload review drafts
+        uses: actions/upload-artifact@v4
+        with:
+          name: review-drafts
+          path: review/
+          if-no-files-found: ignore

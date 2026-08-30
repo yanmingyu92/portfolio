@@ -1,0 +1,61 @@
+---
+// Individual blog post page.
+import '../../styles/global.css';
+import { getCollection, render } from 'astro:content';
+import { getPublication } from '../../data/publications';
+
+export async function getStaticPaths() {
+	const posts = await getCollection('posts', ({ data }) => !data.draft);
+	return posts.map(post => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const canonical = `https://jaimeyan.com/blog/${post.id}.html`;
+const related = post.data.paperRef ? getPublication(post.data.paperRef) : undefined;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<title>{post.data.title} — Jaime Yan</title>
+		<meta name="description" content={post.data.description} />
+		<link rel="canonical" href={canonical} />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta property="og:type" content="article" />
+		<meta property="og:url" content={canonical} />
+		<meta property="og:title" content={post.data.title} />
+		<meta property="og:description" content={post.data.description} />
+		<meta property="og:image" content="https://jaimeyan.com/og.png" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+	</head>
+	<body class="bg-[#fafaf9] text-stone-900">
+		<main class="max-w-3xl mx-auto px-6 py-16 sm:py-24">
+			<a href="/blog.html" class="text-sm text-stone-500 hover:text-stone-900 transition-colors">← All posts</a>
+			<p class="mt-10 text-xs font-mono text-stone-500">{post.data.date.toISOString().slice(0, 10)}</p>
+			<h1 class="mt-2 font-display text-3xl sm:text-4xl font-medium tracking-tight leading-tight">{post.data.title}</h1>
+
+			<article class="prose-custom mt-8 leading-relaxed text-stone-700">
+				<Content />
+			</article>
+
+			{related && (
+				<aside class="mt-12 border-l-2 border-rose-300 pl-4">
+					<p class="text-xs font-semibold uppercase tracking-widest text-stone-500 mb-1">Related publication</p>
+					<a href={`/papers/${related.slug}.html`} class="text-rose-800 hover:underline font-medium">{related.title}</a>
+					<p class="text-sm text-stone-500 mt-1">{related.venue} · {related.date.slice(0, 4)}</p>
+				</aside>
+			)}
+
+			<p class="mt-10 text-sm text-stone-500">
+				Originally published at <a href={canonical} class="text-rose-800 hover:underline">jaimeyan.com</a>.
+			</p>
+		</main>
+	</body>
+</html>

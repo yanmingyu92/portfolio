@@ -1,22 +1,112 @@
 ---
 import '../styles/global.css';
 
-const { title = 'Jaime Yan - Senior Statistical Programmer & AI Researcher' } = Astro.props;
+const { title = 'Jaime Yan — Clinical Data Science Lead | Associate Director, Statistical Programming' } = Astro.props;
+
+const navLinks = [
+	{ href: '#about', label: 'About' },
+	{ href: '#experience', label: 'Experience' },
+	{ href: '#publications', label: 'Publications' },
+	{ href: '#projects', label: 'Projects' },
+	{ href: '#skills-pipeline', label: 'Expertise' },
+	{ href: '/blog.html', label: 'Blog' },
+	{ href: '#contact', label: 'Contact' },
+];
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="description" content="Jaime Yan - Senior Statistical Programmer at Merck, PhD Candidate in Data Science, expert in AI/LLM applications in clinical trials" />
+		<meta name="description" content="Jaime Yan — Clinical Data Science Lead and Associate Director of Statistical Programming at Kardigan. NDA statistical programming lead for FDA-approved LIPFENDRA (enlicitide); researcher in AI/LLM applications for clinical trials." />
 		<meta name="viewport" content="width=device-width" />
+		<link rel="canonical" href="https://jaimeyan.com/" />
+		<link rel="alternate" type="application/rss+xml" title="Jaime Yan — Research & Writing" href="/rss.xml" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png" />
+		<link rel="apple-touch-icon" href="/favicon-512.png" />
+		<meta name="theme-color" content="#1c1917" />
+
+		<!-- Open Graph -->
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content="https://jaimeyan.com/" />
+		<meta property="og:title" content="Jaime Yan — Clinical Data Science Lead" />
+		<meta property="og:description" content="NDA statistical programming lead for FDA-approved LIPFENDRA (enlicitide). AI/LLM research for clinical trial automation. 2 journal papers · 13 conference papers · 30+ research outputs." />
+		<meta property="og:image" content="https://jaimeyan.com/og.png" />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+
+		<!-- Twitter -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content="Jaime Yan — Clinical Data Science Lead" />
+		<meta name="twitter:description" content="NDA statistical programming lead for FDA-approved LIPFENDRA (enlicitide). AI/LLM research for clinical trial automation." />
+		<meta name="twitter:image" content="https://jaimeyan.com/og.png" />
+
+		<!-- Structured data -->
+		<script type="application/ld+json">
+		{
+			"@context": "https://schema.org",
+			"@type": "Person",
+			"name": "Jaime Yan",
+			"url": "https://jaimeyan.com/",
+			"email": "mailto:yanmingyunmt@gmail.com",
+			"jobTitle": "Associate Director, Statistical Programming",
+			"description": "Clinical Data Science Lead — statistical programming, AI/LLM automation, and regulatory submissions for clinical trials.",
+			"worksFor": { "@type": "Organization", "name": "Kardigan, Inc." },
+			"alumniOf": { "@type": "CollegeOrUniversity", "name": "Harrisburg University of Science and Technology" },
+			"sameAs": [
+				"https://github.com/yanmingyu92",
+				"https://www.linkedin.com/in/jaime-y-66312a133/",
+				"https://scholar.google.com/citations?user=vo1hv04AAAAJ"
+				// TODO: add ORCID iD URL here once registered (https://orcid.org/0000-...)
+			]
+		}
+		</script>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
 	</head>
-	<body class="bg-gray-50 text-gray-900">
-		<div class="min-h-screen">
+	<body class="bg-[#fafaf9] text-stone-900">
+		<header class="fixed top-0 inset-x-0 z-50 bg-[#fafaf9]/90 backdrop-blur-md border-b border-stone-200">
+			<nav class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
+				<a href="#top" class="font-display text-lg font-semibold tracking-tight text-stone-900">
+					Jaime Yan
+				</a>
+				<div class="hidden md:flex items-center gap-7">
+					{navLinks.map(link => (
+						<a href={link.href} class="text-sm text-stone-500 hover:text-stone-900 transition-colors">{link.label}</a>
+					))}
+					<a href="/Jaime_Yan_Resume.pdf" download="Jaime_Yan_Resume.pdf" class="text-sm font-medium text-white bg-stone-900 hover:bg-stone-700 px-4 py-2 rounded-md transition-colors">
+						Résumé
+					</a>
+				</div>
+				<button id="mobile-menu-btn" class="md:hidden p-2 text-stone-600" aria-label="Open menu">
+					<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
+				</button>
+			</nav>
+			<div id="mobile-menu" class="hidden md:hidden border-t border-stone-200 bg-[#fafaf9]">
+				<div class="px-6 py-4 flex flex-col gap-3">
+					{navLinks.map(link => (
+						<a href={link.href} class="text-sm text-stone-600 hover:text-stone-900">{link.label}</a>
+					))}
+					<a href="/Jaime_Yan_Resume.pdf" download="Jaime_Yan_Resume.pdf" class="text-sm font-medium text-rose-800">
+						Download Résumé (PDF)
+					</a>
+				</div>
+			</div>
+		</header>
+		<div class="min-h-screen" id="top">
 			<slot />
 		</div>
+
+		<script>
+			const btn = document.getElementById('mobile-menu-btn');
+			const menu = document.getElementById('mobile-menu');
+			btn?.addEventListener('click', () => menu?.classList.toggle('hidden'));
+			menu?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => menu.classList.add('hidden')));
+		</script>
 	</body>
 </html>

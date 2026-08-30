@@ -1,72 +1,114 @@
 ---
-// Experience Section Component
+// Experience Section — date-left editorial timeline
 ---
 
-<section id="experience" class="py-20 bg-gray-50">
-	<div class="max-w-6xl mx-auto px-6">
-		<h2 class="text-4xl font-bold text-center mb-12 text-gray-900">Professional Experience</h2>
+<section id="experience" class="py-20 sm:py-24 bg-white border-y border-stone-200">
+	<div class="max-w-5xl mx-auto px-6">
+		<p class="eyebrow mb-2">Experience</p>
+		<h2 class="font-display text-3xl sm:text-4xl font-medium tracking-tight text-stone-900 mb-12">
+			Professional Experience
+		</h2>
 
-		<div class="space-y-8">
+		<div>
+			<!-- Kardigan -->
+			<div class="grid md:grid-cols-[220px_1fr] gap-4 md:gap-10 py-8 border-t border-stone-200">
+				<div class="text-sm">
+					<p class="font-medium text-stone-900">May 2026 — Present</p>
+					<p class="text-stone-500">Kardigan, Inc. · Princeton, NJ</p>
+				</div>
+				<div>
+					<h3 class="text-xl font-semibold text-stone-900 mb-3">Associate Director, Statistical Programming</h3>
+					<ul class="space-y-2 text-stone-600 text-[15px] leading-relaxed list-disc list-outside ml-4 marker:text-stone-300">
+						<li><span class="text-stone-900 font-medium">Statistical programming lead for the tonlamarsen program</span> — investigational antisense therapy for uncontrolled hypertension; KARDINAL Phase 2 published in <em>JACC</em> 2026</li>
+						<li>Lead analysis datasets, TLFs, define.xml, and regulatory-ready eSubmission packages for Phase 2 and later-stage trials</li>
+						<li>Architected enterprise clinical analytics &amp; AI platforms; established a standardized, reproducible analytics environment under 21 CFR Part 11 / GAMP 5</li>
+					</ul>
+				</div>
+			</div>
+
 			<!-- Merck -->
-			<div class="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow">
-				<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
-					<h3 class="text-2xl font-bold text-gray-900">Senior Statistical Programmer</h3>
-					<span class="text-blue-600 font-semibold">Rahway, NJ</span>
+			<div class="grid md:grid-cols-[220px_1fr] gap-4 md:gap-10 py-8 border-t border-stone-200">
+				<div class="text-sm">
+					<p class="font-medium text-stone-900">Nov 2021 — Apr 2026</p>
+					<p class="text-stone-500">Merck &amp; Co., Inc. · Rahway, NJ</p>
 				</div>
-				<p class="text-xl text-blue-700 font-semibold mb-4">Merck & Co., Inc.</p>
-				<ul class="text-gray-700 space-y-2">
-					<li class="flex items-start gap-2">
-						<span class="text-blue-600 mt-1">▸</span>
-						<span>Lead statistical programming for clinical trials using SAS and R</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<span class="text-blue-600 mt-1">▸</span>
-						<span>Develop AI/LLM solutions to automate TLF generation workflows</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<span class="text-blue-600 mt-1">▸</span>
-						<span>Implement CDISC SDTM and ADaM standards for clinical data</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<span class="text-blue-600 mt-1">▸</span>
-						<span>Collaborate with cross-functional teams on data analysis and reporting</span>
-					</li>
-				</ul>
+				<div>
+					<h3 class="text-xl font-semibold text-stone-900 mb-3">Senior Scientist, Statistical Programming</h3>
+					<ul class="space-y-2 text-stone-600 text-[15px] leading-relaxed list-disc list-outside ml-4 marker:text-stone-300">
+						<li><span class="text-stone-900 font-medium">NDA statistical programming lead for LIPFENDRA&reg; (enlicitide / MK-0616)</span> — first and only oral PCSK9 inhibitor, FDA-approved July 16, 2026; Phase 2b lead (<em>JACC</em> 2023), pivotal Phase 3 CORALreef program (<em>NEJM</em> 2026; CVOT ~14,550 participants)</li>
+						<li>Led NDA/BLA eSubmission packages — Define-XML v2.1, reviewer's guides, eCTD, ADRG — in a 21 CFR Part 11 validated environment</li>
+						<li>Led GenAI automation initiatives (enterprise LLM/RAG platform); created py4csr, the open-source Python framework for clinical study reporting; CRO vendor oversight; SAS-to-R migration tooling</li>
+					</ul>
+				</div>
 			</div>
 
-			<!-- Academic Experience -->
-			<div class="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow">
-				<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
-					<h3 class="text-2xl font-bold text-gray-900">PhD Candidate - Data Science</h3>
-					<span class="text-blue-600 font-semibold">Harrisburg, PA</span>
+			<!-- Regeneron -->
+			<div class="grid md:grid-cols-[220px_1fr] gap-4 md:gap-10 py-8 border-t border-stone-200">
+				<div class="text-sm">
+					<p class="font-medium text-stone-900">Jun 2020 — Nov 2021</p>
+					<p class="text-stone-500">Regeneron Pharmaceuticals · Basking Ridge, NJ</p>
 				</div>
-				<p class="text-xl text-blue-700 font-semibold mb-4">Harrisburg University of Science and Technology</p>
-				<ul class="text-gray-700 space-y-2">
-					<li class="flex items-start gap-2">
-						<span class="text-blue-600 mt-1">▸</span>
-						<span>Research: AI/LLM applications in clinical trial statistical programming</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<span class="text-blue-600 mt-1">▸</span>
-						<span>Dissertation: ClinAgent - Autonomous architecture for clinical programming automation</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<span class="text-blue-600 mt-1">▸</span>
-						<span>Published 12+ peer-reviewed papers in top conferences and journals</span>
-					</li>
-				</ul>
+				<div>
+					<h3 class="text-xl font-semibold text-stone-900 mb-3">Senior Statistical Programmer</h3>
+					<ul class="space-y-2 text-stone-600 text-[15px] leading-relaxed list-disc list-outside ml-4 marker:text-stone-300">
+						<li>SDTM/ADaM development for Phase 1–3 oncology trials (solid tumors, dose escalation); RECIST 1.1 endpoints</li>
+						<li>DSMB ad-hoc analyses; external vendor data integration to submission quality</li>
+					</ul>
+				</div>
 			</div>
 
-			<!-- Previous Experience -->
-			<div class="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow">
-				<h3 class="text-2xl font-bold text-gray-900 mb-4">Previous Roles</h3>
-				<div class="space-y-4">
-					<div class="border-l-4 border-blue-600 pl-4">
-						<p class="font-semibold text-gray-900">Statistical Programmer / Data Scientist</p>
-						<p class="text-gray-600">Multiple pharmaceutical and healthcare organizations</p>
-						<p class="text-sm text-gray-500 mt-1">Specialized in statistical analysis, clinical trial programming, and data science applications</p>
-					</div>
+			<!-- Boehringer Ingelheim -->
+			<div class="grid md:grid-cols-[220px_1fr] gap-4 md:gap-10 py-8 border-t border-stone-200">
+				<div class="text-sm">
+					<p class="font-medium text-stone-900">Feb 2018 — Jun 2020</p>
+					<p class="text-stone-500">Boehringer Ingelheim · Ridgefield, CT</p>
 				</div>
+				<div>
+					<h3 class="text-xl font-semibold text-stone-900 mb-3">Statistical Programmer</h3>
+					<ul class="space-y-2 text-stone-600 text-[15px] leading-relaxed list-disc list-outside ml-4 marker:text-stone-300">
+						<li>ISE/ISS pooled datasets for oncology and cardiovascular regulatory submissions</li>
+						<li>Reusable SAS macro libraries; CDISC TAUG development; DaVinci open-source R Shiny visualization; automated Pinnacle 21 compliance workflows</li>
+					</ul>
+				</div>
+			</div>
+
+			<!-- Talentech -->
+			<div class="grid md:grid-cols-[220px_1fr] gap-4 md:gap-10 py-8 border-t border-b border-stone-200">
+				<div class="text-sm">
+					<p class="font-medium text-stone-900">May 2017 — Feb 2018</p>
+					<p class="text-stone-500">Talentech · Monmouth Junction, NJ</p>
+				</div>
+				<div>
+					<h3 class="text-xl font-semibold text-stone-900 mb-3">SAS Programmer</h3>
+					<ul class="space-y-2 text-stone-600 text-[15px] leading-relaxed list-disc list-outside ml-4 marker:text-stone-300">
+						<li>TLF generation on standard ADaM datasets (ADSL, ADLB, ADAE, ADTTE, ADRS) with strict CDISC compliance; core SAS macro development</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<!-- Selected highlights -->
+		<h3 class="font-display text-2xl font-medium tracking-tight text-stone-900 mt-16 mb-8">Selected Highlights</h3>
+		<div class="grid sm:grid-cols-2 gap-x-10 gap-y-8">
+			<div class="border-t-2 border-stone-900 pt-4">
+				<p class="text-xs font-semibold uppercase tracking-widest text-stone-500 mb-2">Regulatory</p>
+				<p class="font-medium text-stone-900 mb-1">First-in-class NDA, end to end</p>
+				<p class="text-sm text-stone-600 leading-relaxed">Statistical programming lead from Phase 2b through pivotal Phase 3 to FDA approval of LIPFENDRA&reg; — Define-XML v2.1, reviewer's guides, eCTD, and ADRG delivered with full CDISC compliance.</p>
+			</div>
+			<div class="border-t-2 border-stone-900 pt-4">
+				<p class="text-xs font-semibold uppercase tracking-widest text-stone-500 mb-2">GenAI</p>
+				<p class="font-medium text-stone-900 mb-1">Enterprise AI automation</p>
+				<p class="text-sm text-stone-600 leading-relaxed">Led GenAI automation initiatives including an enterprise LLM/RAG platform; architected agentic systems (ClinAgent, GxP-Agent) published in peer-reviewed journals.</p>
+			</div>
+			<div class="border-t-2 border-stone-900 pt-4">
+				<p class="text-xs font-semibold uppercase tracking-widest text-stone-500 mb-2">Open Source</p>
+				<p class="font-medium text-stone-900 mb-1">Tools the industry uses</p>
+				<p class="text-sm text-stone-600 leading-relaxed">Creator of py4csr (PyPI); contributor to CRAN packages r2rtf, metalite, metalite.ae, forestly, boxly, gsDesign/gsDesign2; esubpack for the R Consortium R Submission Pilot 1.</p>
+			</div>
+			<div class="border-t-2 border-stone-900 pt-4">
+				<p class="text-xs font-semibold uppercase tracking-widest text-stone-500 mb-2">Visualization</p>
+				<p class="font-medium text-stone-900 mb-1">Enterprise analytics platforms</p>
+				<p class="text-sm text-stone-600 leading-relaxed">Enterprise data visualization and AI tools for automated clinical trial reporting; interactive DMC reporting on the metalite/forestly/boxly R ecosystem.</p>
 			</div>
 		</div>
 	</div>

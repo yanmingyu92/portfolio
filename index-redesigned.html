@@ -1,0 +1,1817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jaime Yan - Associate Principal Scientist, Statistical Programming</title>
+    <meta name="description" content="Jaime Yan - Senior Statistical Programmer at Merck, PhD Candidate in Data Science, expert in AI/LLM applications in clinical trials">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ===== IMPROVED DESIGN SYSTEM ===== */
+        :root {
+            /* Enhanced color palette - keeping blue base but more sophisticated */
+            --color-primary: oklch(0.55 0.18 240); /* Rich blue */
+            --color-primary-light: oklch(0.65 0.15 240);
+            --color-primary-dark: oklch(0.40 0.20 240);
+
+            --color-secondary: oklch(0.60 0.18 280); /* Purple */
+            --color-accent: oklch(0.65 0.18 45); /* Warm gold */
+
+            --color-neutral-50: oklch(0.98 0.01 85);
+            --color-neutral-100: oklch(0.95 0.01 85);
+            --color-neutral-200: oklch(0.90 0.01 85);
+            --color-neutral-300: oklch(0.80 0.01 85);
+            --color-neutral-700: oklch(0.40 0.02 85);
+            --color-neutral-800: oklch(0.30 0.02 85);
+            --color-neutral-900: oklch(0.20 0.02 85);
+
+            /* Typography */
+            --font-heading: 'Plus Jakarta Sans', -apple-system, sans-serif;
+            --font-body: 'Source Sans Pro', -apple-system, sans-serif;
+
+            /* Spacing */
+            --space-xs: 8px;
+            --space-sm: 16px;
+            --space-md: 24px;
+            --space-lg: 32px;
+            --space-xl: 48px;
+            --space-2xl: 64px;
+            --space-3xl: 96px;
+
+            /* Border radius */
+            --radius-sm: 6px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+
+            /* Transitions */
+            --transition-base: 300ms ease-out;
+
+            /* Shadows */
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.10);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+            --shadow-xl: 0 12px 32px rgba(0, 0, 0, 0.15);
+        }
+
+        /* ===== RESET & BASE ===== */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--color-neutral-900);
+            background: var(--color-neutral-50);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ===== TYPOGRAPHY ===== */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            line-height: 1.2;
+            color: var(--color-neutral-900);
+            text-wrap: pretty;
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            letter-spacing: -0.01em;
+        }
+
+        h3 {
+            font-size: clamp(1.25rem, 2vw, 1.75rem);
+            font-weight: 600;
+        }
+
+        h4 {
+            font-size: clamp(1.1rem, 1.5vw, 1.3rem);
+            font-weight: 600;
+        }
+
+        p {
+            font-size: clamp(1rem, 1.5vw, 1.125rem);
+            color: var(--color-neutral-700);
+            text-wrap: pretty;
+        }
+
+        a {
+            color: var(--color-primary);
+            text-decoration: none;
+            transition: color var(--transition-base);
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        /* ===== CONTAINER ===== */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 var(--space-md);
+        }
+
+        .section {
+            padding: var(--space-3xl) 0;
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            position: relative;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+            color: white;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 32px 32px;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: var(--space-3xl) var(--space-md);
+            text-align: center;
+        }
+
+        .hero h1 {
+            color: white;
+            margin-bottom: var(--space-md);
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.25rem, 2vw, 1.75rem);
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: var(--space-sm);
+            font-weight: 500;
+        }
+
+        .hero-tagline {
+            font-size: 1.125rem;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: var(--space-xl);
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: var(--space-md);
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm) var(--space-lg);
+            border-radius: var(--radius-lg);
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all var(--transition-base);
+            cursor: pointer;
+            border: none;
+            font-family: var(--font-heading);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #9333ea 0%, #7c3aed 100%);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+        }
+
+        .btn-outline {
+            background: white;
+            color: var(--color-primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--color-neutral-50);
+            transform: translateY(-2px);
+        }
+
+        /* ===== STATS BAR ===== */
+        .stats-bar {
+            background: white;
+            padding: var(--space-xl) 0;
+            border-bottom: 1px solid var(--color-neutral-200);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-lg);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: var(--font-heading);
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            line-height: 1;
+            margin-bottom: var(--space-xs);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--color-neutral-700);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* ===== SKILLS PIPELINE SECTION ===== */
+        .skills-pipeline {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skills-pipeline::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        .skills-pipeline .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .skills-pipeline h2 {
+            color: white;
+            text-align: center;
+            margin-bottom: var(--space-md);
+        }
+
+        .skills-pipeline > .container > p {
+            color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto var(--space-xl);
+        }
+
+        .pipeline-flow {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-lg);
+            margin-bottom: var(--space-2xl);
+        }
+
+        .pipeline-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-xl);
+            padding: var(--space-lg);
+            transition: all var(--transition-base);
+        }
+
+        .pipeline-card:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            transform: translateY(-4px);
+        }
+
+        .pipeline-card-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: var(--space-md);
+            font-size: 2rem;
+        }
+
+        .pipeline-card h3 {
+            color: white;
+            margin-bottom: var(--space-sm);
+        }
+
+        .pipeline-card p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            margin-bottom: var(--space-md);
+        }
+
+        .pipeline-card ul {
+            margin-top: var(--space-md);
+        }
+
+        .pipeline-card li {
+            padding: var(--space-xs) 0;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+
+        .pipeline-card li::before {
+            content: '▸';
+            color: var(--color-accent);
+        }
+
+        .pipeline-cta {
+            text-align: center;
+            margin-top: var(--space-xl);
+        }
+
+        /* ===== ABOUT SECTION ===== */
+        .about {
+            background: white;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-2xl);
+            align-items: start;
+        }
+
+        .about-content h2 {
+            text-align: center;
+            margin-bottom: var(--space-lg);
+        }
+
+        .about-content p {
+            margin-bottom: var(--space-md);
+        }
+
+        .about-highlight {
+            background: linear-gradient(135deg, var(--color-neutral-50) 0%, var(--color-neutral-100) 100%);
+            padding: var(--space-lg);
+            border-radius: var(--radius-xl);
+            border-left: 4px solid var(--color-primary);
+            margin-bottom: var(--space-md);
+        }
+
+        .expertise-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-sm);
+        }
+
+        .tag {
+            background: var(--color-neutral-200);
+            color: var(--color-neutral-900);
+            padding: var(--space-xs) var(--space-md);
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .tag.primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .tag.accent {
+            background: var(--color-accent);
+            color: white;
+        }
+
+        .about-sidebar {
+            background: linear-gradient(135deg, var(--color-neutral-50) 0%, var(--color-neutral-100) 100%);
+            padding: var(--space-xl);
+            border-radius: var(--radius-xl);
+        }
+
+        .about-sidebar h3 {
+            margin-bottom: var(--space-md);
+        }
+
+        .about-item {
+            margin-bottom: var(--space-md);
+        }
+
+        .about-item strong {
+            display: block;
+            color: var(--color-primary);
+            margin-bottom: var(--space-xs);
+        }
+
+        /* ===== EXPERIENCE SECTION ===== */
+        .experience {
+            background: var(--color-neutral-50);
+        }
+
+        .experience h2 {
+            text-align: center;
+            margin-bottom: var(--space-xl);
+        }
+
+        .experience-grid {
+            display: grid;
+            gap: var(--space-lg);
+        }
+
+        .experience-card {
+            background: white;
+            padding: var(--space-lg);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-md);
+            transition: all var(--transition-base);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .experience-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform var(--transition-base);
+        }
+
+        .experience-card:hover {
+            box-shadow: var(--shadow-xl);
+            transform: translateY(-4px);
+        }
+
+        .experience-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .experience-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--space-md);
+            gap: var(--space-md);
+        }
+
+        .experience-title h3 {
+            margin-bottom: var(--space-xs);
+        }
+
+        .experience-badge {
+            background: var(--color-primary);
+            color: white;
+            padding: var(--space-xs) var(--space-md);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            white-space: nowrap;
+        }
+
+        .experience-list {
+            margin-top: var(--space-md);
+        }
+
+        .experience-list li {
+            padding: var(--space-xs) 0;
+            color: var(--color-neutral-700);
+            display: flex;
+            align-items: start;
+            gap: var(--space-sm);
+        }
+
+        .experience-list li::before {
+            content: '→';
+            color: var(--color-primary);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        /* ===== PUBLICATIONS SECTION ===== */
+        .publications {
+            background: white;
+        }
+
+        .publications h2 {
+            text-align: center;
+            margin-bottom: var(--space-md);
+        }
+
+        .publications > .container > p {
+            text-align: center;
+            margin-bottom: var(--space-2xl);
+        }
+
+        .pub-category {
+            margin-bottom: var(--space-2xl);
+        }
+
+        .pub-category-title {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
+        }
+
+        .pub-category-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .pub-card {
+            background: var(--color-neutral-50);
+            padding: var(--space-lg);
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--space-md);
+            transition: all var(--transition-base);
+            border: 1px solid var(--color-neutral-200);
+        }
+
+        .pub-card:hover {
+            box-shadow: var(--shadow-md);
+            border-color: var(--color-primary);
+        }
+
+        .pub-date {
+            font-size: 0.875rem;
+            font-weight: 700;
+            margin-bottom: var(--space-xs);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .pub-card h4 {
+            margin-bottom: var(--space-sm);
+        }
+
+        .pub-card p {
+            font-size: 0.95rem;
+            margin-bottom: var(--space-sm);
+        }
+
+        .pub-link {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .pub-link:hover {
+            gap: var(--space-sm);
+        }
+
+        .pub-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: var(--space-md);
+        }
+
+        /* ===== PROJECTS SECTION ===== */
+        .projects {
+            background: var(--color-neutral-50);
+        }
+
+        .projects h2 {
+            text-align: center;
+            margin-bottom: var(--space-md);
+        }
+
+        .projects > .container > p {
+            text-align: center;
+            margin-bottom: var(--space-2xl);
+        }
+
+        .featured-project {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-radius: var(--radius-xl);
+            padding: var(--space-2xl);
+            margin-bottom: var(--space-2xl);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .featured-project::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .featured-project > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .featured-badge {
+            display: inline-block;
+            background: var(--color-accent);
+            color: #0f172a;
+            padding: var(--space-xs) var(--space-md);
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.875rem;
+            margin-bottom: var(--space-md);
+        }
+
+        .featured-project h3 {
+            color: white;
+            font-size: clamp(1.75rem, 3vw, 2.5rem);
+            margin-bottom: var(--space-md);
+        }
+
+        .featured-project p {
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: var(--space-lg);
+        }
+
+        .featured-impact {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-md);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            margin-bottom: var(--space-lg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .impact-item strong {
+            display: block;
+            margin-bottom: var(--space-xs);
+            font-size: 0.875rem;
+        }
+
+        .impact-item p {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .featured-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
+        }
+
+        .metric-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: var(--space-md);
+            border-radius: var(--radius-lg);
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: var(--space-xs);
+        }
+
+        .metric-label {
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: var(--space-lg);
+        }
+
+        .project-card {
+            background: white;
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: all var(--transition-base);
+        }
+
+        .project-card:hover {
+            box-shadow: var(--shadow-xl);
+            transform: translateY(-4px);
+        }
+
+        .project-card-header {
+            padding: var(--space-lg);
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .project-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .project-card-body {
+            padding: 0 var(--space-lg) var(--space-lg);
+        }
+
+        .project-card-body p {
+            font-size: 0.95rem;
+            margin-bottom: var(--space-sm);
+        }
+
+        .project-pipeline {
+            background: var(--color-neutral-50);
+            border-radius: var(--radius-lg);
+            padding: var(--space-md);
+            margin-bottom: var(--space-md);
+        }
+
+        .project-pipeline > p {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--color-neutral-700);
+            margin-bottom: var(--space-sm);
+        }
+
+        .pipeline-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+
+        .pipeline-step {
+            text-align: center;
+            flex: 1;
+        }
+
+        .pipeline-step-num {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--space-xs);
+            font-weight: 700;
+            font-size: 0.875rem;
+        }
+
+        .pipeline-step p {
+            font-size: 0.75rem;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-xs);
+            margin-bottom: var(--space-md);
+        }
+
+        .project-tag {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .project-link {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .project-link:hover {
+            gap: var(--space-sm);
+        }
+
+        /* ===== CONTACT SECTION ===== */
+        .contact {
+            background: var(--color-neutral-50);
+        }
+
+        .contact h2 {
+            text-align: center;
+            margin-bottom: var(--space-md);
+        }
+
+        .contact > .container > p {
+            text-align: center;
+            margin-bottom: var(--space-2xl);
+        }
+
+        .contact-resume {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            border: 2px solid #10b981;
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+            text-align: center;
+            margin-bottom: var(--space-2xl);
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-lg);
+        }
+
+        .contact-card {
+            background: white;
+            padding: var(--space-lg);
+            border-radius: var(--radius-xl);
+            text-align: center;
+            box-shadow: var(--shadow-md);
+            transition: all var(--transition-base);
+        }
+
+        .contact-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-4px);
+        }
+
+        .contact-card-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--space-md);
+            font-size: 1.75rem;
+        }
+
+        .contact-card h4 {
+            margin-bottom: var(--space-xs);
+        }
+
+        .contact-card p {
+            font-size: 0.95rem;
+        }
+
+        .contact-tags {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: var(--space-sm);
+            margin-top: var(--space-2xl);
+        }
+
+        .contact-tag {
+            padding: var(--space-xs) var(--space-md);
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            background: var(--color-neutral-900);
+            color: white;
+            padding: var(--space-xl) 0;
+            text-align: center;
+        }
+
+        .footer p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .footer-social {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-md);
+            margin-top: var(--space-md);
+        }
+
+        .footer-social a {
+            color: rgba(255, 255, 255, 0.6);
+            transition: color var(--transition-base);
+        }
+
+        .footer-social a:hover {
+            color: white;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .project-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pipeline-flow {
+                grid-template-columns: 1fr;
+            }
+
+            .experience-header {
+                flex-direction: column;
+            }
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content animate-in">
+            <h1>Jaime Yan</h1>
+            <p class="hero-subtitle">Associate Principal Scientist, Statistical Programming @ Merck</p>
+            <p class="hero-tagline">PhD Candidate in Data Science | AI/LLM Researcher | Clinical Trials Automation Expert | 9+ years in CV & Oncology therapeutic areas</p>
+            <div class="hero-cta">
+                <a href="./Resume_Jaime_pg_dom.pdf" download="Jaime_Yan_Resume.pdf" class="btn btn-primary">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    Download Resume
+                </a>
+                <a href="#skills-pipeline" class="btn btn-secondary">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    View Technical Pipeline
+                </a>
+                <a href="#publications" class="btn btn-outline">
+                    Publications
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Bar -->
+    <section class="stats-bar">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value">9+</div>
+                    <div class="stat-label">Years Experience</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">12+</div>
+                    <div class="stat-label">Publications</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">3</div>
+                    <div class="stat-label">Therapeutic Areas</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">Lead</div>
+                    <div class="stat-label">NDA/BLA Submissions</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Pipeline Section -->
+    <section id="skills-pipeline" class="section skills-pipeline">
+        <div class="container">
+            <h2>Technical Competency Pipeline</h2>
+            <p>End-to-end expertise in clinical trial programming, from traditional SAS to modern GenAI automation</p>
+            <p style="margin-top: var(--space-sm); font-size: 0.9rem; opacity: 0.7;">Key Member of Merck Programming Initiative Teams</p>
+
+            <div class="pipeline-flow">
+                <div class="pipeline-card">
+                    <div class="pipeline-card-icon" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);">
+                        💻
+                    </div>
+                    <h3>Multi-Language Programming</h3>
+                    <p>SAS · R · Python</p>
+                    <ul>
+                        <li>CDISC SDTM & ADaM Standards</li>
+                        <li>TLF Generation & Validation</li>
+                        <li>Cross-Language Integration</li>
+                    </ul>
+                </div>
+
+                <div class="pipeline-card">
+                    <div class="pipeline-card-icon" style="background: linear-gradient(135deg, #9333ea 0%, #7c3aed 100%);">
+                        🤖
+                    </div>
+                    <h3>GenAI & Automation</h3>
+                    <p>LLMs · Automation Agents</p>
+                    <ul>
+                        <li>GenAI Code Conversion (SAS ↔ R)</li>
+                        <li>Autonomous Programming Agents</li>
+                        <li>LLM-Powered Code Review</li>
+                    </ul>
+                </div>
+
+                <div class="pipeline-card">
+                    <div class="pipeline-card-icon" style="background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);">
+                        📊
+                    </div>
+                    <h3>Interactive Visualization</h3>
+                    <p>Dash · Shiny · HTML/JS</p>
+                    <ul>
+                        <li>Python Dash Applications</li>
+                        <li>R Shiny Interactive Dashboards</li>
+                        <li>HTML/JavaScript Data Displays</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pipeline-cta">
+                <a href="#projects" class="btn btn-primary" style="background: linear-gradient(135deg, #3b82f6 0%, #9333ea 100%); display: inline-flex;">
+                    View Pipeline Projects
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="margin-left: var(--space-sm);"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section about">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-content">
+                    <h2>About Me</h2>
+                    <p>I'm an Associate Principal Scientist in Statistical Programming at Merck with over 9 years of experience in clinical trial research across Cardiovascular and Oncology therapeutic areas.</p>
+                    <p>Currently pursuing a PhD in Data Science at Harrisburg University, focusing on AI/LLM applications for clinical trial automation. My research bridges the gap between traditional statistical programming and cutting-edge machine learning.</p>
+                    <div class="about-highlight">
+                        <p style="margin: 0; color: var(--color-neutral-900);"><strong>Research Focus:</strong> ClinAgent - Autonomous Clinical Programming Architecture for TLF generation automation, reducing development time from months to days.</p>
+                    </div>
+                    <div class="expertise-tags">
+                        <span class="tag primary">SAS</span>
+                        <span class="tag primary">R</span>
+                        <span class="tag primary">Python</span>
+                        <span class="tag accent">AI/LLM</span>
+                        <span class="tag accent">CDISC</span>
+                        <span class="tag">Dash</span>
+                        <span class="tag">Shiny</span>
+                        <span class="tag">Neo4j</span>
+                        <span class="tag">Docker</span>
+                    </div>
+                </div>
+                <div class="about-sidebar">
+                    <h3>Key Leadership Roles</h3>
+                    <div class="about-item">
+                        <strong>GenAI Code Conversion Team</strong>
+                        <span style="font-size: 0.9rem;">Key Member • SAS ↔ R translation pipelines</span>
+                    </div>
+                    <div class="about-item">
+                        <strong>Automation GenAI Subteam</strong>
+                        <span style="font-size: 0.9rem;">Team Lead • Autonomous agent systems</span>
+                    </div>
+                    <div class="about-item">
+                        <strong>NDA/BLA Submissions</strong>
+                        <span style="font-size: 0.9rem;">Submission Lead • Regulatory excellence</span>
+                    </div>
+                    <div class="about-item">
+                        <strong>Multilingual Programming</strong>
+                        <span style="font-size: 0.9rem;">Training Contributor • R & Python workshops</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="section experience">
+        <div class="container">
+            <h2>Leadership & Expertise</h2>
+            <div class="experience-grid">
+                <div class="experience-card">
+                    <div class="experience-header">
+                        <div class="experience-title">
+                            <h3>Regulatory Submission Leadership</h3>
+                            <p style="font-size: 0.95rem;">NDA/BLA Submissions & Regulatory Excellence</p>
+                        </div>
+                        <span class="experience-badge">Submission Lead</span>
+                    </div>
+                    <ul class="experience-list">
+                        <li>Led statistical programming for NDA/BLA submissions across multiple therapeutic areas</li>
+                        <li>Delivered regulatory-ready submissions with 100% CDISC compliance</li>
+                        <li>Supported regulatory agency interactions with timely data-driven responses</li>
+                    </ul>
+                </div>
+
+                <div class="experience-card">
+                    <div class="experience-header">
+                        <div class="experience-title">
+                            <h3>Therapeutic Area Expertise</h3>
+                            <p style="font-size: 0.95rem;">CV & Oncology Statistical Programming</p>
+                        </div>
+                        <span class="experience-badge">Domain Expert</span>
+                    </div>
+                    <ul class="experience-list">
+                        <li>Cardiovascular trials: Extensive experience in Phase I-III CV studies with complex endpoints</li>
+                        <li>Oncology trials: Led statistical programming for multiple oncology studies across different phases</li>
+                        <li>Cross-functional collaboration with clinical teams on study design and analysis strategies</li>
+                    </ul>
+                </div>
+
+                <div class="experience-card">
+                    <div class="experience-header">
+                        <div class="experience-title">
+                            <h3>GenAI Code Conversion Initiative</h3>
+                            <p style="font-size: 0.95rem;">Founding Team Member</p>
+                        </div>
+                        <span class="experience-badge">Key Member</span>
+                    </div>
+                    <ul class="experience-list">
+                        <li>Core contributor to Merck's GenAI-powered code conversion platform (SAS ↔ R)</li>
+                        <li>Developed and validated LLM-based translation pipelines for statistical programming code</li>
+                        <li>Enabled cross-language interoperability maintaining CDISC standards compliance</li>
+                    </ul>
+                </div>
+
+                <div class="experience-card">
+                    <div class="experience-header">
+                        <div class="experience-title">
+                            <h3>Automation GenAI Subteam</h3>
+                            <p style="font-size: 0.95rem;">Team Lead</p>
+                        </div>
+                        <span class="experience-badge">Lead</span>
+                    </div>
+                    <ul class="experience-list">
+                        <li>Leading the automation subteam focused on GenAI applications for clinical programming</li>
+                        <li>Architected autonomous agent systems (ClinAgent) for TLF generation automation</li>
+                        <li>Reduced TLF generation time from months to days through AI-driven automation</li>
+                    </ul>
+                </div>
+
+                <div class="experience-card">
+                    <div class="experience-header">
+                        <div class="experience-title">
+                            <h3>Interactive Data Visualization</h3>
+                            <p style="font-size: 0.95rem;">Full-Stack Visualization Developer</p>
+                        </div>
+                        <span class="experience-badge">SME</span>
+                    </div>
+                    <ul class="experience-list">
+                        <li>Build Python Dash applications for clinical data review and analysis</li>
+                        <li>Develop R Shiny interactive dashboards for statistical reporting</li>
+                        <li>Create HTML/JavaScript tools for real-time data visualization</li>
+                    </ul>
+                </div>
+
+                <div class="experience-card">
+                    <div class="experience-header">
+                        <div class="experience-title">
+                            <h3>PhD Candidate - Data Science</h3>
+                            <p style="font-size: 0.95rem;">Harrisburg University</p>
+                        </div>
+                        <span class="experience-badge">Research</span>
+                    </div>
+                    <ul class="experience-list">
+                        <li>Dissertation: ClinAgent - Autonomous Clinical Programming Architecture</li>
+                        <li>Researching AI/LLM applications in clinical trial statistical programming</li>
+                        <li>12+ publications including preprints, conference presentations, and archived papers</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Publications Section -->
+    <section id="publications" class="section publications">
+        <div class="container">
+            <h2>Publications</h2>
+            <p>12+ publications including preprints, conference presentations, and archived papers</p>
+
+            <!-- medRxiv Preprints -->
+            <div class="pub-category">
+                <div class="pub-category-title">
+                    <div class="pub-category-icon" style="background: #3b82f6; color: white;">📄</div>
+                    <h3 style="color: #3b82f6;">medRxiv Preprints</h3>
+                </div>
+                <div class="pub-card">
+                    <p class="pub-date" style="color: #3b82f6;">January 2026</p>
+                    <h4>ClinAgent: A Five-Layer Architecture for Autonomous Clinical Trial Statistical Programming</h4>
+                    <p>Proposes ClinAgent, an autonomous architecture for automating clinical trial statistical programming, addressing that Phase 3 studies typically require 12-24 FTE-months.</p>
+                    <a href="https://www.medrxiv.org/content/10.64898/2026.01.09.26343542v1" target="_blank" rel="noopener" class="pub-link" style="color: #3b82f6;">
+                        View Paper <span>→</span>
+                    </a>
+                </div>
+                <div class="pub-card">
+                    <p class="pub-date" style="color: #3b82f6;">December 2025</p>
+                    <h4>Automation in Clinical Trial Statistical Programming: A Structured Review</h4>
+                    <p><strong>Authors:</strong> Jaime Yan, Jason Zhang, Tingting Tian</p>
+                    <p>Structured review of TLF generation, validation frameworks, and AI/ML integration in clinical trial statistical programming.</p>
+                    <a href="https://www.medrxiv.org/content/10.64898/2025.12.24.25342988v1" target="_blank" rel="noopener" class="pub-link" style="color: #3b82f6;">
+                        View Paper <span>→</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- TechRxiv Publications -->
+            <div class="pub-category">
+                <div class="pub-category-title">
+                    <div class="pub-category-icon" style="background: #9333ea; color: white;">⚙️</div>
+                    <h3 style="color: #9333ea;">TechRxiv Publications</h3>
+                </div>
+                <div class="pub-card">
+                    <p class="pub-date" style="color: #9333ea;">October 2025</p>
+                    <h4>Schema-Preserving Generation of Clinical TLF Templates via Iterative LLM-Guided Debugging</h4>
+                    <p><strong>Authors:</strong> Jaime Yan, Ming Yang</p>
+                    <a href="https://www.techrxiv.org/users/890813/articles/1339604" target="_blank" rel="noopener" class="pub-link" style="color: #9333ea;">
+                        View Paper <span>→</span>
+                    </a>
+                </div>
+                <div class="pub-card">
+                    <p class="pub-date" style="color: #9333ea;">March 2025</p>
+                    <h4>Novel Pipeline for Synthetic CDISC ADaM Datasets Using LLMs and Knowledge Graphs</h4>
+                    <p>Focuses on using LLMs and knowledge graphs to generate realistic synthetic CDISC ADaM datasets.</p>
+                    <a href="https://www.techrxiv.org/users/890813/articles/1274982" target="_blank" rel="noopener" class="pub-link" style="color: #9333ea;">
+                        View Paper <span>→</span>
+                    </a>
+                </div>
+                <div class="pub-card">
+                    <p class="pub-date" style="color: #9333ea;">March 2025</p>
+                    <h4>End-to-End Fine-Tuning Small LLMs for Generating Admiral R Code</h4>
+                    <p>Presents methodology for fine-tuning small language models to generate R code for the Admiral package.</p>
+                    <a href="https://www.techrxiv.org/users/890813/articles/1274985" target="_blank" rel="noopener" class="pub-link" style="color: #9333ea;">
+                        View Paper <span>→</span>
+                    </a>
+                </div>
+                <div class="pub-card">
+                    <p class="pub-date" style="color: #9333ea;">March 2025</p>
+                    <h4>Automating SAS and R Code Interpretation and Debugging: A Practical Pipeline</h4>
+                    <a href="https://www.techrxiv.org/users/890813/articles/1274984" target="_blank" rel="noopener" class="pub-link" style="color: #9333ea;">
+                        View Paper <span>→</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Conference Papers -->
+            <div class="pub-category">
+                <div class="pub-category-title">
+                    <div class="pub-category-icon" style="background: #059669; color: white;">🎤</div>
+                    <h3 style="color: #059669;">Conference Papers (PhUSE & PharmaSUG)</h3>
+                </div>
+                <div class="pub-grid">
+                    <div class="pub-card">
+                        <p class="pub-date" style="color: #059669;">PhUSE-US 2025</p>
+                        <h4>End-to-End Fine-Tuning Small LLMs for Generating Admiral R Code</h4>
+                        <p><strong>With:</strong> Tingting Tian</p>
+                        <a href="https://www.lexjansen.com/phuse-us/2025/os/PAP_OS08.pdf" target="_blank" rel="noopener" class="pub-link" style="color: #059669;">
+                            View PDF <span>→</span>
+                        </a>
+                    </div>
+                    <div class="pub-card">
+                        <p class="pub-date" style="color: #059669;">PhUSE-US 2025</p>
+                        <h4>Automating SAS and R Code Interpretation and Debugging</h4>
+                        <p><strong>With:</strong> Tingting Tian</p>
+                        <a href="https://www.lexjansen.com/phuse-us/2025/et/PAP_ET01.pdf" target="_blank" rel="noopener" class="pub-link" style="color: #059669;">
+                            View PDF <span>→</span>
+                        </a>
+                    </div>
+                    <div class="pub-card">
+                        <p class="pub-date" style="color: #059669;">PhUSE-US 2025</p>
+                        <h4>Enhancing Clinical Trial Data Queries with LLMs and Neo4j</h4>
+                        <p><strong>With:</strong> Changhong Shi</p>
+                        <a href="https://www.lexjansen.com/phuse-us/2025/dh/PAP_DH03.pdf" target="_blank" rel="noopener" class="pub-link" style="color: #059669;">
+                            View PDF <span>→</span>
+                        </a>
+                    </div>
+                    <div class="pub-card">
+                        <p class="pub-date" style="color: #059669;">PhUSE-US 2025</p>
+                        <h4>Novel Pipeline for Synthetic CDISC ADaM Datasets</h4>
+                        <p><strong>With:</strong> Chao Su</p>
+                        <a href="https://www.lexjansen.com/phuse-us/2025/ml/PAP_ML12.pdf" target="_blank" rel="noopener" class="pub-link" style="color: #059669;">
+                            View PDF <span>→</span>
+                        </a>
+                    </div>
+                    <div class="pub-card">
+                        <p class="pub-date" style="color: #059669;">PharmaSUG 2025</p>
+                        <h4>GenAI Assisted Code Conversion: SAS to R Standard</h4>
+                        <a href="https://pharmasug.org/proceedings/2025/AI/PharmaSUG-2025-AI-239.pdf" target="_blank" rel="noopener" class="pub-link" style="color: #059669;">
+                            View PDF <span>→</span>
+                        </a>
+                    </div>
+                    <div class="pub-card">
+                        <p class="pub-date" style="color: #059669;">PharmaSUG 2025</p>
+                        <h4>Comparing SQL and Graph Database Query Methods</h4>
+                        <a href="https://www.lexjansen.com/pharmasug/2025/SI/PharmaSUG-2025-SI-342.pdf" target="_blank" rel="noopener" class="pub-link" style="color: #059669;">
+                            View PDF <span>→</span>
+                        </a>
+                    </div>
+                    <div class="pub-card">
+                        <p class="pub-date" style="color: #059669;">PhUSE-US 2024</p>
+                        <h4>AI-Enhanced Chatbot for Clinical Trials Analysis</h4>
+                        <p><strong>With:</strong> Chao Su, Changhong Shi</p>
+                        <a href="https://www.lexjansen.com/phuse-us/2024/ic/PAP_IC08.pdf" target="_blank" rel="noopener" class="pub-link" style="color: #059669;">
+                            View PDF <span>→</span>
+                        </a>
+                    </div>
+                    <div class="pub-card">
+                        <p class="pub-date" style="color: #059669;">PharmaSUG 2024</p>
+                        <h4>LLM-Enhanced Training Agent for Statistical Programming</h4>
+                        <a href="https://pharmasug.org/proceedings/2024/SI/PharmaSUG-2024-SI-160.pdf" target="_blank" rel="noopener" class="pub-link" style="color: #059669;">
+                            View PDF <span>→</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Google Scholar -->
+            <div style="text-align: center; margin-top: var(--space-2xl);">
+                <a href="https://scholar.google.com/citations?user=vo1hv04AAAAJ&hl=en" target="_blank" rel="noopener" class="btn btn-primary" style="background: #3b82f6; display: inline-flex;">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20" style="margin-right: var(--space-sm);"><path d="M12 24a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm0-24L0 9.5l4.838 3.94A8 8 0 0 1 12 9a8 8 0 0 1 7.162 4.44L24 9.5z"/></svg>
+                    View Google Scholar Profile
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="section projects">
+        <div class="container">
+            <h2>Pipeline Projects</h2>
+            <p>End-to-end solutions from SAS to GenAI automation</p>
+
+            <!-- Featured Project: GenAI Code Conversion -->
+            <div class="featured-project">
+                <span class="featured-badge">⭐ KEY INITIATIVE</span>
+                <h3>GenAI Code Conversion Platform</h3>
+                <p style="font-size: 1.125rem;">Merck's foundational system for automated SAS ↔ R code translation, enabling seamless cross-language statistical programming while maintaining CDISC standards compliance.</p>
+
+                <div class="featured-impact">
+                    <div class="impact-item">
+                        <strong style="color: #f87171;">❌ PROBLEM</strong>
+                        <p>Manual SAS ↔ R code conversion was time-consuming, error-prone, and inconsistent across studies</p>
+                    </div>
+                    <div class="impact-item">
+                        <strong style="color: #a78bfa;">✅ SOLUTION</strong>
+                        <p>Built LLM-powered automated translation pipeline with validation and CDISC compliance checks</p>
+                    </div>
+                    <div class="impact-item">
+                        <strong style="color: #34d399;">🎯 IMPACT</strong>
+                        <p>90% translation accuracy, 10x faster than manual, maintained CDISC compliance</p>
+                    </div>
+                </div>
+
+                <div class="featured-metrics">
+                    <div class="metric-box">
+                        <div class="metric-value">90%</div>
+                        <div class="metric-label">Translation Accuracy</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-value">10x</div>
+                        <div class="metric-label">Faster than Manual</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-value">CDISC</div>
+                        <div class="metric-label">Compliant</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-value">🔒</div>
+                        <div class="metric-label">Secure & Validated</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project Grid -->
+            <div class="project-grid">
+                <!-- ClinAgent -->
+                <div class="project-card">
+                    <div class="project-card-header">
+                        <div class="project-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white;">🖥️</div>
+                        <div>
+                            <h4>ClinAgent</h4>
+                            <p style="color: #10b981; font-weight: 600;">Autonomous Programming</p>
+                        </div>
+                    </div>
+                    <div class="project-card-body">
+                        <p><strong>Problem:</strong> Phase 3 studies required 12-24 FTE-months for TLF generation</p>
+                        <p><strong>Solution:</strong> Five-layer autonomous architecture with LLM orchestration</p>
+                        <p><strong>Impact:</strong> Reduced TLF generation from <strong>months to days</strong>, maintaining CDISC compliance</p>
+
+                        <div class="project-pipeline">
+                            <p>Pipeline Flow</p>
+                            <div class="pipeline-steps">
+                                <div class="pipeline-step">
+                                    <div class="pipeline-step-num" style="background: #dbeafe; color: #1d4ed8;">1</div>
+                                    <p>Requirements</p>
+                                </div>
+                                <div style="color: #9ca3af;">→</div>
+                                <div class="pipeline-step">
+                                    <div class="pipeline-step-num" style="background: #e9d5ff; color: #7c3aed;">2</div>
+                                    <p>LLM Planning</p>
+                                </div>
+                                <div style="color: #9ca3af;">→</div>
+                                <div class="pipeline-step">
+                                    <div class="pipeline-step-num" style="background: #d1fae5; color: #059669;">3</div>
+                                    <p>Code Gen</p>
+                                </div>
+                                <div style="color: #9ca3af;">→</div>
+                                <div class="pipeline-step">
+                                    <div class="pipeline-step-num" style="background: #fed7aa; color: #ea580c;">4</div>
+                                    <p>Validation</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="project-tags">
+                            <span class="project-tag" style="background: #d1fae5; color: #059669;">LLMs</span>
+                            <span class="project-tag" style="background: #dbeafe; color: #1d4ed8;">SAS</span>
+                            <span class="project-tag" style="background: #e9d5ff; color: #7c3aed;">R/Admiral</span>
+                            <span class="project-tag" style="background: #fed7aa; color: #ea580c;">CDISC</span>
+                        </div>
+
+                        <a href="https://www.medrxiv.org/content/10.64898/2026.01.09.26343542v1" target="_blank" rel="noopener" class="project-link" style="color: #10b981;">
+                            Read Paper <span>→</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- LLM Code Generation -->
+                <div class="project-card">
+                    <div class="project-card-header">
+                        <div class="project-icon" style="background: linear-gradient(135deg, #9333ea 0%, #7c3aed 100%); color: white;">⚡</div>
+                        <div>
+                            <h4>LLM Code Generation</h4>
+                            <p style="color: #9333ea; font-weight: 600;">Fine-Tuning Pipeline</p>
+                        </div>
+                    </div>
+                    <div class="project-card-body">
+                        <p>End-to-end methodology for fine-tuning small language models to generate executable <strong>Admiral R code</strong> for statistical programming.</p>
+
+                        <div class="project-pipeline">
+                            <p>Pipeline Flow</p>
+                            <div class="pipeline-steps">
+                                <div class="pipeline-step">
+                                    <div class="pipeline-step-num" style="background: #dbeafe; color: #1d4ed8;">1</div>
+                                    <p>Dataset</p>
+                                </div>
+                                <div style="color: #9ca3af;">→</div>
+                                <div class="pipeline-step">
+                                    <div class="pipeline-step-num" style="background: #e9d5ff; color: #7c3aed;">2</div>
+                                    <p>Fine-tune</p>
+                                </div>
+                                <div style="color: #9ca3af;">→</div>
+                                <div class="pipeline-step">
+                                    <div class="pipeline-step-num" style="background: #d1fae5; color: #059669;">3</div>
+                                    <p>Generate</p>
+                                </div>
+                                <div style="color: #9ca3af;">→</div>
+                                <div class="pipeline-step">
+                                    <div class="pipeline-step-num" style="background: #fed7aa; color: #ea580c;">4</div>
+                                    <p>Debug</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="project-tags">
+                            <span class="project-tag" style="background: #e9d5ff; color: #7c3aed;">Fine-tuning</span>
+                            <span class="project-tag" style="background: #dbeafe; color: #1d4ed8;">R</span>
+                            <span class="project-tag" style="background: #d1fae5; color: #059669;">Admiral</span>
+                            <span class="project-tag" style="background: #fed7aa; color: #ea580c;">LLM</span>
+                        </div>
+
+                        <a href="https://www.techrxiv.org/users/890813/articles/1274985" target="_blank" rel="noopener" class="project-link" style="color: #9333ea;">
+                            Read Paper <span>→</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Knowledge Graph -->
+                <div class="project-card">
+                    <div class="project-card-header">
+                        <div class="project-icon" style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); color: white;">🧠</div>
+                        <div>
+                            <h4>Clinical Knowledge Graph</h4>
+                            <p style="color: #f97316; font-weight: 600;">Neo4j + LLM</p>
+                        </div>
+                    </div>
+                    <div class="project-card-body">
+                        <p>LLM-powered natural language interface to <strong>Neo4j graph database</strong> for clinical trial data exploration and complex relationship discovery.</p>
+
+                        <div class="project-pipeline">
+                            <p>Pipeline Flow</p>
+                            <div class="pipeline-steps">
+                                <div class="pipeline-step">
+                                    <div class="pipeline-step-num" style="background: #dbeafe; color: #1d4ed8;">1</div>
+                                    <p>Query</p>
+                                </div>
+                                <div style="color: #9ca3af;">→</div>
+                                <div class="pipeline-step">
+                                    <div class="pipeline-step-num" style="background: #e9d5ff; color: #7c3aed;">2</div>
+                                    <p>LLM Parse</p>
+                                </div>
+                                <div style="color: #9ca3af;">→</div>
+                                <div class="pipeline-step">
+                                    <div class="pipeline-step-num" style="background: #d1fae5; color: #059669;">3</div>
+                                    <p>Cypher</p>
+                                </div>
+                                <div style="color: #9ca3af;">→</div>
+                                <div class="pipeline-step">
+                                    <div class="pipeline-step-num" style="background: #fed7aa; color: #ea580c;">4</div>
+                                    <p>Results</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="project-tags">
+                            <span class="project-tag" style="background: #fed7aa; color: #ea580c;">Neo4j</span>
+                            <span class="project-tag" style="background: #e9d5ff; color: #7c3aed;">LLM</span>
+                            <span class="project-tag" style="background: #dbeafe; color: #1d4ed8;">Cypher</span>
+                            <span class="project-tag" style="background: #d1fae5; color: #059669;">SQL</span>
+                        </div>
+
+                        <a href="https://www.lexjansen.com/phuse-us/2025/dh/PAP_DH03.pdf" target="_blank" rel="noopener" class="project-link" style="color: #f97316;">
+                            Read Paper <span>→</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Interactive Visualization -->
+                <div class="project-card">
+                    <div class="project-card-header">
+                        <div class="project-icon" style="background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%); color: white;">📊</div>
+                        <div>
+                            <h4>Interactive Visualization</h4>
+                            <p style="color: #06b6d4; font-weight: 600;">Dash · Shiny · HTML/JS</p>
+                        </div>
+                    </div>
+                    <div class="project-card-body">
+                        <p>Full-stack interactive dashboards for clinical data review using <strong>Python Dash, R Shiny, and HTML/JavaScript</strong>.</p>
+
+                        <div class="project-pipeline">
+                            <p>Pipeline Flow</p>
+                            <div class="pipeline-steps">
+                                <div class="pipeline-step">
+                                    <div class="pipeline-step-num" style="background: #dbeafe; color: #1d4ed8;">1</div>
+                                    <p>Data</p>
+                                </div>
+                                <div style="color: #9ca3af;">→</div>
+                                <div class="pipeline-step">
+                                    <div class="pipeline-step-num" style="background: #e9d5ff; color: #7c3aed;">2</div>
+                                    <p>Process</p>
+                                </div>
+                                <div style="color: #9ca3af;">→</div>
+                                <div class="pipeline-step">
+                                    <div class="pipeline-step-num" style="background: #d1fae5; color: #059669;">3</div>
+                                    <p>Visualize</p>
+                                </div>
+                                <div style="color: #9ca3af;">→</div>
+                                <div class="pipeline-step">
+                                    <div class="pipeline-step-num" style="background: #fed7aa; color: #ea580c;">4</div>
+                                    <p>Interactive</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="project-tags">
+                            <span class="project-tag" style="background: #cffafe; color: #0891b2;">Dash</span>
+                            <span class="project-tag" style="background: #dbeafe; color: #1d4ed8;">Shiny</span>
+                            <span class="project-tag" style="background: #e9d5ff; color: #7c3aed;">HTML/JS</span>
+                            <span class="project-tag" style="background: #d1fae5; color: #059669;">Plotly</span>
+                        </div>
+
+                        <a href="#contact" class="project-link" style="color: #06b6d4;">
+                            Request Demo <span>→</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Zero Gravity Platform -->
+                <div class="project-card">
+                    <div class="project-card-header">
+                        <div class="project-icon" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white;">🧪</div>
+                        <div>
+                            <h4>Zero Gravity Platform</h4>
+                            <p style="color: #f59e0b; font-weight: 600;">Synthetic Data Contributor</p>
+                        </div>
+                    </div>
+                    <div class="project-card-body">
+                        <p>Created <strong>high-quality synthetic CDISC data</strong> for testing Merck's Zero Gravity platform, supporting AWS team validation efforts.</p>
+
+                        <div class="project-pipeline">
+                            <p>Contribution Flow</p>
+                            <div class="pipeline-steps">
+                                <div class="pipeline-step">
+                                    <div class="pipeline-step-num" style="background: #dbeafe; color: #1d4ed8;">1</div>
+                                    <p>Create</p>
+                                </div>
+                                <div style="color: #9ca3af;">→</div>
+                                <div class="pipeline-step">
+                                    <div class="pipeline-step-num" style="background: #d1fae5; color: #059669;">2</div>
+                                    <p>Validate</p>
+                                </div>
+                                <div style="color: #9ca3af;">→</div>
+                                <div class="pipeline-step">
+                                    <div class="pipeline-step-num" style="background: #e9d5ff; color: #7c3aed;">3</div>
+                                    <p>Provide</p>
+                                </div>
+                                <div style="color: #9ca3af;">→</div>
+                                <div class="pipeline-step">
+                                    <div class="pipeline-step-num" style="background: #fed7aa; color: #ea580c;">4</div>
+                                    <p>Test</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="project-tags">
+                            <span class="project-tag" style="background: #fef3c7; color: #d97706;">Zero Gravity</span>
+                            <span class="project-tag" style="background: #fed7aa; color: #ea580c;">Synthetic Data</span>
+                            <span class="project-tag" style="background: #dbeafe; color: #1d4ed8;">CDISC</span>
+                            <span class="project-tag" style="background: #e9d5ff; color: #7c3aed;">AWS</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section contact">
+        <div class="container" style="text-align: center;">
+            <h2>Get In Touch</h2>
+            <p style="margin-bottom: var(--space-2xl);">Interested in collaboration or have a question? Feel free to reach out!</p>
+
+            <!-- Download Resume CTA -->
+            <div class="contact-resume">
+                <p style="margin-bottom: var(--space-md);">Want my full CV with detailed experience?</p>
+                <a href="./Resume_Jaime_pg_dom.pdf" download="Jaime_Yan_Resume.pdf" class="btn btn-primary" style="display: inline-flex;">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="margin-right: var(--space-sm);"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    Download Resume (PDF)
+                </a>
+            </div>
+
+            <div class="contact-grid">
+                <a href="mailto:yanmingyunmt@gmail.com" class="contact-card">
+                    <div class="contact-card-icon" style="background: #3b82f6;">✉️</div>
+                    <h4>Email</h4>
+                    <p>yanmingyunmt@gmail.com</p>
+                </a>
+
+                <a href="https://www.linkedin.com/in/jaime-y-66312a133/" target="_blank" rel="noopener" class="contact-card">
+                    <div class="contact-card-icon" style="background: #1d4ed8;">💼</div>
+                    <h4>LinkedIn</h4>
+                    <p>linkedin.com/in/jaime-yan</p>
+                </a>
+
+                <a href="https://github.com/yanmingyu92?tab=repositories" target="_blank" rel="noopener" class="contact-card">
+                    <div class="contact-card-icon" style="background: #1f2937;">⚡</div>
+                    <h4>GitHub</h4>
+                    <p>github.com/yanmingyu92</p>
+                </a>
+
+                <a href="https://scholar.google.com/citations?user=vo1hv04AAAAJ&hl=en" target="_blank" rel="noopener" class="contact-card">
+                    <div class="contact-card-icon" style="background: #3b82f6;">🎓</div>
+                    <h4>Google Scholar</h4>
+                    <p>View Publications</p>
+                </a>
+            </div>
+
+            <div class="contact-tags">
+                <span class="contact-tag" style="background: #dbeafe; color: #1d4ed8;">Statistical Programming</span>
+                <span class="contact-tag" style="background: #d1fae5; color: #059669;">AI/LLM Research</span>
+                <span class="contact-tag" style="background: #e9d5ff; color: #7c3aed;">Clinical Trials</span>
+                <span class="contact-tag" style="background: #fed7aa; color: #ea580c;">Data Science</span>
+                <span class="contact-tag" style="background: #c7d2fe; color: #4f46e5;">Analytics Leadership</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>© 2025 Jaime Yan. All rights reserved.</p>
+            <p>Associate Principal Scientist, Statistical Programming @ Merck | PhD Candidate in Data Science | 9+ years in clinical trials</p>
+            <div class="footer-social">
+                <a href="https://github.com/yanmingyu92?tab=repositories" target="_blank" rel="noopener">
+                    <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                </a>
+                <a href="https://www.linkedin.com/in/jaime-y-66312a133/" target="_blank" rel="noopener">
+                    <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                </a>
+                <a href="mailto:yanmingyunmt@gmail.com">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href && href !== '#') {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe cards for animation
+        document.querySelectorAll('.experience-card, .pub-card, .project-card, .pipeline-card, .contact-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

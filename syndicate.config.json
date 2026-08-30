@@ -1,0 +1,44 @@
+{
+  "siteUrl": "https://jaimeyan.com",
+  "postsDir": "content/posts",
+  "reviewDir": "review",
+  "platforms": {
+    "devto": {
+      "enabled": true,
+      "mode": "api"
+    },
+    "hashnode": {
+      "enabled": false,
+      "mode": "api",
+      "note": "requires Hashnode Pro ($50/yr) for GraphQL API access"
+    },
+    "wechat": {
+      "enabled": false,
+      "mode": "draft-api"
+    },
+    "medium": {
+      "enabled": true,
+      "mode": "manual-import",
+      "note": "API dead; generate import URL + instructions"
+    },
+    "zhihu": {
+      "enabled": true,
+      "mode": "draft-file",
+      "note": "publish via Wechatsync browser extension/CLI as draft"
+    },
+    "juejin": {
+      "enabled": true,
+      "mode": "draft-file"
+    },
+    "reddit": {
+      "enabled": true,
+      "mode": "draft-file",
+      "note": "human posts manually; respect each subreddit's self-promotion rules"
+    },
+    "xiaohongshu": {
+      "enabled": true,
+      "mode": "draft-file",
+      "note": "short caption + carousel copy; manual posting"
+    }
+  }
+}

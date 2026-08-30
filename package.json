@@ -9,8 +9,12 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/sitemap": "^3.7.3",
     "@tailwindcss/vite": "^4.1.18",
+    "@tsparticles/engine": "^3.9.1",
     "astro": "^5.17.1",
-    "tailwindcss": "^4.1.18"
+    "tailwindcss": "^4.1.18",
+    "tsparticles": "^3.9.1"
   }
 }
