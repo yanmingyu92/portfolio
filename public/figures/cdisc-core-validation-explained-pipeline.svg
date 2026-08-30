@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 300" font-family="Helvetica, Arial, sans-serif">
+  <rect width="700" height="300" fill="#fafaf9"/>
+
+  <!-- inputs: library -->
+  <rect x="20" y="40" width="180" height="70" rx="6" fill="#ffffff" stroke="#d6d3d1" stroke-width="2"/>
+  <text x="110" y="68" text-anchor="middle" font-size="14" font-weight="bold" fill="#1c1917">CDISC Library</text>
+  <text x="110" y="90" text-anchor="middle" font-size="13" fill="#1c1917">standards metadata (API)</text>
+
+  <!-- inputs: rules -->
+  <rect x="20" y="140" width="180" height="70" rx="6" fill="#ffffff" stroke="#d6d3d1" stroke-width="2"/>
+  <text x="110" y="168" text-anchor="middle" font-size="14" font-weight="bold" fill="#1c1917">Conformance rules</text>
+  <text x="110" y="190" text-anchor="middle" font-size="13" fill="#1c1917">YAML, versioned on GitHub</text>
+
+  <!-- engine -->
+  <rect x="270" y="85" width="170" height="100" rx="6" fill="#ffffff" stroke="#9f1239" stroke-width="2.5"/>
+  <text x="355" y="122" text-anchor="middle" font-size="15" font-weight="bold" fill="#9f1239">CORE engine</text>
+  <text x="355" y="145" text-anchor="middle" font-size="13" fill="#1c1917">Python · pandas</text>
+  <text x="355" y="165" text-anchor="middle" font-size="13" fill="#1c1917">closed operator set</text>
+
+  <!-- datasets -->
+  <rect x="270" y="225" width="170" height="55" rx="6" fill="#ffffff" stroke="#d6d3d1" stroke-width="2"/>
+  <text x="355" y="248" text-anchor="middle" font-size="14" font-weight="bold" fill="#1c1917">XPT datasets</text>
+  <text x="355" y="268" text-anchor="middle" font-size="13" fill="#1c1917">SDTM / ADaM / SEND</text>
+
+  <!-- report -->
+  <rect x="500" y="85" width="180" height="100" rx="6" fill="#ffffff" stroke="#d6d3d1" stroke-width="2"/>
+  <text x="590" y="122" text-anchor="middle" font-size="14" font-weight="bold" fill="#1c1917">Validation report</text>
+  <text x="590" y="145" text-anchor="middle" font-size="13" fill="#1c1917">JSON or Excel</text>
+  <text x="590" y="165" text-anchor="middle" font-size="13" fill="#1c1917">rule ID · domain · rows</text>
+
+  <!-- arrows -->
+  <g stroke="#d6d3d1" stroke-width="2" fill="none" marker-end="url(#arrow)">
+    <path d="M200 75 C 235 75, 235 110, 270 110"/>
+    <path d="M200 175 C 235 175, 235 160, 270 160"/>
+    <path d="M355 225 L355 185"/>
+    <path d="M440 135 L500 135"/>
+  </g>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#9f1239"/>
+    </marker>
+  </defs>
+</svg>

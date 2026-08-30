@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 300" font-family="ui-sans-serif, system-ui, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1c1917"/>
+    </marker>
+    <marker id="arrow-reject" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#9f1239"/>
+    </marker>
+  </defs>
+  <rect width="700" height="300" fill="#fafaf9"/>
+
+  <!-- Row 1: steps 1-3 -->
+  <g>
+    <rect x="30" y="40" width="170" height="64" rx="8" fill="#ffffff" stroke="#d6d3d1" stroke-width="1.5"/>
+    <text x="115" y="66" text-anchor="middle" font-size="14" font-weight="600" fill="#1c1917"><tspan fill="#9f1239">1.</tspan> Spec extraction</text>
+    <text x="115" y="88" text-anchor="middle" font-size="13" fill="#1c1917">Excel specs → JSON</text>
+
+    <rect x="265" y="40" width="170" height="64" rx="8" fill="#ffffff" stroke="#d6d3d1" stroke-width="1.5"/>
+    <text x="350" y="66" text-anchor="middle" font-size="14" font-weight="600" fill="#1c1917"><tspan fill="#9f1239">2.</tspan> Dual augmentation</text>
+    <text x="350" y="88" text-anchor="middle" font-size="13" fill="#1c1917">evolve + function variants</text>
+
+    <rect x="500" y="40" width="170" height="64" rx="8" fill="#ffffff" stroke="#d6d3d1" stroke-width="1.5"/>
+    <text x="585" y="66" text-anchor="middle" font-size="14" font-weight="600" fill="#1c1917"><tspan fill="#9f1239">3.</tspan> KG filtering</text>
+    <text x="585" y="88" text-anchor="middle" font-size="13" fill="#1c1917">keep only score ≥ 0.8</text>
+  </g>
+
+  <!-- Row 2: steps 4-6 (right to left) -->
+  <g>
+    <rect x="500" y="200" width="170" height="64" rx="8" fill="#ffffff" stroke="#d6d3d1" stroke-width="1.5"/>
+    <text x="585" y="226" text-anchor="middle" font-size="14" font-weight="600" fill="#1c1917"><tspan fill="#9f1239">4.</tspan> Curated Q-A set</text>
+    <text x="585" y="248" text-anchor="middle" font-size="13" fill="#1c1917">variable-level records</text>
+
+    <rect x="265" y="200" width="170" height="64" rx="8" fill="#ffffff" stroke="#d6d3d1" stroke-width="1.5"/>
+    <text x="350" y="226" text-anchor="middle" font-size="14" font-weight="600" fill="#1c1917"><tspan fill="#9f1239">5.</tspan> LoRA fine-tuning</text>
+    <text x="350" y="248" text-anchor="middle" font-size="13" fill="#1c1917">LLaMA 3.1 8B, one L4</text>
+
+    <rect x="30" y="200" width="170" height="64" rx="8" fill="#ffffff" stroke="#d6d3d1" stroke-width="1.5"/>
+    <text x="115" y="226" text-anchor="middle" font-size="14" font-weight="600" fill="#1c1917"><tspan fill="#9f1239">6.</tspan> KG validation</text>
+    <text x="115" y="248" text-anchor="middle" font-size="13" fill="#1c1917">at inference</text>
+  </g>
+
+  <!-- Flow arrows -->
+  <line x1="202" y1="72" x2="262" y2="72" stroke="#1c1917" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="437" y1="72" x2="497" y2="72" stroke="#1c1917" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="640" y1="106" x2="640" y2="197" stroke="#1c1917" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="498" y1="232" x2="438" y2="232" stroke="#1c1917" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="263" y1="232" x2="203" y2="232" stroke="#1c1917" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Reject path from filtering -->
+  <line x1="530" y1="106" x2="530" y2="146" stroke="#9f1239" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arrow-reject)"/>
+  <text x="530" y="166" text-anchor="middle" font-size="13" fill="#9f1239">discard (&lt; 0.8)</text>
+</svg>

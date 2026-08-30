@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="700" height="360" viewBox="0 0 700 360" font-family="system-ui, -apple-system, sans-serif">
+  <rect width="700" height="360" fill="#fafaf9"/>
+
+  <!-- Stage 1 -->
+  <rect x="90" y="24" width="520" height="56" rx="6" fill="#fafaf9" stroke="#d6d3d1" stroke-width="2"/>
+  <text x="350" y="47" text-anchor="middle" font-size="16" font-weight="600" fill="#1c1917">1,247 records screened</text>
+  <text x="350" y="68" text-anchor="middle" font-size="13" fill="#1c1917">2020&#8211;2025, TLF generation &#183; validation &#183; AI/ML</text>
+
+  <!-- Arrow 1 -->
+  <line x1="350" y1="80" x2="350" y2="108" stroke="#d6d3d1" stroke-width="2"/>
+  <polygon points="350,116 344,106 356,106" fill="#d6d3d1"/>
+
+  <!-- Stage 2 -->
+  <rect x="140" y="116" width="420" height="56" rx="6" fill="#fafaf9" stroke="#d6d3d1" stroke-width="2"/>
+  <text x="350" y="139" text-anchor="middle" font-size="16" font-weight="600" fill="#1c1917">262 studies included</text>
+  <text x="350" y="160" text-anchor="middle" font-size="13" fill="#1c1917">reported per PRISMA-ScR</text>
+
+  <!-- Arrow 2 -->
+  <line x1="350" y1="172" x2="350" y2="200" stroke="#d6d3d1" stroke-width="2"/>
+  <polygon points="350,208 344,198 356,198" fill="#d6d3d1"/>
+
+  <!-- Stage 3 (accent) -->
+  <rect x="190" y="208" width="320" height="56" rx="6" fill="#9f1239"/>
+  <text x="350" y="231" text-anchor="middle" font-size="16" font-weight="600" fill="#fafaf9">42 studies (16%)</text>
+  <text x="350" y="252" text-anchor="middle" font-size="13" fill="#fafaf9">reported any quantitative outcome</text>
+
+  <!-- Side annotation: validation subset -->
+  <line x1="510" y1="236" x2="552" y2="236" stroke="#d6d3d1" stroke-width="2" stroke-dasharray="4 3"/>
+  <rect x="552" y="196" width="144" height="80" rx="6" fill="#fafaf9" stroke="#9f1239" stroke-width="2"/>
+  <text x="624" y="212" text-anchor="middle" font-size="13" font-weight="600" fill="#1c1917">Validation subset</text>
+  <text x="624" y="230" text-anchor="middle" font-size="13" fill="#1c1917">527 papers</text>
+  <text x="624" y="248" text-anchor="middle" font-size="13" fill="#1c1917">12 (2.3%)</text>
+  <text x="624" y="266" text-anchor="middle" font-size="13" fill="#1c1917">quantitative</text>
+
+  <!-- Bottom caption strip -->
+  <text x="350" y="308" text-anchor="middle" font-size="14" fill="#1c1917">Evidence thins at every step: most automation claims never reach a number,</text>
+  <text x="350" y="330" text-anchor="middle" font-size="14" fill="#1c1917">and almost none reach a controlled comparison.</text>
+</svg>

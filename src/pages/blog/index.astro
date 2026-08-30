@@ -2,11 +2,13 @@
 // Blog index — lists published posts from content/posts.
 import '../../styles/global.css';
 import { getCollection } from 'astro:content';
+import PostCard from '../../components/PostCard.astro';
 
 const posts = (await getCollection('posts', ({ data }) => !data.draft))
 	.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
-const postHref = (id: string) => `/blog/${id}.html`;
+const explainers = posts.filter(p => p.data.kind === 'explainer');
+const deepDives = posts.filter(p => p.data.kind !== 'explainer');
 ---
 
 <!doctype html>
@@ -33,21 +35,24 @@ const postHref = (id: string) => `/blog/${id}.html`;
 				extended companions to my <a href="/#publications" class="text-rose-800 hover:underline">published research</a>.
 			</p>
 
-			<div class="divide-y divide-stone-200 border-t border-b border-stone-200 mt-10">
-				{posts.length === 0 && <p class="py-6 text-sm text-stone-500">First posts are in the pipeline.</p>}
-				{posts.map(post => (
-					<article class="py-6">
-						<p class="text-xs font-mono text-stone-500">{post.data.date.toISOString().slice(0, 10)}</p>
-						<h2 class="mt-1 text-lg font-medium leading-snug">
-							<a href={postHref(post.id)} class="hover:text-rose-800 transition-colors">{post.data.title}</a>
-						</h2>
-						<p class="mt-1 text-sm text-stone-600 leading-relaxed">{post.data.description}</p>
-						{post.data.tags.length > 0 && (
-							<p class="mt-2 text-xs text-stone-500">{post.data.tags.map(t => `#${t}`).join(' ')}</p>
-						)}
-					</article>
-				))}
-			</div>
+			{explainers.length > 0 && (
+				<section class="mt-12">
+					<p class="eyebrow mb-1">Field Guides &amp; Hot Topics</p>
+					<p class="text-sm text-stone-500 mb-4">Practical explainers on the tools and debates shaping clinical programming today.</p>
+					<div class="divide-y divide-stone-200 border-t border-b border-stone-200">
+						{explainers.map(post => <PostCard post={post} />)}
+					</div>
+				</section>
+			)}
+
+			<section class="mt-12">
+				<p class="eyebrow mb-1">Research Deep-Dives</p>
+				<p class="text-sm text-stone-500 mb-4">Extended companions to the published papers — methods, results, and honest limitations.</p>
+				<div class="divide-y divide-stone-200 border-t border-b border-stone-200">
+					{deepDives.length === 0 && <p class="py-6 text-sm text-stone-500">First posts are in the pipeline.</p>}
+					{deepDives.map(post => <PostCard post={post} />)}
+				</div>
+			</section>
 		</main>
 	</body>
 </html>

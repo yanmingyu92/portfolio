@@ -1,0 +1,26 @@
+---
+// Card for one blog post in the index list.
+interface Props {
+	post: {
+		id: string;
+		data: {
+			title: string;
+			description: string;
+			date: Date;
+			tags: string[];
+		};
+	};
+}
+const { post } = Astro.props;
+---
+
+<article class="py-6">
+	<p class="text-xs font-mono text-stone-500">{post.data.date.toISOString().slice(0, 10)}</p>
+	<h2 class="mt-1 text-lg font-medium leading-snug">
+		<a href={`/blog/${post.id}.html`} class="hover:text-rose-800 transition-colors">{post.data.title}</a>
+	</h2>
+	<p class="mt-1 text-sm text-stone-600 leading-relaxed">{post.data.description}</p>
+	{post.data.tags.length > 0 && (
+		<p class="mt-2 text-xs text-stone-500">{post.data.tags.map(t => `#${t}`).join(' ')}</p>
+	)}
+</article>

@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 470" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect width="700" height="470" fill="#fafaf9"/>
+
+  <!-- Agent on top -->
+  <rect x="60" y="16" width="580" height="48" rx="6" fill="#fafaf9" stroke="#1c1917" stroke-width="1.5"/>
+  <text x="350" y="45" text-anchor="middle" font-size="14" fill="#1c1917">Any MCP-compatible agent (Claude Code, Cursor, Cline)</text>
+
+  <!-- Entry arrow -->
+  <line x1="350" y1="64" x2="350" y2="84" stroke="#9f1239" stroke-width="2"/>
+  <polygon points="344,84 356,84 350,93" fill="#9f1239"/>
+
+  <!-- Layer 1: A2UI -->
+  <rect x="60" y="98" width="580" height="58" rx="6" fill="#fafaf9" stroke="#d6d3d1" stroke-width="1.5"/>
+  <text x="80" y="123" font-size="15" font-weight="600" fill="#1c1917">1 · A2UI — results rendering</text>
+  <text x="80" y="143" font-size="13" fill="#1c1917">Validation dashboards, log tables, RTF viewers — deterministic output</text>
+
+  <!-- Layer 2: Skill router -->
+  <rect x="60" y="168" width="580" height="58" rx="6" fill="#fafaf9" stroke="#d6d3d1" stroke-width="1.5"/>
+  <text x="80" y="193" font-size="15" font-weight="600" fill="#1c1917">2 · Skill router</text>
+  <text x="80" y="213" font-size="13" fill="#1c1917">Routes tool calls to the right skill; validates inputs first</text>
+
+  <!-- Layer 3: Skills (thick) -->
+  <rect x="60" y="238" width="580" height="58" rx="6" fill="#fafaf9" stroke="#9f1239" stroke-width="2"/>
+  <text x="80" y="263" font-size="15" font-weight="600" fill="#1c1917">3 · Skills — domain expertise</text>
+  <text x="600" y="263" text-anchor="end" font-size="13" font-weight="700" fill="#9f1239">THICK</text>
+  <text x="80" y="283" font-size="13" fill="#1c1917">SK-001–SK-009: prompt templates, few-shot examples, rule engines</text>
+
+  <!-- Layer 4: MCP tools (thin) -->
+  <rect x="60" y="308" width="580" height="58" rx="6" fill="#fafaf9" stroke="#9f1239" stroke-width="2"/>
+  <text x="80" y="333" font-size="15" font-weight="600" fill="#1c1917">4 · MCP tools — data access</text>
+  <text x="600" y="333" text-anchor="end" font-size="13" font-weight="700" fill="#9f1239">THIN</text>
+  <text x="80" y="353" font-size="13" fill="#1c1917">Stateless I/O only: read SAS7BDAT, parse spec Excel, read logs</text>
+
+  <!-- Layer 5: Infrastructure -->
+  <rect x="60" y="378" width="580" height="58" rx="6" fill="#fafaf9" stroke="#d6d3d1" stroke-width="1.5"/>
+  <text x="80" y="403" font-size="15" font-weight="600" fill="#1c1917">5 · Infrastructure — compliance</text>
+  <text x="80" y="423" font-size="13" fill="#1c1917">AuditLogger · DataMasker · AccessControl · context minimization</text>
+</svg>

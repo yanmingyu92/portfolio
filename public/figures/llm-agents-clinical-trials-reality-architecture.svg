@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="700" height="300" viewBox="0 0 700 300" font-family="Helvetica, Arial, sans-serif">
+  <rect width="700" height="300" fill="#fafaf9"/>
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#1c1917"/>
+    </marker>
+    <marker id="arrR" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#9f1239"/>
+    </marker>
+  </defs>
+
+  <!-- Left panel: free-form agent loop -->
+  <text x="25" y="32" font-size="15" font-weight="bold" fill="#1c1917">Free-form agent loop</text>
+  <rect x="15" y="42" width="320" height="230" rx="6" fill="none" stroke="#d6d3d1"/>
+
+  <rect x="50" y="75" width="80" height="32" rx="4" fill="#fafaf9" stroke="#1c1917"/>
+  <text x="90" y="95" text-anchor="middle" font-size="13" fill="#1c1917">Plan</text>
+  <rect x="220" y="75" width="80" height="32" rx="4" fill="#fafaf9" stroke="#1c1917"/>
+  <text x="260" y="95" text-anchor="middle" font-size="13" fill="#1c1917">Act</text>
+  <rect x="135" y="165" width="80" height="32" rx="4" fill="#fafaf9" stroke="#1c1917"/>
+  <text x="175" y="185" text-anchor="middle" font-size="13" fill="#1c1917">Observe</text>
+
+  <line x1="132" y1="91" x2="216" y2="91" stroke="#1c1917" stroke-width="1.5" marker-end="url(#arr)"/>
+  <path d="M255,108 C248,140 238,158 218,176" fill="none" stroke="#1c1917" stroke-width="1.5" marker-end="url(#arr)"/>
+  <path d="M132,176 C112,155 100,135 93,112" fill="none" stroke="#1c1917" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <text x="175" y="140" text-anchor="middle" font-size="13" font-style="italic" fill="#9f1239">path chosen at runtime</text>
+  <text x="175" y="232" text-anchor="middle" font-size="13" fill="#9f1239">same input, different path</text>
+  <text x="175" y="254" text-anchor="middle" font-size="13" fill="#1c1917">no replay guarantee · thin audit trail</text>
+
+  <!-- Right panel: constrained workflow -->
+  <text x="375" y="32" font-size="15" font-weight="bold" fill="#1c1917">Constrained workflow (typed DAG)</text>
+  <rect x="365" y="42" width="320" height="230" rx="6" fill="none" stroke="#d6d3d1"/>
+
+  <rect x="380" y="70" width="64" height="32" rx="4" fill="#fafaf9" stroke="#1c1917"/>
+  <text x="412" y="90" text-anchor="middle" font-size="13" fill="#1c1917">Ingest</text>
+  <rect x="459" y="70" width="64" height="32" rx="4" fill="#fafaf9" stroke="#1c1917"/>
+  <text x="491" y="90" text-anchor="middle" font-size="13" fill="#1c1917">Derive</text>
+  <rect x="538" y="70" width="64" height="32" rx="4" fill="#fafaf9" stroke="#9f1239" stroke-width="2"/>
+  <text x="570" y="90" text-anchor="middle" font-size="13" fill="#1c1917">Validate</text>
+  <rect x="617" y="70" width="64" height="32" rx="4" fill="#fafaf9" stroke="#1c1917"/>
+  <text x="649" y="90" text-anchor="middle" font-size="13" fill="#1c1917">Export</text>
+
+  <line x1="446" y1="86" x2="455" y2="86" stroke="#1c1917" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="525" y1="86" x2="534" y2="86" stroke="#1c1917" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="604" y1="86" x2="613" y2="86" stroke="#1c1917" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <text x="570" y="122" text-anchor="middle" font-size="13" fill="#9f1239">deterministic gate</text>
+
+  <line x1="649" y1="104" x2="649" y2="143" stroke="#d6d3d1" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr)"/>
+  <rect x="380" y="145" width="290" height="58" rx="4" fill="#ffffff" stroke="#d6d3d1"/>
+  <text x="392" y="166" font-size="13" font-weight="bold" fill="#1c1917">Audit log — every node, every run</text>
+  <text x="392" y="188" font-size="13" fill="#1c1917">timestamp · inputs · outputs · hash</text>
+
+  <text x="525" y="232" text-anchor="middle" font-size="13" fill="#1c1917">fixed path · typed artifacts · replayable</text>
+  <text x="525" y="254" text-anchor="middle" font-size="13" fill="#1c1917">validation gates never sample</text>
+</svg>

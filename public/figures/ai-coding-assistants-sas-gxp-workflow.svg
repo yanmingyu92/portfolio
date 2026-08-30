@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="700" height="280" viewBox="0 0 700 280" font-family="Arial, Helvetica, sans-serif">
+  <rect width="700" height="280" fill="#fafaf9"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1c1917"/>
+    </marker>
+  </defs>
+
+  <!-- Step boxes -->
+  <rect x="6" y="30" width="124" height="70" rx="6" fill="#ffffff" stroke="#d6d3d1" stroke-width="1.5"/>
+  <text x="68" y="52" text-anchor="middle" font-size="13" font-weight="bold" fill="#1c1917">1. Task spec</text>
+  <text x="68" y="70" text-anchor="middle" font-size="13" fill="#1c1917">human-written,</text>
+  <text x="68" y="86" text-anchor="middle" font-size="13" fill="#1c1917">versioned</text>
+
+  <rect x="148" y="30" width="124" height="70" rx="6" fill="#ffffff" stroke="#9f1239" stroke-width="2"/>
+  <text x="210" y="52" text-anchor="middle" font-size="13" font-weight="bold" fill="#9f1239">2. LLM draft</text>
+  <text x="210" y="70" text-anchor="middle" font-size="13" fill="#1c1917">code, docs,</text>
+  <text x="210" y="86" text-anchor="middle" font-size="13" fill="#1c1917">review notes</text>
+
+  <rect x="290" y="30" width="124" height="70" rx="6" fill="#ffffff" stroke="#d6d3d1" stroke-width="1.5"/>
+  <text x="352" y="52" text-anchor="middle" font-size="13" font-weight="bold" fill="#1c1917">3. Deterministic</text>
+  <text x="352" y="68" text-anchor="middle" font-size="13" font-weight="bold" fill="#1c1917">gate</text>
+  <text x="352" y="86" text-anchor="middle" font-size="13" fill="#1c1917">compile + QC compare</text>
+
+  <rect x="432" y="30" width="124" height="70" rx="6" fill="#ffffff" stroke="#d6d3d1" stroke-width="1.5"/>
+  <text x="494" y="52" text-anchor="middle" font-size="13" font-weight="bold" fill="#1c1917">4. Human</text>
+  <text x="494" y="68" text-anchor="middle" font-size="13" font-weight="bold" fill="#1c1917">sign-off</text>
+  <text x="494" y="86" text-anchor="middle" font-size="13" fill="#1c1917">reads gate evidence</text>
+
+  <rect x="574" y="30" width="120" height="70" rx="6" fill="#ffffff" stroke="#d6d3d1" stroke-width="1.5"/>
+  <text x="634" y="52" text-anchor="middle" font-size="13" font-weight="bold" fill="#1c1917">5. Release +</text>
+  <text x="634" y="68" text-anchor="middle" font-size="13" font-weight="bold" fill="#1c1917">archive</text>
+  <text x="634" y="86" text-anchor="middle" font-size="13" fill="#1c1917">prompt + log stored</text>
+
+  <!-- Forward arrows -->
+  <line x1="132" y1="65" x2="144" y2="65" stroke="#1c1917" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="274" y1="65" x2="286" y2="65" stroke="#1c1917" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="416" y1="65" x2="428" y2="65" stroke="#1c1917" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="558" y1="65" x2="570" y2="65" stroke="#1c1917" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Forbidden path -->
+  <path d="M210 102 V 190 H 634 V 150" fill="none" stroke="#9f1239" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="634" y="142" text-anchor="middle" font-size="16" font-weight="bold" fill="#9f1239">&#10007;</text>
+  <text x="422" y="214" text-anchor="middle" font-size="13" fill="#9f1239">never: unverified assistant output goes straight to production</text>
+
+  <!-- Legend -->
+  <text x="20" y="252" font-size="13" fill="#1c1917">The assistant works only at step 2. Every step after it is deterministic or human.</text>
+</svg>

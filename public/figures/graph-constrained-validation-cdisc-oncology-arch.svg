@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 300" font-family="ui-sans-serif, system-ui, sans-serif">
+  <rect width="700" height="300" fill="#fafaf9"/>
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#9f1239"/>
+    </marker>
+  </defs>
+
+  <!-- Source: XPT domains -->
+  <rect x="15" y="110" width="160" height="75" rx="6" fill="#ffffff" stroke="#d6d3d1" stroke-width="1.5"/>
+  <text x="95" y="142" text-anchor="middle" font-size="14" font-weight="600" fill="#1c1917">9 oncology SDTM</text>
+  <text x="95" y="162" text-anchor="middle" font-size="14" font-weight="600" fill="#1c1917">domains (XPT)</text>
+
+  <line x1="175" y1="147" x2="214" y2="147" stroke="#9f1239" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- RDF graph -->
+  <rect x="218" y="110" width="168" height="75" rx="6" fill="#ffffff" stroke="#d6d3d1" stroke-width="1.5"/>
+  <text x="302" y="138" text-anchor="middle" font-size="14" font-weight="600" fill="#1c1917">RDF knowledge graph</text>
+  <text x="302" y="158" text-anchor="middle" font-size="13" fill="#1c1917">RELREC foreign keys</text>
+  <text x="302" y="174" text-anchor="middle" font-size="13" fill="#1c1917">SUPPDM → semantic triples</text>
+
+  <!-- split arrows to L1 / L3 -->
+  <line x1="386" y1="140" x2="416" y2="65" stroke="#9f1239" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="386" y1="155" x2="416" y2="165" stroke="#9f1239" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- L1 -->
+  <rect x="414" y="25" width="278" height="72" rx="6" fill="#ffffff" stroke="#d6d3d1" stroke-width="1.5"/>
+  <text x="552" y="48" text-anchor="middle" font-size="14" font-weight="700" fill="#9f1239">L1 — 111 SHACL shapes</text>
+  <text x="552" y="68" text-anchor="middle" font-size="13" fill="#1c1917">85 CORE ports · 8 RECIST derivations</text>
+  <text x="552" y="84" text-anchor="middle" font-size="13" fill="#1c1917">18 archetype SHACL-SPARQL rules</text>
+
+  <!-- L3 -->
+  <rect x="420" y="125" width="265" height="72" rx="6" fill="#ffffff" stroke="#d6d3d1" stroke-width="1.5"/>
+  <text x="552" y="148" text-anchor="middle" font-size="14" font-weight="700" fill="#9f1239">L3 — CaveAgent state machine</text>
+  <text x="552" y="168" text-anchor="middle" font-size="13" fill="#1c1917">RECIST Table 7 · typed SPARQL calls</text>
+  <text x="552" y="184" text-anchor="middle" font-size="13" fill="#1c1917">deterministic · $0.000 / subject</text>
+
+  <!-- converge to audit store (L1 routes around L3 via the left channel) -->
+  <polyline points="440,97 440,106 402,106 402,255 414,255" fill="none" stroke="#9f1239" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="552" y1="197" x2="552" y2="219" stroke="#9f1239" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Audit store -->
+  <rect x="420" y="225" width="265" height="60" rx="6" fill="#ffffff" stroke="#9f1239" stroke-width="1.5"/>
+  <text x="552" y="250" text-anchor="middle" font-size="14" font-weight="600" fill="#1c1917">Merkle-chained audit store</text>
+  <text x="552" y="270" text-anchor="middle" font-size="13" fill="#1c1917">append-only · Part 11 foundation</text>
+</svg>

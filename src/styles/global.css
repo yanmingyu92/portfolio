@@ -98,3 +98,43 @@ section[id] {
 	color: #57534e;
 	margin-bottom: 1rem;
 }
+.prose-custom table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 0.875rem;
+	margin: 1.25rem 0 1.5rem;
+}
+.prose-custom th {
+	text-align: left;
+	font-weight: 600;
+	color: #1c1917;
+	border-bottom: 2px solid #d6d3d1;
+	padding: 0.5rem 0.75rem 0.5rem 0;
+}
+.prose-custom td {
+	border-bottom: 1px solid #e7e5e4;
+	padding: 0.5rem 0.75rem 0.5rem 0;
+	vertical-align: top;
+	color: #44403c;
+}
+.prose-custom tr:last-child td { border-bottom: none; }
+.prose-custom img {
+	border-radius: 0.5rem;
+	border: 1px solid #e7e5e4;
+	margin: 1.5rem auto;
+	display: block;
+	max-width: 100%;
+}
+.prose-custom figure { margin: 1.5rem 0; }
+.prose-custom figcaption {
+	text-align: center;
+	font-size: 0.8125rem;
+	color: #78716c;
+	margin-top: 0.5rem;
+}
+.prose-custom hr {
+	border: none;
+	border-top: 1px solid #e7e5e4;
+	margin: 2rem 0;
+}
+.prose-custom strong { color: #1c1917; }

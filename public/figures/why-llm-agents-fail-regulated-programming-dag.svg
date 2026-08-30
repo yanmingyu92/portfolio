@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 190" font-family="ui-sans-serif, system-ui, sans-serif">
+  <rect width="700" height="190" fill="#fafaf9"/>
+
+  <!-- input / output labels -->
+  <text x="14" y="30" font-size="13" fill="#1c1917" opacity="0.7">SDTM source data</text>
+  <text x="686" y="30" font-size="13" fill="#1c1917" opacity="0.7" text-anchor="end">ADaM dataset (e.g. ADSL)</text>
+
+  <!-- arrows with typed-artifact edge labels -->
+  <g stroke="#d6d3d1" stroke-width="2" fill="none">
+    <line x1="112" y1="100" x2="136" y2="100"/>
+    <line x1="232" y1="100" x2="256" y2="100"/>
+    <line x1="352" y1="100" x2="376" y2="100"/>
+    <line x1="472" y1="100" x2="496" y2="100"/>
+    <line x1="592" y1="100" x2="616" y2="100"/>
+  </g>
+  <g fill="#1c1917">
+    <polygon points="136,100 128,96 128,104"/>
+    <polygon points="256,100 248,96 248,104"/>
+    <polygon points="376,100 368,96 368,104"/>
+    <polygon points="496,100 488,96 488,104"/>
+    <polygon points="616,100 608,96 608,104"/>
+  </g>
+  <g font-size="13" fill="#1c1917" opacity="0.65" text-anchor="middle">
+    <text x="124" y="86">.rds</text>
+    <text x="244" y="86">.rds</text>
+    <text x="364" y="86">.rds</text>
+    <text x="484" y="86">.rds</text>
+    <text x="604" y="86">.rds</text>
+  </g>
+
+  <!-- nodes -->
+  <g font-size="14" text-anchor="middle">
+    <rect x="16" y="78" width="96" height="44" rx="6" fill="#fafaf9" stroke="#d6d3d1" stroke-width="2"/>
+    <text x="64" y="105" fill="#1c1917">INGEST</text>
+
+    <rect x="136" y="78" width="96" height="44" rx="6" fill="#fafaf9" stroke="#d6d3d1" stroke-width="2"/>
+    <text x="184" y="105" fill="#1c1917">MERGE</text>
+
+    <rect x="256" y="78" width="96" height="44" rx="6" fill="#fafaf9" stroke="#d6d3d1" stroke-width="2"/>
+    <text x="304" y="105" fill="#1c1917">DERIVE</text>
+
+    <rect x="376" y="78" width="96" height="44" rx="6" fill="#fafaf9" stroke="#9f1239" stroke-width="2.5"/>
+    <text x="424" y="105" fill="#9f1239" font-weight="600">VALIDATE</text>
+
+    <rect x="496" y="78" width="96" height="44" rx="6" fill="#fafaf9" stroke="#d6d3d1" stroke-width="2"/>
+    <text x="544" y="105" fill="#1c1917">METADATA</text>
+
+    <rect x="616" y="78" width="68" height="44" rx="6" fill="#fafaf9" stroke="#d6d3d1" stroke-width="2"/>
+    <text x="650" y="105" fill="#1c1917">EXPORT</text>
+  </g>
+
+  <!-- annotations -->
+  <text x="304" y="152" font-size="13" fill="#1c1917" opacity="0.7" text-anchor="middle">LLM generates pharmaverse R code inside each node</text>
+  <text x="424" y="172" font-size="13" fill="#9f1239" text-anchor="middle">deterministic gates: 12 assertions for ADSL</text>
+</svg>

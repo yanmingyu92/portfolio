@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="290" viewBox="0 0 720 290" font-family="system-ui, -apple-system, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#9f1239"/>
+    </marker>
+  </defs>
+  <rect width="720" height="290" fill="#fafaf9"/>
+
+  <!-- Stage 1 -->
+  <rect x="14" y="95" width="128" height="70" rx="8" fill="#ffffff" stroke="#d6d3d1" stroke-width="2"/>
+  <text x="78" y="120" text-anchor="middle" font-size="14" font-weight="700" fill="#1c1917">1. Specs → JSON</text>
+  <text x="78" y="140" text-anchor="middle" font-size="13" fill="#1c1917">names, types,</text>
+  <text x="78" y="156" text-anchor="middle" font-size="13" fill="#1c1917">codelists</text>
+
+  <line x1="142" y1="130" x2="168" y2="130" stroke="#d6d3d1" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Stage 2 -->
+  <rect x="170" y="30" width="250" height="200" rx="8" fill="#ffffff" stroke="#9f1239" stroke-width="2"/>
+  <text x="295" y="54" text-anchor="middle" font-size="14" font-weight="700" fill="#1c1917">2. Schema enhancement</text>
+  <rect x="182" y="66" width="226" height="74" rx="6" fill="#fafaf9" stroke="#d6d3d1" stroke-width="1.5"/>
+  <text x="295" y="86" text-anchor="middle" font-size="13" font-weight="700" fill="#9f1239">Knowledge enrichment</text>
+  <text x="295" y="104" text-anchor="middle" font-size="13" fill="#1c1917">query protocol / SAP / CRF</text>
+  <text x="295" y="120" text-anchor="middle" font-size="13" fill="#1c1917">knowledge graph for ranges,</text>
+  <text x="295" y="134" text-anchor="middle" font-size="13" fill="#1c1917">equations, allowed values</text>
+  <rect x="182" y="150" width="226" height="66" rx="6" fill="#fafaf9" stroke="#d6d3d1" stroke-width="1.5"/>
+  <text x="295" y="170" text-anchor="middle" font-size="13" font-weight="700" fill="#9f1239">Structure optimization</text>
+  <text x="295" y="188" text-anchor="middle" font-size="13" fill="#1c1917">reorganize flat schema into</text>
+  <text x="295" y="204" text-anchor="middle" font-size="13" fill="#1c1917">ADSL / BDS / OCCDS blocks</text>
+
+  <line x1="420" y1="130" x2="446" y2="130" stroke="#d6d3d1" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Stage 3 -->
+  <rect x="448" y="78" width="140" height="104" rx="8" fill="#ffffff" stroke="#d6d3d1" stroke-width="2"/>
+  <text x="518" y="102" text-anchor="middle" font-size="14" font-weight="700" fill="#1c1917">3. Generation</text>
+  <text x="518" y="122" text-anchor="middle" font-size="13" fill="#1c1917">Faker direct calls</text>
+  <text x="518" y="138" text-anchor="middle" font-size="13" fill="#1c1917">+ Python templates,</text>
+  <text x="518" y="154" text-anchor="middle" font-size="13" fill="#1c1917">ADSL-first, then</text>
+  <text x="518" y="170" text-anchor="middle" font-size="13" fill="#1c1917">propagate subjects</text>
+
+  <line x1="588" y1="130" x2="612" y2="130" stroke="#d6d3d1" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Stage 4 -->
+  <rect x="610" y="95" width="102" height="70" rx="8" fill="#ffffff" stroke="#d6d3d1" stroke-width="2"/>
+  <text x="661" y="116" text-anchor="middle" font-size="14" font-weight="700" fill="#1c1917">4. Evaluate</text>
+  <text x="661" y="132" text-anchor="middle" font-size="13" fill="#1c1917">structure,</text>
+  <text x="661" y="146" text-anchor="middle" font-size="13" fill="#1c1917">subject,</text>
+  <text x="661" y="160" text-anchor="middle" font-size="13" fill="#1c1917">relation</text>
+
+  <!-- Score annotation -->
+  <text x="360" y="262" text-anchor="middle" font-size="14" fill="#1c1917">Overall quality:  <tspan font-weight="700" fill="#9f1239">0.45</tspan> direct JSON  →  <tspan font-weight="700" fill="#9f1239">0.63</tspan> enhanced  →  <tspan font-weight="700" fill="#9f1239">0.70</tspan> template-based</text>
+</svg>

@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="700" height="380" viewBox="0 0 700 380" font-family="Helvetica, Arial, sans-serif">
+  <rect width="700" height="380" fill="#fafaf9"/>
+  <text x="20" y="34" font-size="16" font-weight="bold" fill="#1c1917">Three ways to migrate a validated SAS library to R</text>
+
+  <!-- Row 1 -->
+  <rect x="20" y="52" width="200" height="72" rx="8" fill="#ffffff" stroke="#d6d3d1" stroke-width="1.5"/>
+  <text x="120" y="82" font-size="14" font-weight="bold" fill="#1c1917" text-anchor="middle">1. Big-bang rewrite</text>
+  <text x="120" y="103" font-size="13" fill="#1c1917" text-anchor="middle">one cutover to R</text>
+  <line x1="220" y1="88" x2="248" y2="88" stroke="#9f1239" stroke-width="2"/>
+  <polygon points="248,88 240,83 240,93" fill="#9f1239"/>
+  <text x="258" y="80" font-size="13" fill="#1c1917">Every macro is rewritten at once, so every output is re-validated</text>
+  <text x="258" y="100" font-size="13" fill="#1c1917">at once. Timelines slip while old and new must agree exactly.</text>
+
+  <!-- Row 2 -->
+  <rect x="20" y="142" width="200" height="72" rx="8" fill="#ffffff" stroke="#d6d3d1" stroke-width="1.5"/>
+  <text x="120" y="172" font-size="14" font-weight="bold" fill="#1c1917" text-anchor="middle">2. Freeze &amp; greenfield</text>
+  <text x="120" y="193" font-size="13" fill="#1c1917" text-anchor="middle">new studies start in R</text>
+  <line x1="220" y1="178" x2="248" y2="178" stroke="#9f1239" stroke-width="2"/>
+  <polygon points="248,178 240,173 240,183" fill="#9f1239"/>
+  <text x="258" y="170" font-size="13" fill="#1c1917">Low risk per study, but the legacy library never shrinks. Two</text>
+  <text x="258" y="190" font-size="13" fill="#1c1917">toolchains and two skill pools must be maintained indefinitely.</text>
+
+  <!-- Row 3 (recommended) -->
+  <rect x="20" y="232" width="200" height="72" rx="8" fill="#ffffff" stroke="#9f1239" stroke-width="2.5"/>
+  <text x="120" y="262" font-size="14" font-weight="bold" fill="#9f1239" text-anchor="middle">3. Wrap &amp; retire by domain</text>
+  <text x="120" y="283" font-size="13" fill="#1c1917" text-anchor="middle">incremental, dual-run QC</text>
+  <line x1="220" y1="268" x2="248" y2="268" stroke="#9f1239" stroke-width="2"/>
+  <polygon points="248,268 240,263 240,273" fill="#9f1239"/>
+  <text x="258" y="252" font-size="13" fill="#1c1917">Legacy macros run unchanged behind a wrapper. R takes over one</text>
+  <text x="258" y="272" font-size="13" fill="#1c1917">domain or report type at a time, with cell-level dual-run QC as the</text>
+  <text x="258" y="292" font-size="13" fill="#9f1239" font-weight="bold">exit gate before each retirement. Validation envelope preserved.</text>
+
+  <line x1="20" y1="330" x2="680" y2="330" stroke="#d6d3d1" stroke-width="1"/>
+  <text x="20" y="356" font-size="13" fill="#1c1917">Risk and re-validation scope decrease from path 1 to path 3; total migration time moves the other way.</text>
+</svg>

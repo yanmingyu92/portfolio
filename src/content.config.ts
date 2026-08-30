@@ -9,6 +9,8 @@ const posts = defineCollection({
 		description: z.string(),
 		tags: z.array(z.string()).default([]),
 		draft: z.boolean().default(false),
+		/** Content type: deep-dive = research companion; explainer = field guide / hot topic */
+		kind: z.enum(['deep-dive', 'explainer']).default('deep-dive'),
 		/** Site-relative canonical path, e.g. /blog/my-post.html */
 		canonicalPath: z.string().optional(),
 		/** Slug of a related entry in src/data/publications.ts */

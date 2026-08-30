@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 300" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <rect width="700" height="300" fill="#fafaf9"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1c1917"/>
+    </marker>
+  </defs>
+
+  <!-- Gate row -->
+  <g stroke="#d6d3d1" fill="#ffffff">
+    <rect x="16"  y="40" width="148" height="56" rx="8"/>
+    <rect x="194" y="40" width="148" height="56" rx="8"/>
+    <rect x="372" y="40" width="148" height="56" rx="8"/>
+    <rect x="550" y="40" width="148" height="56" rx="8"/>
+  </g>
+  <g text-anchor="middle" fill="#1c1917">
+    <text x="90"  y="63" font-size="13" fill="#9f1239" font-weight="600">Gate 1</text>
+    <text x="90"  y="82" font-size="13">Spec AI-readiness</text>
+    <text x="268" y="63" font-size="13" fill="#9f1239" font-weight="600">Gate 2</text>
+    <text x="268" y="82" font-size="13">ADaM class</text>
+    <text x="446" y="63" font-size="13" fill="#9f1239" font-weight="600">Gate 3</text>
+    <text x="446" y="82" font-size="13">Variable complexity</text>
+    <text x="624" y="63" font-size="13" fill="#9f1239" font-weight="600">Gate 4</text>
+    <text x="624" y="82" font-size="13">Risk override</text>
+  </g>
+
+  <!-- Arrows between gates -->
+  <g stroke="#1c1917" stroke-width="1.5" fill="none">
+    <line x1="166" y1="68" x2="192" y2="68" marker-end="url(#arrow)"/>
+    <line x1="344" y1="68" x2="370" y2="68" marker-end="url(#arrow)"/>
+    <line x1="522" y1="68" x2="548" y2="68" marker-end="url(#arrow)"/>
+  </g>
+
+  <!-- Bus down to outcomes -->
+  <g stroke="#d6d3d1" stroke-width="1.5" fill="none">
+    <line x1="268" y1="96" x2="268" y2="140"/>
+    <line x1="130" y1="140" x2="570" y2="140"/>
+  </g>
+  <g stroke="#1c1917" stroke-width="1.5" fill="none">
+    <line x1="130" y1="140" x2="130" y2="176" marker-end="url(#arrow)"/>
+    <line x1="350" y1="140" x2="350" y2="176" marker-end="url(#arrow)"/>
+    <line x1="570" y1="140" x2="570" y2="176" marker-end="url(#arrow)"/>
+  </g>
+
+  <!-- Outcome row -->
+  <g stroke="#d6d3d1" fill="#ffffff">
+    <rect x="30"  y="180" width="200" height="64" rx="8"/>
+    <rect x="250" y="180" width="200" height="64" rx="8"/>
+    <rect x="470" y="180" width="200" height="64" rx="8"/>
+  </g>
+  <g text-anchor="middle">
+    <text x="130" y="208" font-size="14" font-weight="600" fill="#1c1917">Full AI generation</text>
+    <text x="130" y="228" font-size="13" fill="#9f1239">4 of 5 benchmark datasets</text>
+    <text x="350" y="208" font-size="14" font-weight="600" fill="#1c1917">AI + enhanced review</text>
+    <text x="350" y="228" font-size="13" fill="#9f1239">ADSL in the benchmark</text>
+    <text x="570" y="208" font-size="14" font-weight="600" fill="#1c1917">Manual QC</text>
+    <text x="570" y="228" font-size="13" fill="#1c1917">via risk override</text>
+  </g>
+</svg>

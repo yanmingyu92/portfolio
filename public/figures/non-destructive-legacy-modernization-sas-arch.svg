@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 340" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <rect width="700" height="340" fill="#fafaf9"/>
+
+  <!-- Box 1: bridge map -->
+  <rect x="150" y="14" width="400" height="44" rx="6" fill="#ffffff" stroke="#d6d3d1" stroke-width="1.5"/>
+  <text x="350" y="41" text-anchor="middle" font-size="14" fill="#1c1917">Bridge map · 365 entries, one per macro call</text>
+
+  <line x1="350" y1="58" x2="350" y2="72" stroke="#d6d3d1" stroke-width="2"/>
+  <polygon points="345,72 355,72 350,80" fill="#d6d3d1"/>
+
+  <!-- Box 2: orchestrator -->
+  <rect x="150" y="80" width="400" height="44" rx="6" fill="#ffffff" stroke="#d6d3d1" stroke-width="1.5"/>
+  <text x="350" y="107" text-anchor="middle" font-size="14" fill="#1c1917">Python orchestrator · 48 modules, resolves YAML</text>
+
+  <line x1="350" y1="124" x2="350" y2="138" stroke="#d6d3d1" stroke-width="2"/>
+  <polygon points="345,138 355,138 350,146" fill="#d6d3d1"/>
+
+  <!-- Box 3: legacy macros (validation envelope) -->
+  <rect x="150" y="146" width="400" height="44" rx="6" fill="#ffffff" stroke="#9f1239" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="350" y="166" text-anchor="middle" font-size="14" fill="#1c1917">Legacy SAS macros · run unchanged</text>
+  <text x="350" y="183" text-anchor="middle" font-size="13" fill="#9f1239">regulated boundary — SAS owns computation</text>
+
+  <line x1="350" y1="190" x2="350" y2="204" stroke="#d6d3d1" stroke-width="2"/>
+  <polygon points="345,204 355,204 350,212" fill="#d6d3d1"/>
+
+  <!-- Box 4: typed IR -->
+  <rect x="150" y="212" width="400" height="44" rx="6" fill="#ffffff" stroke="#d6d3d1" stroke-width="1.5"/>
+  <text x="350" y="239" text-anchor="middle" font-size="14" fill="#1c1917">Typed IR · ir_cells + ir_structure</text>
+
+  <line x1="350" y1="256" x2="350" y2="270" stroke="#d6d3d1" stroke-width="2"/>
+  <polygon points="345,270 355,270 350,278" fill="#d6d3d1"/>
+
+  <!-- Box 5: JSON / LLM -->
+  <rect x="150" y="278" width="400" height="44" rx="6" fill="#ffffff" stroke="#9f1239" stroke-width="1.5"/>
+  <text x="350" y="305" text-anchor="middle" font-size="14" fill="#1c1917">AI-ready JSON · LLM summarization and checks</text>
+</svg>
