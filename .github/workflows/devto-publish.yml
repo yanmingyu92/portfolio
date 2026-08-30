@@ -1,0 +1,30 @@
+# Weekly dev.to publisher — flips the next 2 RSS-imported drafts to published.
+#
+# Queue order comes from the site RSS feed (blog posts first, papers excluded).
+# Runs every Thursday ~15:42 UTC (morning US Eastern) and on manual dispatch.
+#
+# Required repo secret: DEV_TO_API_KEY (https://dev.to/settings/extensions).
+# Missing secret => script dry-runs and exits 0.
+
+name: devto-weekly-publish
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '42 15 * * 4'
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Publish next 2 drafts
+        env:
+          DEV_TO_API_KEY: ${{ secrets.DEV_TO_API_KEY }}
+        run: node scripts/devto-publish-weekly.mjs --max 2
