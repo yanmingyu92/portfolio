@@ -55,7 +55,7 @@ scripts/syndicate(API 平台)      scripts/syndicate(草稿平台)
 - [x] **Google Search Console** 已验证(HTML 文件方式)并提交 sitemap;Bing 已从 GSC 导入。新文章用 GSC 网址检查工具请求索引加速收录。
 - [ ] **验证 citation 标签**:部署后打开任一 `/papers/*.html`,查看源代码确认 `citation_title` / `citation_author` / `citation_publication_date` 三个必填标签都在(2026-08-30 已抽查通过)。Scholar 收录需数周,之后用 `site:jaimeyan.com` 在 Scholar 里检查。
 - [ ] **medRxiv / arXiv 新手动提交**(无 API):新方法学论文先发 medRxiv(临床受众),CS 向发 arXiv stat.ME/stat.AP。已有 DOI 的用 `scripts/zenodo-deposit.mjs` 补 Zenodo 存档。
-- [ ] **Zenodo**:注册 → Settings → Applications → 新建 token(scopes: deposit:write+deposit:actions)→ 填入 `ZENODO_TOKEN`;关联 GitHub 账号可自动存档代码仓库 release。
+- [x] **Zenodo**:token 已配置;**15 篇无 DOI 论文已全部存缴并获得 DOI**(10.5281/zenodo.22182xxx 系列),创作者含 ORCID,DOI 已回填 `publications.ts`,论文页 `citation_doi` 标签已生效。新论文用 `npm run zenodo-kit -- <slug> [--pdf path] --publish` 一条命令存缴。剩:关联 GitHub 账号可自动存档代码仓库 release。
 - [ ] **Google Scholar 个人页**:确认所有新论文被收录后手动补录漏网条目;开启自动合并更新。
 - [x] **dev.to RSS 自动导入**已开(canonical 已验证全部指回主站);发布由 `.github/workflows/devto-publish.yml` 每周四自动发 2 篇。
 - [ ] **Newsletter**:注册 Buttondown → 把用户名填进 `src/components/Newsletter.astro` 的 `BUTTONDOWN_USER` → 重新部署,订阅框自动出现在博客首页和每篇文章底部。

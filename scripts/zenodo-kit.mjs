@@ -44,7 +44,7 @@ if (!pdf || !existsSync(pdf)) {
 	process.exit(1);
 }
 
-const PUB_TYPE = { journal: 'article', conference: 'conferencepaper', poster: 'poster', preprint: 'preprint' };
+const RES_TYPE = { journal: 'publication-article', conference: 'publication-conferencepaper', poster: 'poster', preprint: 'publication-preprint' };
 const creators = pub.authors.map(name => {
 	const parts = name.trim().split(/\s+/);
 	const c = { person_or_org: { type: 'personal', family_name: parts.at(-1), given_name: parts.slice(0, -1).join(' ') } };
@@ -53,17 +53,17 @@ const creators = pub.authors.map(name => {
 });
 
 const metadata = {
-	upload_type: 'publication',
-	publication_type: PUB_TYPE[pub.type] || 'article',
+	resource_type: { id: RES_TYPE[pub.type] || 'publication-article' },
+	publisher: pub.venue,
 	creators,
 	description: `${pub.abstract}\n\nPresented at / published in: ${pub.venue}${pub.paperId ? ` (paper ${pub.paperId})` : ''}, ${pub.date.slice(0, 4)}. Author page: https://jaimeyan.com/papers/${pub.slug}.html`,
 	publication_date: pub.date.length === 4 ? `${pub.date}-01-01` : pub.date,
 	keywords: pub.keywords,
 	related_identifiers: [
-		{ identifier: `https://jaimeyan.com/papers/${pub.slug}.html`, relation: 'isSupplementedBy', scheme: 'url' },
-		...(pub.url ? [{ identifier: pub.url, relation: 'isIdenticalTo', scheme: 'url' }] : []),
+		{ identifier: `https://jaimeyan.com/papers/${pub.slug}.html`, scheme: 'url', relation_type: { id: 'issupplementedby' } },
+		...(pub.url ? [{ identifier: pub.url, scheme: 'url', relation_type: { id: 'isidenticalto' } }] : []),
 	],
-	license: 'CC-BY-4.0',
+	rights: [{ id: 'cc-by-4.0' }],
 };
 
 const metaFile = join(root, 'node_modules', '.cache', `zenodo-meta-${slug}.json`);

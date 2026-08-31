@@ -64,6 +64,7 @@ export const publications: Publication[] = [
 	// ── Conference papers — PhUSE & PharmaSUG ─────────────────────────────────
 	{
 		slug: 'pharmasug-2026-ai-201',
+		doi: '10.5281/zenodo.22182922',
 		title: 'Eliminating QC Programming Duplication Through Claude AI-Assisted Independent Code Generation: A Practical Framework for Regulatory-Compliant Validation',
 		authors: [AUTHOR, 'Jason Zhang'],
 		venue: 'PharmaSUG 2026',
@@ -78,6 +79,7 @@ export const publications: Publication[] = [
 	},
 	{
 		slug: 'pharmasug-2026-ap-211',
+		doi: '10.5281/zenodo.22182914',
 		title: 'Schema-Preserving Generation of Clinical TLF Templates and Executable R Code via Iterative LLM-Guided Debugging',
 		authors: [AUTHOR],
 		venue: 'PharmaSUG 2026',
@@ -92,6 +94,8 @@ export const publications: Publication[] = [
 	},
 	{
 		slug: 'phuse-2025-os08',
+		doi: '10.5281/zenodo.22182891',
+		url: 'https://doi.org/10.5281/zenodo.22182891',
 		title: 'An End-to-End Approach to Fine-Tune Small LLMs for Generating Admiral R Code in Statistical Programming',
 		authors: [AUTHOR, 'Tingting Tian'],
 		venue: 'PhUSE US Connect 2025',
@@ -105,6 +109,8 @@ export const publications: Publication[] = [
 	},
 	{
 		slug: 'phuse-2025-et01',
+		doi: '10.5281/zenodo.22182897',
+		url: 'https://doi.org/10.5281/zenodo.22182897',
 		title: 'Automating SAS and R Code Interpretation and Debugging: A Practical Pipeline for Statistical Programmers',
 		authors: [AUTHOR, 'Tingting Tian'],
 		venue: 'PhUSE US Connect 2025',
@@ -118,6 +124,8 @@ export const publications: Publication[] = [
 	},
 	{
 		slug: 'phuse-2025-dh03',
+		doi: '10.5281/zenodo.22182899',
+		url: 'https://doi.org/10.5281/zenodo.22182899',
 		title: 'Enhancing Clinical Trial Data Queries with LLMs and Neo4j: A Flexible Framework for ADaM Dataset Management',
 		authors: [AUTHOR, 'Changhong Shi'],
 		venue: 'PhUSE US Connect 2025',
@@ -131,6 +139,8 @@ export const publications: Publication[] = [
 	},
 	{
 		slug: 'phuse-2025-ml12',
+		doi: '10.5281/zenodo.22182901',
+		url: 'https://doi.org/10.5281/zenodo.22182901',
 		title: 'A Novel Pipeline for Generating Realistic Synthetic CDISC ADaM Datasets Using Large Language Models and Knowledge Graphs',
 		authors: [AUTHOR, 'Chao Su'],
 		venue: 'PhUSE US Connect 2025',
@@ -144,6 +154,7 @@ export const publications: Publication[] = [
 	},
 	{
 		slug: 'pharmasug-2025-ai-239',
+		doi: '10.5281/zenodo.22182918',
 		title: 'GenAI Assisted Code Conversion: From SAS to R Standard ADaM Templates',
 		authors: ['Jeff Cheng', 'Srinivas Malipeddi', 'Gurubaran Veeravel', AUTHOR, 'Suhas R. Sanjee'],
 		venue: 'PharmaSUG 2025',
@@ -157,6 +168,7 @@ export const publications: Publication[] = [
 	},
 	{
 		slug: 'pharmasug-2025-si-342',
+		doi: '10.5281/zenodo.22182920',
 		title: 'Comparing SQL and Graph Database Query Methods for Answering Clinical Trial Questions with LLM-Powered Pipelines',
 		authors: [AUTHOR],
 		venue: 'PharmaSUG 2025',
@@ -171,6 +183,8 @@ export const publications: Publication[] = [
 	},
 	{
 		slug: 'phuse-2024-ic08',
+		doi: '10.5281/zenodo.22182904',
+		url: 'https://doi.org/10.5281/zenodo.22182904',
 		title: 'AI-Enhanced Chatbot for Streamlined Clinical Trials Analysis and Document Management',
 		authors: [AUTHOR, 'Chao Su', 'Changhong Shi'],
 		venue: 'PhUSE US Connect 2024',
@@ -184,6 +198,7 @@ export const publications: Publication[] = [
 	},
 	{
 		slug: 'pharmasug-2024-si-160',
+		doi: '10.5281/zenodo.22182924',
 		title: 'LLM-Enhanced Training Agent for Statistical Programming',
 		authors: ['Jason Zhang', AUTHOR],
 		venue: 'PharmaSUG 2024',
@@ -197,6 +212,7 @@ export const publications: Publication[] = [
 	},
 	{
 		slug: 'pharmasug-2024-mm-226',
+		doi: '10.5281/zenodo.22182916',
 		title: 'Methodology for Automating TOC Extraction from Word Documents to Excel',
 		authors: ['Jeetender Chauhan', 'Madhusudhan Ginnaram', 'Sarad Nepal', AUTHOR],
 		venue: 'PharmaSUG 2024',
@@ -210,6 +226,7 @@ export const publications: Publication[] = [
 	},
 	{
 		slug: 'pharmasug-2023-sd-084',
+		doi: '10.5281/zenodo.22182926',
 		title: 'A Macro Utility for CDISC Datasets Cross Checking',
 		authors: ['Chao Su', AUTHOR, 'Changhong Shi'],
 		venue: 'PharmaSUG 2023',
@@ -223,6 +240,7 @@ export const publications: Publication[] = [
 	},
 	{
 		slug: 'pharmasug-2023-qt-085',
+		doi: '10.5281/zenodo.22182912',
 		title: 'Tips to Read In and Output Excel Spreadsheets in SAS',
 		authors: [AUTHOR, 'Chao Su', 'Changhong Shi'],
 		venue: 'PharmaSUG 2023',
@@ -238,6 +256,8 @@ export const publications: Publication[] = [
 	// ── Posters — PHUSE/FDA CSS ───────────────────────────────────────────────
 	{
 		slug: 'css-2024-pp02',
+		doi: '10.5281/zenodo.22182906',
+		url: 'https://doi.org/10.5281/zenodo.22182906',
 		title: 'JSON Data Generation: Linking Statistical Analysis with Large Language Models',
 		authors: ['Changhong Shi', AUTHOR],
 		venue: 'PHUSE/FDA Computational Science Symposium (CSS) 2024',
@@ -251,6 +271,8 @@ export const publications: Publication[] = [
 	},
 	{
 		slug: 'css-2023-pp20',
+		doi: '10.5281/zenodo.22182908',
+		url: 'https://doi.org/10.5281/zenodo.22182908',
 		title: 'A Framework for Interactive Ad-hoc Request Handling: Empowering Clinical Insights through Interactive Plots',
 		authors: ['Changhong Shi', AUTHOR, 'Chao Su'],
 		venue: 'PHUSE/FDA Computational Science Symposium (CSS) 2023',

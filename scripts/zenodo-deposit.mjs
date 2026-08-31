@@ -77,11 +77,19 @@ async function main() {
     body: { metadata },
   });
   console.log(`[zenodo] draft record created: ${record.id}`);
-  const bucketUrl = record.links?.bucket;
-  if (!bucketUrl) throw new Error('Draft record has no links.bucket; cannot upload file');
+  // 2. InvenioRDM files flow: init file entry -> PUT content -> commit.
+  const filesUrl = record.links?.files;
+  if (!filesUrl) throw new Error('Draft record has no links.files; cannot upload file');
 
-  // 2. Upload the file to the bucket (binary PUT, not JSON).
-  const uploadRes = await fetch(`${bucketUrl}/${encodeURIComponent(fileName)}`, {
+  const init = await fetchJson(filesUrl, {
+    method: 'POST',
+    headers: auth,
+    body: [{ key: fileName }],
+  });
+  const entry = init.entries?.find(e => e.key === fileName) || init.entries?.[0];
+  if (!entry?.links?.content) throw new Error(`File entry init failed: ${JSON.stringify(init).slice(0, 500)}`);
+
+  const uploadRes = await fetch(entry.links.content, {
     method: 'PUT',
     headers: { ...auth, 'Content-Type': 'application/octet-stream' },
     body: pdfBytes,
@@ -91,10 +99,14 @@ async function main() {
   }
   console.log(`[zenodo] uploaded ${fileName} (${pdfBytes.length} bytes)`);
 
+  await fetchJson(entry.links.commit, { method: 'POST', headers: auth });
+  console.log(`[zenodo] file committed`);
+
   // 3. Optionally publish.
   if (flags.publish) {
     const published = await fetchJson(record.links.publish, { method: 'POST', headers: auth });
     console.log(`[zenodo] published: ${published.links?.html || `record ${record.id}`}`);
+    console.log(`[zenodo] DOI: ${published.pids?.doi?.identifier || published.metadata?.doi || 'see record page'}`);
   } else {
     console.log(`[zenodo] draft ready at ${record.links?.self_html || `${baseUrl}/records/${record.id}`} (use --publish to publish)`);
   }
