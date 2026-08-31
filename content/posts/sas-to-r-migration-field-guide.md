@@ -79,7 +79,7 @@ adsl <- select_dataset(spec, "ADSL") |>
   xportr_write("ADSL.xpt")      # validated v5 transport file
 ```
 
-Two things to note. Admiral's one-variable-at-a-time design is deliberate — each derivation is independently reviewable and traceable back to the spec. And the packages are composable: you can adopt `xportr` alone to fix XPT export without touching anything else.
+Two things to note. admiral's one-variable-at-a-time design is deliberate — each derivation is independently reviewable and traceable back to the spec. And the packages are composable: you can adopt `xportr` alone to fix XPT export without touching anything else.
 
 ## Three migration patterns, one recommendation
 
@@ -140,4 +140,4 @@ Compare artifacts, not code. Dataset-level tools like `diffdf` and PROC COMPARE,
 ## Further reading
 
 - [Modernizing a 558-Macro SAS Library Without Touching a Line of Validated Code](/blog/non-destructive-legacy-modernization-sas.html) — the wrap-and-retire pattern applied to a real legacy TFL library, with cell-level parity results.
-- [Fine-Tuning LLaMA 3.1 8B for Admiral R Code](/blog/fine-tuning-small-llms-admiral-r.html) — what becomes possible once your derivations live in modular, traceable R code.
+- [Fine-Tuning Llama 3.1 8B for admiral R Code](/blog/fine-tuning-small-llms-admiral-r.html) — what becomes possible once your derivations live in modular, traceable R code.
