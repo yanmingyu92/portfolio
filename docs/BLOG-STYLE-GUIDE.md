@@ -8,6 +8,12 @@ All posts in `content/posts/` follow this guide. Enforced by `npm run qc:blog`.
 |---|---|---|---|
 | `deep-dive` | Companion to a published paper (`paperRef` required) | 900–1,400 words | credibility → citations |
 | `explainer` | Field guide / hot topic, no paper required | 1,200–1,800 words | search traffic → deep-dives |
+| `note` | Short observation, tool tip, annotated link | 150–600 words | cadence + freshness |
+
+Notes are the high-cadence lane (Simon Willison linkpost pattern): a concrete
+observation, a gotcha, or an annotated link to a new paper/tool/CDISC update.
+One idea, no TL;DR/table/takeaways requirements — but still concrete, still
+banned-phrase-free, and still at least one inward link where relevant.
 
 Explainers are the drainage (引流) layer: they target what people actually search for
 (CDISC CORE, SAS→R migration, LLMs in GxP, pharmaverse) and link inward to deep-dives

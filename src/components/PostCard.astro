@@ -21,6 +21,10 @@ const { post } = Astro.props;
 	</h2>
 	<p class="mt-1 text-sm text-stone-600 leading-relaxed">{post.data.description}</p>
 	{post.data.tags.length > 0 && (
-		<p class="mt-2 text-xs text-stone-500">{post.data.tags.map(t => `#${t}`).join(' ')}</p>
+		<p class="mt-2 text-xs text-stone-500">
+			{post.data.tags.map(t => (
+				<a href={`/tags/${t}.html`} class="mr-2 text-stone-500 hover:text-rose-800 no-underline">#{t}</a>
+			))}
+		</p>
 	)}
 </article>

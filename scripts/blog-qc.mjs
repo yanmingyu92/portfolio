@@ -47,17 +47,21 @@ for (const file of files) {
 
 	// structure
 	const words = body.split(/\s+/).filter(Boolean).length;
-	const minWords = kind === 'explainer' ? 1000 : 700;
-	if (words < minWords) err(name, `${words} words (< ${minWords} for ${kind})`);
-	if (!/^>\s*\*\*TL;DR\*\*/m.test(body)) err(name, 'missing TL;DR blockquote');
-	if (!/\|[\s:-]+\|[\s:-]+\|/.test(body)) err(name, 'no markdown table (TLF requirement)');
-	if (!/!\[.+\]\(.+\)|```/.test(body)) err(name, 'no figure or code listing (TLF requirement)');
-	if (!/^##\s+Key takeaways/im.test(body)) err(name, 'missing "## Key takeaways"');
-	if (kind === 'explainer' && !/^##\s+FAQ/im.test(body)) err(name, 'explainer missing "## FAQ"');
+	if (kind === 'note') {
+		if (words < 150) err(name, `${words} words (< 150 for note)`);
+	} else {
+		const minWords = kind === 'explainer' ? 1000 : 700;
+		if (words < minWords) err(name, `${words} words (< ${minWords} for ${kind})`);
+		if (!/^>\s*\*\*TL;DR\*\*/m.test(body)) err(name, 'missing TL;DR blockquote');
+		if (!/\|[\s:-]+\|[\s:-]+\|/.test(body)) err(name, 'no markdown table (TLF requirement)');
+		if (!/!\[.+\]\(.+\)|```/.test(body)) err(name, 'no figure or code listing (TLF requirement)');
+		if (!/^##\s+Key takeaways/im.test(body)) err(name, 'missing "## Key takeaways"');
+		if (kind === 'explainer' && !/^##\s+FAQ/im.test(body)) err(name, 'explainer missing "## FAQ"');
+	}
 	if (!/\]\(\/(papers|blog)\//.test(body)) warn(name, 'no inward link to /papers/ or /blog/');
 	if (/^#\s/m.test(body)) err(name, 'h1 in body (title comes from frontmatter)');
 	const h2s = (body.match(/^##\s/gm) || []).length;
-	if (h2s < 3) warn(name, `only ${h2s} h2 sections`);
+	if (kind !== 'note' && h2s < 3) warn(name, `only ${h2s} h2 sections`);
 
 	// banned patterns
 	for (const re of BANNED) {

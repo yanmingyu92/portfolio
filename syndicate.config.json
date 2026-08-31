@@ -4,8 +4,9 @@
   "reviewDir": "review",
   "platforms": {
     "devto": {
-      "enabled": true,
-      "mode": "api"
+      "enabled": false,
+      "mode": "api",
+      "note": "DISABLED on purpose: dev.to RSS import (Settings > Extensions > Publishing from RSS) now owns this channel — it auto-imports every post as a canonical-marked draft, and .github/workflows/devto-publish.yml publishes 2/week. Using this API adapter as well would create duplicate drafts."
     },
     "hashnode": {
       "enabled": false,

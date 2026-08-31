@@ -8,7 +8,8 @@ const posts = (await getCollection('posts', ({ data }) => !data.draft))
 	.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
 const explainers = posts.filter(p => p.data.kind === 'explainer');
-const deepDives = posts.filter(p => p.data.kind !== 'explainer');
+const deepDives = posts.filter(p => p.data.kind !== 'explainer' && p.data.kind !== 'note');
+const notes = posts.filter(p => p.data.kind === 'note');
 ---
 
 <!doctype html>
@@ -41,6 +42,16 @@ const deepDives = posts.filter(p => p.data.kind !== 'explainer');
 					<p class="text-sm text-stone-500 mb-4">Practical explainers on the tools and debates shaping clinical programming today.</p>
 					<div class="divide-y divide-stone-200 border-t border-b border-stone-200">
 						{explainers.map(post => <PostCard post={post} />)}
+					</div>
+				</section>
+			)}
+
+			{notes.length > 0 && (
+				<section class="mt-12">
+					<p class="eyebrow mb-1">Notes</p>
+					<p class="text-sm text-stone-500 mb-4">Short, frequent observations — tools, papers, and field notes. Longer arguments live in the sections above.</p>
+					<div class="divide-y divide-stone-200 border-t border-b border-stone-200">
+						{notes.map(post => <PostCard post={post} />)}
 					</div>
 				</section>
 			)}

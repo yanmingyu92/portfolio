@@ -14,6 +14,8 @@ const { Content } = await render(post);
 
 const canonical = `https://jaimeyan.com/blog/${post.id}.html`;
 const related = post.data.paperRef ? getPublication(post.data.paperRef) : undefined;
+const words = (post.body || '').split(/\s+/).filter(Boolean).length;
+const readingTime = Math.max(1, Math.round(words / 200));
 ---
 
 <!doctype html>
@@ -38,8 +40,17 @@ const related = post.data.paperRef ? getPublication(post.data.paperRef) : undefi
 	<body class="bg-[#fafaf9] text-stone-900">
 		<main class="max-w-3xl mx-auto px-6 py-16 sm:py-24">
 			<a href="/blog.html" class="text-sm text-stone-500 hover:text-stone-900 transition-colors">← All posts</a>
-			<p class="mt-10 text-xs font-mono text-stone-500">{post.data.date.toISOString().slice(0, 10)}</p>
+			<p class="mt-10 text-xs font-mono text-stone-500">
+				{post.data.date.toISOString().slice(0, 10)} · {readingTime} min read
+			</p>
 			<h1 class="mt-2 font-display text-3xl sm:text-4xl font-medium tracking-tight leading-tight">{post.data.title}</h1>
+			{post.data.tags.length > 0 && (
+				<p class="mt-3 text-xs text-stone-500">
+					{post.data.tags.map(t => (
+						<a href={`/tags/${t}.html`} class="mr-2 text-stone-500 hover:text-rose-800 no-underline">#{t}</a>
+					))}
+				</p>
+			)}
 
 			<article class="prose-custom mt-8 leading-relaxed text-stone-700">
 				<Content />

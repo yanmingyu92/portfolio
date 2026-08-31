@@ -41,7 +41,7 @@ scripts/syndicate(API 平台)      scripts/syndicate(草稿平台)
 
 | 平台 | 开通步骤 | 发布方式 |
 |---|---|---|
-| **dev.to** | Settings → Extensions → 生成 API key → 填入 `DEV_TO_API_KEY` | `node scripts/syndicate/devto.mjs <post.md> [--publish]`;**推荐同时开 RSS 自动导入**:Settings → Extensions → Publishing from RSS,填 `https://jaimeyan.com/rss.xml`,勾选 "mark RSS source as canonical",零代码全自动 |
+| **dev.to** | Settings → Extensions → Publishing from RSS,填 `https://jaimeyan.com/rss.xml`,勾选 "mark RSS source as canonical"(**当前生效方案**) | RSS 自动抓为草稿 → `.github/workflows/devto-publish.yml` 每周四自动发布 2 篇(队列顺序取自 RSS);`scripts/syndicate/devto.mjs` 已停用以免产生重复草稿 |
 | **Hashnode** | 需 Pro($50/年)→ 拿 Personal Access Token + Publication ID | `node scripts/syndicate/hashnode.mjs <post.md> [--publish]`,canonical 走 `originalArticleURL` |
 | **公众号** | 公众平台 → 开发 → 基本配置拿 AppID/AppSecret,配置 IP 白名单 | `node scripts/syndicate/wechat.mjs <post.md>` 推到草稿箱,人工在后台点群发。注意:正文图片必须走素材 API,外链图会被剥掉 |
 | **Medium** | 无需开通(API 已废弃) | `review/*.medium.md` 里有 import 链接与步骤:Medium 编辑器 → Import a story → 粘贴站内 URL,Medium 自动把 canonical 指回 jaimeyan.com |

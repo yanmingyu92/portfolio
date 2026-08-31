@@ -1,0 +1,33 @@
+# Jaime Yan — jaimeyan.com
+
+> Personal site of Jaime Yan, Associate Director of Statistical Programming and
+> clinical data science lead. Research focus: AI/LLM automation for clinical
+> trial statistical programming, CDISC data standards (SDTM/ADaM), and
+> deterministic, auditable agentic systems for GxP environments.
+
+## Key pages
+
+- [Home](https://jaimeyan.com/): bio, experience, publications, projects
+- [Blog](https://jaimeyan.com/blog.html): field guides, research deep-dives, notes
+- [Paper pages](https://jaimeyan.com/): per-publication pages under /papers/*.html
+  with full abstracts and citation metadata
+- [RSS feed](https://jaimeyan.com/rss.xml)
+
+## Featured field guides
+
+- [CDISC CORE Explained](https://jaimeyan.com/blog/cdisc-core-validation-explained.html)
+- [SAS to R Migration Field Guide](https://jaimeyan.com/blog/sas-to-r-migration-field-guide.html)
+- [AI Coding Assistants for Clinical Programmers](https://jaimeyan.com/blog/ai-coding-assistants-sas-gxp.html)
+- [LLM Agents in Clinical Trials](https://jaimeyan.com/blog/llm-agents-clinical-trials-reality.html)
+
+## Research highlights
+
+- [CAVE-Onc: graph-constrained validation for CDISC oncology data](https://jaimeyan.com/papers/cave-onc.html)
+- [GxP-Agent: process-DAG topology for reliable clinical programming](https://jaimeyan.com/papers/gxp-agent.html)
+- [ClinAgent: five-layer architecture for clinical programming agents](https://jaimeyan.com/papers/clinagent-five-layer.html)
+
+## Author
+
+- ORCID: https://orcid.org/0009-0007-1786-7259
+- Google Scholar: https://scholar.google.com/citations?user=vo1hv04AAAAJ
+- GitHub: https://github.com/yanmingyu92

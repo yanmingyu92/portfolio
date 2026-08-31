@@ -1,0 +1,49 @@
+---
+// Tag hub — all posts carrying one tag.
+import '../../styles/global.css';
+import { getCollection } from 'astro:content';
+import PostCard from '../../components/PostCard.astro';
+
+export async function getStaticPaths() {
+	const posts = await getCollection('posts', ({ data }) => !data.draft);
+	const tags = [...new Set(posts.flatMap(p => p.data.tags))];
+	return tags.map(tag => ({
+		params: { tag },
+		props: {
+			tag,
+			posts: posts
+				.filter(p => p.data.tags.includes(tag))
+				.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()),
+		},
+	}));
+}
+
+const { tag, posts } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<title>#{tag} — Jaime Yan</title>
+		<meta name="description" content={`Posts tagged ${tag} — AI/LLM automation for clinical trial statistical programming.`} />
+		<link rel="canonical" href={`https://jaimeyan.com/tags/${tag}.html`} />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+	</head>
+	<body class="bg-[#fafaf9] text-stone-900">
+		<main class="max-w-3xl mx-auto px-6 py-16 sm:py-24">
+			<a href="/blog.html" class="text-sm text-stone-500 hover:text-stone-900 transition-colors">← All posts</a>
+			<p class="eyebrow mt-10 mb-3">Topic</p>
+			<h1 class="font-display text-3xl sm:text-4xl font-medium tracking-tight">#{tag}</h1>
+			<p class="mt-3 text-stone-600">{posts.length} post{posts.length === 1 ? '' : 's'}</p>
+
+			<div class="divide-y divide-stone-200 border-t border-b border-stone-200 mt-10">
+				{posts.map(post => <PostCard post={post} />)}
+			</div>
+		</main>
+	</body>
+</html>
