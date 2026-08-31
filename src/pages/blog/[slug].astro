@@ -75,21 +75,21 @@ if (post.data.kind === 'tutorial') jsonLd.articleSection = SERIES_TITLE;
 	</head>
 	<body class="bg-[#fafaf9] text-stone-900">
 		<main class="max-w-3xl mx-auto px-6 py-16 sm:py-24">
-		<a href="/blog.html" class="text-sm text-stone-500 hover:text-stone-900 transition-colors">← All posts</a>
+		<a href="/blog.html" class="text-sm text-stone-600 hover:text-stone-900 transition-colors">← All posts</a>
 		{post.data.series && (
 			<p class="mt-10 text-xs font-mono text-rose-800">
 				<a href="/blog.html#bootcamp" class="hover:underline">{SERIES_TITLE}</a>
-				{post.data.seriesOrder !== undefined && <span class="text-stone-500"> · Part {post.data.seriesOrder}</span>}
+				{post.data.seriesOrder !== undefined && <span class="text-stone-600"> · {post.data.seriesOrder === 0 ? 'Series intro' : `Part ${post.data.seriesOrder}`}</span>}
 			</p>
 		)}
-		<p class={(post.data.series ? 'mt-1' : 'mt-10') + " text-xs font-mono text-stone-500"}>
+		<p class={(post.data.series ? 'mt-1' : 'mt-10') + " text-xs font-mono text-stone-600"}>
 				{post.data.date.toISOString().slice(0, 10)} · {readingTime} min read
 			</p>
 			<h1 class="mt-2 font-display text-3xl sm:text-4xl font-medium tracking-tight leading-tight">{post.data.title}</h1>
 			{post.data.tags.length > 0 && (
-				<p class="mt-3 text-xs text-stone-500">
+				<p class="mt-3 text-xs text-stone-600">
 					{post.data.tags.map(t => (
-						<a href={`/tags/${t}.html`} class="mr-2 text-stone-500 hover:text-rose-800 no-underline">#{t}</a>
+						<a href={`/tags/${t}.html`} class="mr-2 text-stone-600 hover:text-rose-800 no-underline">#{t}</a>
 					))}
 				</p>
 			)}
@@ -100,9 +100,9 @@ if (post.data.kind === 'tutorial') jsonLd.articleSection = SERIES_TITLE;
 
 			{related && (
 				<aside class="mt-12 border-l-2 border-rose-300 pl-4">
-					<p class="text-xs font-semibold uppercase tracking-widest text-stone-500 mb-1">Related publication</p>
+					<p class="text-xs font-semibold uppercase tracking-widest text-stone-600 mb-1">Related publication</p>
 					<a href={`/papers/${related.slug}.html`} class="text-rose-800 hover:underline font-medium">{related.title}</a>
-					<p class="text-sm text-stone-500 mt-1">{related.venue} · {related.date.slice(0, 4)}</p>
+					<p class="text-sm text-stone-600 mt-1">{related.venue} · {related.date.slice(0, 4)}</p>
 				</aside>
 			)}
 
@@ -127,7 +127,7 @@ if (post.data.kind === 'tutorial') jsonLd.articleSection = SERIES_TITLE;
 				</nav>
 			)}
 
-			<p class="mt-10 text-sm text-stone-500">
+			<p class="mt-10 text-sm text-stone-600">
 				Originally published at <a href={canonical} class="text-rose-800 hover:underline">jaimeyan.com</a>.
 			</p>
 

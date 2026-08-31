@@ -17,17 +17,17 @@ const { post, part } = Astro.props;
 ---
 
 <article class="py-6">
-	<p class="text-xs font-mono text-stone-500">
-		{part !== undefined && <span class="text-rose-800">Part {part} · </span>}{post.data.date.toISOString().slice(0, 10)}
+	<p class="text-xs font-mono text-stone-600">
+		{part !== undefined && <span class="text-rose-800">{part === 0 ? 'Intro' : `Part ${part}`} · </span>}{post.data.date.toISOString().slice(0, 10)}
 	</p>
 	<h2 class="mt-1 text-lg font-medium leading-snug">
 		<a href={`/blog/${post.id}.html`} class="hover:text-rose-800 transition-colors">{post.data.title}</a>
 	</h2>
 	<p class="mt-1 text-sm text-stone-600 leading-relaxed">{post.data.description}</p>
 	{post.data.tags.length > 0 && (
-		<p class="mt-2 text-xs text-stone-500">
+		<p class="mt-2 text-xs text-stone-600">
 			{post.data.tags.map(t => (
-				<a href={`/tags/${t}.html`} class="mr-2 text-stone-500 hover:text-rose-800 no-underline">#{t}</a>
+				<a href={`/tags/${t}.html`} class="mr-2 text-stone-600 hover:text-rose-800 no-underline">#{t}</a>
 			))}
 		</p>
 	)}

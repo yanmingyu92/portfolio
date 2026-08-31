@@ -99,7 +99,9 @@ section[id] {
 	margin-bottom: 1rem;
 }
 .prose-custom table {
+	display: block;
 	width: 100%;
+	overflow-x: auto;
 	border-collapse: collapse;
 	font-size: 0.875rem;
 	margin: 1.25rem 0 1.5rem;
@@ -129,7 +131,7 @@ section[id] {
 .prose-custom figcaption {
 	text-align: center;
 	font-size: 0.8125rem;
-	color: #78716c;
+	color: #57534e;
 	margin-top: 0.5rem;
 }
 .prose-custom hr {
@@ -158,7 +160,7 @@ section[id] {
 .era-callout .era-callout-asof {
 	font-size: 0.75rem;
 	font-family: ui-monospace, monospace;
-	color: #78716c;
+	color: #57534e;
 	margin-top: 0.5rem;
 }
 
@@ -191,24 +193,33 @@ section[id] {
 .skill-card .skill-card-download {
 	display: block;
 	font-size: 0.75rem;
-	color: #78716c;
+	color: #57534e;
 	margin-top: 0.5rem;
 }
 
 /* Series navigation (prev/next) on tutorial post pages */
 .series-nav {
 	display: flex;
+	flex-wrap: wrap;
 	justify-content: space-between;
-	gap: 1rem;
+	gap: 0.75rem;
 	border-top: 1px solid #e7e5e4;
 	border-bottom: 1px solid #e7e5e4;
 	padding: 0.875rem 0;
 	margin: 2rem 0 0;
 	font-size: 0.875rem;
 }
-.series-nav a { color: #9f1239; text-decoration: underline; text-underline-offset: 3px; }
+.series-nav > div { min-width: 0; }
+.series-nav a {
+	color: #9f1239;
+	text-decoration: underline;
+	text-underline-offset: 3px;
+	display: inline-block;
+	padding: 2px 0;
+	line-height: 1.4;
+}
 .series-nav .series-nav-label {
 	font-size: 0.75rem;
 	font-family: ui-monospace, monospace;
-	color: #78716c;
+	color: #57534e;
 }
