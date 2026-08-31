@@ -3,6 +3,7 @@
 import '../../styles/global.css';
 import { getCollection, render } from 'astro:content';
 import { getPublication } from '../../data/publications';
+import { seriesLines, seriesSlugify } from '../../data/bootcamp-lines';
 import Newsletter from '../../components/Newsletter.astro';
 
 export async function getStaticPaths() {
@@ -24,6 +25,7 @@ let seriesPrev: typeof post | undefined;
 let seriesNext: typeof post | undefined;
 let seriesIndex = 0;
 let seriesTotal = 0;
+let sideGroups: { label: string; items: { id: string; order: number; title: string; current: boolean }[] }[] = [];
 if (post.data.series) {
 	const all = await getCollection('posts', ({ data }) => !data.draft && data.series === post.data.series);
 	const ordered = all.sort((a, b) => (a.data.seriesOrder ?? 99) - (b.data.seriesOrder ?? 99));
@@ -31,7 +33,25 @@ if (post.data.series) {
 	seriesIndex = ordered.findIndex(p => p.id === post.id);
 	if (seriesIndex > 0) seriesPrev = ordered[seriesIndex - 1];
 	if (seriesIndex >= 0 && seriesIndex < ordered.length - 1) seriesNext = ordered[seriesIndex + 1];
+
+	// Sidebar groups: published parts grouped by content line.
+	sideGroups = seriesLines
+		.map(g => ({
+			label: g.label,
+			items: ordered
+				.filter(p => g.parts.includes(p.data.seriesOrder ?? -1))
+				.map(p => ({ id: p.id, order: p.data.seriesOrder ?? 0, title: p.data.title, current: p.id === post.id })),
+		}))
+		.filter(g => g.items.length > 0);
 }
+
+// In-page TOC: h2 headings extracted server-side; ids assigned client-side with the same slugify.
+const isTutorial = post.data.kind === 'tutorial';
+const tocItems = isTutorial
+	? [...(post.body || '').matchAll(/^## (.+)$/gm)]
+		.map(m => m[1].trim())
+		.map(t => ({ title: t, id: 'h2-' + seriesSlugify(t) }))
+	: [];
 
 const jsonLd: Record<string, unknown> = {
 	'@context': 'https://schema.org',
@@ -74,7 +94,12 @@ if (post.data.kind === 'tutorial') jsonLd.articleSection = SERIES_TITLE;
 		<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 	</head>
 	<body class="bg-[#fafaf9] text-stone-900">
-		<main class="max-w-3xl mx-auto px-6 py-16 sm:py-24">
+		<main class:list={[
+			'px-6 py-16 sm:py-24',
+			isTutorial ? 'mx-auto max-w-3xl xl:max-w-5xl' : 'max-w-3xl mx-auto',
+		]}>
+		<div class={isTutorial ? 'xl:grid xl:grid-cols-[minmax(0,1fr)_15rem] xl:gap-12' : ''}>
+			<div class="min-w-0">
 		<a href="/blog.html" class="text-sm text-stone-600 hover:text-stone-900 transition-colors">← All posts</a>
 		{post.data.series && (
 			<p class="mt-10 text-xs font-mono text-rose-800">
@@ -82,6 +107,17 @@ if (post.data.kind === 'tutorial') jsonLd.articleSection = SERIES_TITLE;
 				{post.data.seriesOrder !== undefined && <span class="text-stone-600"> · {post.data.seriesOrder === 0 ? 'Series intro' : `Part ${post.data.seriesOrder}`}</span>}
 			</p>
 		)}
+
+		{isTutorial && (
+			<nav class="series-chips xl:hidden" aria-label="Jump to series part">
+				{sideGroups.flatMap(g => g.items).sort((a, b) => a.order - b.order).map(item => (
+					item.current
+						? <span class="series-chip current">{item.order === 0 ? 'Intro' : item.order}</span>
+						: <a class="series-chip" href={`/blog/${item.id}.html`}>{item.order === 0 ? 'Intro' : item.order}</a>
+				))}
+			</nav>
+		)}
+
 		<p class={(post.data.series ? 'mt-1' : 'mt-10') + " text-xs font-mono text-stone-600"}>
 				{post.data.date.toISOString().slice(0, 10)} · {readingTime} min read
 			</p>
@@ -132,6 +168,59 @@ if (post.data.kind === 'tutorial') jsonLd.articleSection = SERIES_TITLE;
 			</p>
 
 			<Newsletter />
+			</div>
+
+			{isTutorial && (
+				<aside class="series-sidebar" aria-label="Series navigation">
+					<p class="eyebrow mb-2">{SERIES_TITLE}</p>
+					{sideGroups.map(g => (
+						<div class="series-side-group">
+							<p class="series-side-label">{g.label}</p>
+							{g.items.map(item => (
+								item.current
+									? <span class="series-side-item current"><span class="n">{item.order === 0 ? '·' : item.order}</span>{item.title}</span>
+									: <a class="series-side-item" href={`/blog/${item.id}.html`}><span class="n">{item.order === 0 ? '·' : item.order}</span>{item.title}</a>
+							))}
+						</div>
+					))}
+					{tocItems.length > 0 && (
+						<div class="series-side-group">
+							<p class="series-side-label">On this page</p>
+							<nav class="series-toc">
+								{tocItems.map(t => <a href={`#${t.id}`}>{t.title}</a>)}
+							</nav>
+						</div>
+					)}
+				</aside>
+			)}
+		</div>
 		</main>
+
+		{isTutorial && (
+			<script>
+				// Assign h2 ids deterministically (matches server-side slugify) + TOC scroll-spy.
+				const slugify = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+				const used = new Set();
+				document.querySelectorAll('.prose-custom h2').forEach(h => {
+					let id = 'h2-' + slugify(h.textContent || '');
+					while (used.has(id)) id += '-x';
+					used.add(id);
+					h.id = id;
+				});
+				const links = [...document.querySelectorAll('.series-toc a')];
+				if (links.length) {
+					const map = new Map(links.map(a => [a.getAttribute('href').slice(1), a]));
+					const spy = new IntersectionObserver(entries => {
+						for (const e of entries) {
+							if (e.isIntersecting) {
+								links.forEach(a => a.classList.remove('active'));
+								map.get(e.target.id)?.classList.add('active');
+							}
+						}
+					}, { rootMargin: '-10% 0px -80% 0px' });
+					document.querySelectorAll('.prose-custom h2[id]').forEach(h => spy.observe(h));
+				}
+			</script>
+		)}
 	</body>
 </html>

@@ -223,3 +223,90 @@ section[id] {
 	font-family: ui-monospace, monospace;
 	color: #57534e;
 }
+
+/* ---- Tutorial series sidebar (xl+) and chips (mobile) ---- */
+
+.prose-custom h2[id] { scroll-margin-top: 1.5rem; }
+
+.series-chips {
+	display: flex;
+	gap: 0.375rem;
+	overflow-x: auto;
+	margin-top: 0.75rem;
+	padding-bottom: 0.25rem;
+	-webkit-overflow-scrolling: touch;
+}
+.series-chip {
+	flex: none;
+	border: 1px solid #d6d3d1;
+	border-radius: 9999px;
+	padding: 0.125rem 0.625rem;
+	font-size: 0.75rem;
+	font-family: ui-monospace, monospace;
+	color: #57534e;
+	white-space: nowrap;
+	text-decoration: none;
+}
+a.series-chip:hover { border-color: #9f1239; color: #9f1239; }
+.series-chip.current {
+	background: #9f1239;
+	border-color: #9f1239;
+	color: #fafaf9;
+}
+
+.series-sidebar { display: none; }
+
+@media (min-width: 1280px) {
+	.series-sidebar {
+		display: block;
+		position: sticky;
+		top: 2rem;
+		align-self: start;
+		max-height: calc(100vh - 4rem);
+		overflow-y: auto;
+		font-size: 0.8125rem;
+		padding-bottom: 1rem;
+	}
+}
+.series-side-group { margin-bottom: 1rem; }
+.series-side-label {
+	font-size: 0.6875rem;
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: #78716c;
+	margin-bottom: 0.25rem;
+}
+.series-side-item {
+	display: flex;
+	gap: 0.5rem;
+	padding: 0.2rem 0;
+	color: #57534e;
+	text-decoration: none;
+	line-height: 1.35;
+}
+a.series-side-item:hover { color: #9f1239; }
+.series-side-item .n {
+	flex: none;
+	min-width: 1.4rem;
+	font-family: ui-monospace, monospace;
+	color: #a8a29e;
+	text-align: right;
+}
+.series-side-item.current { color: #9f1239; font-weight: 600; }
+.series-side-item.current .n { color: #9f1239; }
+
+.series-toc { display: flex; flex-direction: column; gap: 0.2rem; }
+.series-toc a {
+	color: #57534e;
+	text-decoration: none;
+	border-left: 2px solid #e7e5e4;
+	padding-left: 0.5rem;
+	line-height: 1.35;
+}
+.series-toc a:hover { color: #9f1239; }
+.series-toc a.active {
+	color: #9f1239;
+	border-left-color: #9f1239;
+	font-weight: 500;
+}
