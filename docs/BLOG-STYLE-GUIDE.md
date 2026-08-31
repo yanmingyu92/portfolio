@@ -6,9 +6,30 @@ All posts in `content/posts/` follow this guide. Enforced by `npm run qc:blog`.
 
 | kind | Purpose | Length | Funnel role |
 |---|---|---|---|
+| `survey` | Quarterly state-of-the-field reference post | 4,000–6,000 words | citation anchor, compounding SEO |
 | `deep-dive` | Companion to a published paper (`paperRef` required) | 900–1,400 words | credibility → citations |
 | `explainer` | Field guide / hot topic, no paper required | 1,200–1,800 words | search traffic → deep-dives |
 | `note` | Short observation, tool tip, annotated link | 150–600 words | cadence + freshness |
+
+Surveys are the quarterly flagship (Lil'Log pattern): `## Scope and method`,
+evidence-tiered body, ≥3 tables, `## References` with **verified-URL-only**
+citations — every external reference must actually be fetched before citing.
+Scaffold: `npm run new-post -- --kind survey --slug <topic>-<YYYYqN>`. A GitHub
+Actions workflow opens a reminder issue every quarter.
+
+### Receipts notes (48-hour rule)
+
+When a new model/tool/CDISC update drops, test it on a real clinical-programming
+task within 48 hours and post a `note` with the actual prompts and outputs
+(Simon Willison pattern). Template: `templates/note-template.md`
+(`npm run new-post -- --kind note`). Never describe a test you didn't run.
+
+### The paper three-piece set
+
+Every new publication gets: `npm run paper-kit -- <slug>` → deep-dive scaffold
+(prefilled from the abstract, `draft: true`) + LinkedIn draft in `review/` +
+manual checklist (GitHub repo, Zenodo DOI, GSC indexing). Time posting to the
+PhUSE/PharmaSUG/CDISC cycle.
 
 Notes are the high-cadence lane (Simon Willison linkpost pattern): a concrete
 observation, a gotcha, or an annotated link to a new paper/tool/CDISC update.

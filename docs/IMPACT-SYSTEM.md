@@ -51,13 +51,24 @@ scripts/syndicate(API 平台)      scripts/syndicate(草稿平台)
 
 ## 四、一次性手工清单(阶段 C,学术侧)
 
-- [ ] **注册 ORCID**(https://orcid.org)→ 在 ORCID 里授权 Crossref 和 DataCite 自动更新 → 以后任何带你 ORCID 的 DOI 自动进档案。注册后把 iD 填到 `src/layouts/Layout.astro` JSON-LD 的 `sameAs`(文件里有 TODO 注释),并在各平台个人资料里挂上。
-- [ ] **Google Search Console** 验证 jaimeyan.com → 提交 `https://jaimeyan.com/sitemap-index.xml`;Bing Webmaster Tools 同样提交。
-- [ ] **验证 citation 标签**:部署后打开任一 `/papers/*.html`,查看源代码确认 `citation_title` / `citation_author` / `citation_publication_date` 三个必填标签都在。Scholar 收录需数周,之后用 `site:jaimeyan.com` 在 Scholar 里检查。
+- [x] **注册 ORCID** → 已填入 `Layout.astro` JSON-LD `sameAs`(0009-0007-1786-7259)。剩:在 ORCID 里授权 Crossref/DataCite 自动更新,各平台个人资料挂上 iD。
+- [x] **Google Search Console** 已验证(HTML 文件方式)并提交 sitemap;Bing 已从 GSC 导入。新文章用 GSC 网址检查工具请求索引加速收录。
+- [ ] **验证 citation 标签**:部署后打开任一 `/papers/*.html`,查看源代码确认 `citation_title` / `citation_author` / `citation_publication_date` 三个必填标签都在(2026-08-30 已抽查通过)。Scholar 收录需数周,之后用 `site:jaimeyan.com` 在 Scholar 里检查。
 - [ ] **medRxiv / arXiv 新手动提交**(无 API):新方法学论文先发 medRxiv(临床受众),CS 向发 arXiv stat.ME/stat.AP。已有 DOI 的用 `scripts/zenodo-deposit.mjs` 补 Zenodo 存档。
 - [ ] **Zenodo**:注册 → Settings → Applications → 新建 token(scopes: deposit:write+deposit:actions)→ 填入 `ZENODO_TOKEN`;关联 GitHub 账号可自动存档代码仓库 release。
 - [ ] **Google Scholar 个人页**:确认所有新论文被收录后手动补录漏网条目;开启自动合并更新。
-- [ ] **dev.to RSS 自动导入**(见上表),这是整条流水线里 ROI 最高的一个开关。
+- [x] **dev.to RSS 自动导入**已开(canonical 已验证全部指回主站);发布由 `.github/workflows/devto-publish.yml` 每周四自动发 2 篇。
+- [ ] **Newsletter**:注册 Buttondown → 把用户名填进 `src/components/Newsletter.astro` 的 `BUTTONDOWN_USER` → 重新部署,订阅框自动出现在博客首页和每篇文章底部。
+
+## 四点五、内容生产管线(2026-08-30 起)
+
+| 管线 | 触发 | 命令/机制 |
+|---|---|---|
+| 季度综述(survey) | GitHub Actions 每季度自动开提醒 issue(1/4/7/10 月 3 日) | `npm run new-post -- --kind survey --slug <topic>-<YYYYqN>` → 按 `templates/survey-template.md` 写 4000–6000 字,References 必须逐条实际验证 |
+| 论文三件套 | 新论文加入 `publications.ts` 后 | `npm run paper-kit -- <slug>` → 深度文骨架 + LinkedIn 草稿(`review/`)+ 手工清单 |
+| 实测收据(note) | 新模型/工具/CDISC 更新 48 小时内 | `npm run new-post -- --kind note` → 按 `templates/note-template.md` 贴真实 prompt/输出 |
+| 引流文(explainer) | 热点话题 | `npm run new-post -- --kind explainer` |
+| 发布 | 每周四 15:42 UTC | devto-publish.yml 自动发 2 篇 dev.to 草稿(队列顺序取自 RSS) |
 
 ## 五、环境变量(见 `.env.example`)
 

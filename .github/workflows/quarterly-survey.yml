@@ -1,0 +1,39 @@
+# Quarterly survey reminder — opens a GitHub issue each quarter with the
+# "state of the field" survey checklist. Runs at 09:17 UTC on the 3rd of
+# Jan/Apr/Jul/Oct, and on manual dispatch.
+#
+# No secrets required (uses the built-in GITHUB_TOKEN).
+
+name: quarterly-survey-reminder
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 9 3 1,4,7,10 *'
+
+permissions:
+  issues: write
+
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Open survey issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          Q=$(( ($(date +%-m) - 1) / 3 + 1 ))
+          Y=$(date +%Y)
+          gh issue create \
+            --title "Q${Q} ${Y} state-of-the-field survey" \
+            --body "$(cat <<'EOF'
+          Quarterly survey post (see docs/BLOG-STYLE-GUIDE.md, `kind: survey`).
+
+          - [ ] pick this quarter's focus (LLM tooling / CDISC automation / validation / R migration)
+          - [ ] collect sources: PhUSE + PharmaSUG proceedings, journals, repos — every reference must be fetched and verified, no exceptions
+          - [ ] scaffold: `npm run new-post -- --kind survey --slug <topic>-${Y}q${Q} --title "..."`
+          - [ ] write 4,000–6,000 words per templates/survey-template.md (Scope and method section is mandatory)
+          - [ ] `npm run qc:blog` clean → build → deploy
+          - [ ] GSC: request indexing; LinkedIn post; dev.to is automatic
+          EOF
+          )"

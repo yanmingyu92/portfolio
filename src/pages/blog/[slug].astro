@@ -3,6 +3,7 @@
 import '../../styles/global.css';
 import { getCollection, render } from 'astro:content';
 import { getPublication } from '../../data/publications';
+import Newsletter from '../../components/Newsletter.astro';
 
 export async function getStaticPaths() {
 	const posts = await getCollection('posts', ({ data }) => !data.draft);
@@ -67,6 +68,8 @@ const readingTime = Math.max(1, Math.round(words / 200));
 			<p class="mt-10 text-sm text-stone-500">
 				Originally published at <a href={canonical} class="text-rose-800 hover:underline">jaimeyan.com</a>.
 			</p>
+
+			<Newsletter />
 		</main>
 	</body>
 </html>

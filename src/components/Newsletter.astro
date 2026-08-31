@@ -1,0 +1,32 @@
+---
+// Newsletter signup — Buttondown embed. Inactive until BUTTONDOWN_USER is set:
+// 1. register at https://buttondown.com (free tier is fine)
+// 2. fill in your username below and redeploy — the form appears on the blog
+//    index and at the bottom of every post.
+const BUTTONDOWN_USER = '';
+---
+
+{BUTTONDOWN_USER && (
+	<aside class="mt-12 border border-stone-200 rounded-lg p-6 bg-white">
+		<p class="eyebrow mb-1">Newsletter</p>
+		<p class="text-sm text-stone-600 mb-4">
+			New posts on LLM automation for clinical programming, roughly twice a month. No spam, unsubscribe anytime.
+		</p>
+		<form
+			action={`https://buttondown.com/api/emails/embed-subscribe/${BUTTONDOWN_USER}`}
+			method="post"
+			class="flex gap-2"
+		>
+			<input
+				type="email"
+				name="email"
+				required
+				placeholder="you@example.com"
+				class="flex-1 text-sm border border-stone-300 rounded-md px-3 py-2 focus:outline-none focus:border-rose-800"
+			/>
+			<button type="submit" class="text-sm font-medium text-white bg-stone-900 hover:bg-stone-700 px-4 py-2 rounded-md transition-colors">
+				Subscribe
+			</button>
+		</form>
+	</aside>
+)}

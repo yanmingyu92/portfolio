@@ -3,12 +3,14 @@
 import '../../styles/global.css';
 import { getCollection } from 'astro:content';
 import PostCard from '../../components/PostCard.astro';
+import Newsletter from '../../components/Newsletter.astro';
 
 const posts = (await getCollection('posts', ({ data }) => !data.draft))
 	.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
 const explainers = posts.filter(p => p.data.kind === 'explainer');
-const deepDives = posts.filter(p => p.data.kind !== 'explainer' && p.data.kind !== 'note');
+const surveys = posts.filter(p => p.data.kind === 'survey');
+const deepDives = posts.filter(p => p.data.kind !== 'explainer' && p.data.kind !== 'note' && p.data.kind !== 'survey');
 const notes = posts.filter(p => p.data.kind === 'note');
 ---
 
@@ -35,6 +37,16 @@ const notes = posts.filter(p => p.data.kind === 'note');
 				Notes on LLM agents, clinical trial programming automation, and CDISC data standards —
 				extended companions to my <a href="/#publications" class="text-rose-800 hover:underline">published research</a>.
 			</p>
+
+			{surveys.length > 0 && (
+				<section class="mt-12">
+					<p class="eyebrow mb-1">State of the Field</p>
+					<p class="text-sm text-stone-500 mb-4">Quarterly surveys of the evidence — what's proven, what's hype, with full references.</p>
+					<div class="divide-y divide-stone-200 border-t border-b border-stone-200">
+						{surveys.map(post => <PostCard post={post} />)}
+					</div>
+				</section>
+			)}
 
 			{explainers.length > 0 && (
 				<section class="mt-12">
@@ -64,6 +76,8 @@ const notes = posts.filter(p => p.data.kind === 'note');
 					{deepDives.map(post => <PostCard post={post} />)}
 				</div>
 			</section>
+
+			<Newsletter />
 		</main>
 	</body>
 </html>

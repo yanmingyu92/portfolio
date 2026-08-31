@@ -50,13 +50,20 @@ for (const file of files) {
 	if (kind === 'note') {
 		if (words < 150) err(name, `${words} words (< 150 for note)`);
 	} else {
-		const minWords = kind === 'explainer' ? 1000 : 700;
+		const minWords = { survey: 3000, explainer: 1000, 'deep-dive': 700 }[kind] ?? 700;
 		if (words < minWords) err(name, `${words} words (< ${minWords} for ${kind})`);
 		if (!/^>\s*\*\*TL;DR\*\*/m.test(body)) err(name, 'missing TL;DR blockquote');
 		if (!/\|[\s:-]+\|[\s:-]+\|/.test(body)) err(name, 'no markdown table (TLF requirement)');
 		if (!/!\[.+\]\(.+\)|```/.test(body)) err(name, 'no figure or code listing (TLF requirement)');
 		if (!/^##\s+Key takeaways/im.test(body)) err(name, 'missing "## Key takeaways"');
 		if (kind === 'explainer' && !/^##\s+FAQ/im.test(body)) err(name, 'explainer missing "## FAQ"');
+		if (kind === 'survey') {
+			if (!/^##\s+FAQ/im.test(body)) err(name, 'survey missing "## FAQ"');
+			if (!/^##\s+References/im.test(body)) err(name, 'survey missing "## References"');
+			if (!/^##\s+Scope and method/im.test(body)) err(name, 'survey missing "## Scope and method"');
+			const tables = (body.match(/\|[\s:-]+\|[\s:-]+\|/g) || []).length;
+			if (tables < 3) warn(name, `survey has ${tables} table(s), target ≥3`);
+		}
 	}
 	if (!/\]\(\/(papers|blog)\//.test(body)) warn(name, 'no inward link to /papers/ or /blog/');
 	if (/^#\s/m.test(body)) err(name, 'h1 in body (title comes from frontmatter)');

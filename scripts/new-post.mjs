@@ -20,8 +20,9 @@ if (!slug || !/^[a-z0-9]+(-[a-z0-9]+)*$/.test(slug)) {
 	console.error('error: --slug is required (kebab-case, e.g. --slug sas-to-r-migration)');
 	process.exit(1);
 }
-if (!['deep-dive', 'explainer'].includes(kind)) {
-	console.error('error: --kind must be deep-dive or explainer');
+const TEMPLATES = { 'deep-dive': 'post-template.md', explainer: 'post-template.md', survey: 'survey-template.md', note: 'note-template.md' };
+if (!TEMPLATES[kind]) {
+	console.error(`error: --kind must be one of ${Object.keys(TEMPLATES).join(', ')}`);
 	process.exit(1);
 }
 
@@ -32,7 +33,7 @@ if (existsSync(target)) {
 }
 
 const date = new Date().toISOString().slice(0, 10);
-const filled = readFileSync(join(root, 'templates', 'post-template.md'), 'utf8')
+const filled = readFileSync(join(root, 'templates', TEMPLATES[kind]), 'utf8')
 	.replaceAll('{{TITLE}}', title)
 	.replaceAll('{{DATE}}', date)
 	.replaceAll('{{SLUG}}', slug)
