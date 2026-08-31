@@ -15,17 +15,27 @@ const BANNED = [
 	/unlock the power/i, /thrilled to (share|announce)/i, /ever-evolving/i, /\blandscape of\b/i,
 ];
 
-const files = process.argv.slice(2).length
-	? process.argv.slice(2)
+const files = process.argv.slice(2).filter(a => a !== '--all')
+	.map(a => (a.endsWith('.md') ? a : null))
+	.filter(Boolean);
+const includeDrafts = process.argv.includes('--all');
+const filesFinal = files.length
+	? files
 	: readdirSync(postsDir).filter(f => f.endsWith('.md')).map(f => join(postsDir, f));
 
 let errors = 0, warnings = 0;
 const err = (f, m) => { errors++; console.log(`  ERROR  ${m}`); };
 const warn = (f, m) => { warnings++; console.log(`  warn   ${m}`); };
 
-for (const file of files) {
+for (const file of filesFinal) {
 	const name = basename(file);
 	const raw = readFileSync(file, 'utf8');
+
+	if (!includeDrafts && /^draft:\s*true\s*$/m.test(raw)) {
+		console.log(`\n${name}\n  skip   draft (use --all to lint anyway)`);
+		continue;
+	}
+
 	console.log(`\n${name}`);
 
 	const fmMatch = raw.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
@@ -45,18 +55,34 @@ for (const file of files) {
 	if (!/^tags:\s*\[.+\]/m.test(fm)) warn(name, 'no tags');
 	if (kind === 'deep-dive' && !field('paperRef')) err(name, 'deep-dive missing paperRef');
 
+	// tutorial-specific frontmatter
+	if (kind === 'tutorial') {
+		if (!field('series')) err(name, 'tutorial missing series');
+		const order = field('seriesOrder');
+		if (order === undefined || order === '' || isNaN(Number(order))) err(name, 'tutorial missing/invalid seriesOrder');
+	}
+	const seriesOrder = field('seriesOrder');
+	if (seriesOrder !== undefined && seriesOrder !== '' && !field('series')) err(name, 'seriesOrder set but series missing');
+
 	// structure
 	const words = body.split(/\s+/).filter(Boolean).length;
 	if (kind === 'note') {
 		if (words < 150) err(name, `${words} words (< 150 for note)`);
 	} else {
-		const minWords = { survey: 3000, explainer: 1000, 'deep-dive': 700 }[kind] ?? 700;
+		const minWords = { survey: 3000, explainer: 1000, 'deep-dive': 700, tutorial: 1500 }[kind] ?? 700;
 		if (words < minWords) err(name, `${words} words (< ${minWords} for ${kind})`);
 		if (!/^>\s*\*\*TL;DR\*\*/m.test(body)) err(name, 'missing TL;DR blockquote');
 		if (!/\|[\s:-]+\|[\s:-]+\|/.test(body)) err(name, 'no markdown table (TLF requirement)');
 		if (!/!\[.+\]\(.+\)|```/.test(body)) err(name, 'no figure or code listing (TLF requirement)');
 		if (!/^##\s+Key takeaways/im.test(body)) err(name, 'missing "## Key takeaways"');
 		if (kind === 'explainer' && !/^##\s+FAQ/im.test(body)) err(name, 'explainer missing "## FAQ"');
+		if (kind === 'tutorial') {
+			if (!/^##\s+The agentic way/im.test(body)) err(name, 'tutorial missing "## The agentic way" (L3 layer)');
+			if (!/^##\s+The fundamentals/im.test(body)) err(name, 'tutorial missing "## The fundamentals" (L1 layer)');
+			if (!/^##\s+FAQ/im.test(body)) err(name, 'tutorial missing "## FAQ"');
+			if (!/era-callout/.test(body)) err(name, 'tutorial missing era-callout (volatile-layer asOf box)');
+			if (!/```(sas|r|python)/.test(body)) warn(name, 'tutorial code listings should tag a language (sas/r/python)');
+		}
 		if (kind === 'survey') {
 			if (!/^##\s+FAQ/im.test(body)) err(name, 'survey missing "## FAQ"');
 			if (!/^##\s+References/im.test(body)) err(name, 'survey missing "## References"');
@@ -77,5 +103,5 @@ for (const file of files) {
 	}
 }
 
-console.log(`\n${files.length} file(s): ${errors} error(s), ${warnings} warning(s)`);
+console.log(`\n${filesFinal.length} file(s): ${errors} error(s), ${warnings} warning(s)`);
 process.exit(errors ? 1 : 0);

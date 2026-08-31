@@ -9,8 +9,14 @@ const posts = defineCollection({
 		description: z.string(),
 		tags: z.array(z.string()).default([]),
 		draft: z.boolean().default(false),
-		/** Content type: deep-dive = research companion; explainer = field guide / hot topic; survey = quarterly state-of-field; note = short observation */
-		kind: z.enum(['deep-dive', 'explainer', 'survey', 'note']).default('deep-dive'),
+		/** Content type: deep-dive = research companion; explainer = field guide / hot topic; survey = quarterly state-of-field; note = short observation; tutorial = systematic training series post */
+		kind: z.enum(['deep-dive', 'explainer', 'survey', 'note', 'tutorial']).default('deep-dive'),
+		/** Series slug a tutorial belongs to, e.g. "clinical-sp-bootcamp" (tutorials only) */
+		series: z.string().optional(),
+		/** Reading order within the series, 0 = syllabus/roadmap (tutorials only) */
+		seriesOrder: z.number().optional(),
+		/** Path to the companion downloadable Claude skill artifact, e.g. /skills/adam-adsl-derivation/SKILL.md */
+		skillArtifact: z.string().optional(),
 		/** Site-relative canonical path, e.g. /blog/my-post.html */
 		canonicalPath: z.string().optional(),
 		/** Slug of a related entry in src/data/publications.ts */

@@ -10,12 +10,16 @@ interface Props {
 			tags: string[];
 		};
 	};
+	/** Series part number (tutorials only) — rendered as "Part N" next to the date. */
+	part?: number;
 }
-const { post } = Astro.props;
+const { post, part } = Astro.props;
 ---
 
 <article class="py-6">
-	<p class="text-xs font-mono text-stone-500">{post.data.date.toISOString().slice(0, 10)}</p>
+	<p class="text-xs font-mono text-stone-500">
+		{part !== undefined && <span class="text-rose-800">Part {part} · </span>}{post.data.date.toISOString().slice(0, 10)}
+	</p>
 	<h2 class="mt-1 text-lg font-medium leading-snug">
 		<a href={`/blog/${post.id}.html`} class="hover:text-rose-800 transition-colors">{post.data.title}</a>
 	</h2>

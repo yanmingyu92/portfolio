@@ -138,3 +138,77 @@ section[id] {
 	margin: 2rem 0;
 }
 .prose-custom strong { color: #1c1917; }
+
+/* ---- Tutorial series conventions (plain HTML in .md bodies) ---- */
+
+/* Volatile "agentic era" layer callout — used in tutorial posts via
+   <div class="era-callout"> ... </div> */
+.era-callout {
+	border: 1px solid #e7d4db;
+	border-left: 3px solid #9f1239;
+	border-radius: 0.5rem;
+	background: #fdf7f8;
+	padding: 1rem 1.25rem;
+	margin: 1.5rem 0;
+	font-size: 0.9375rem;
+	color: #44403c;
+}
+.era-callout p { margin-bottom: 0.5rem; }
+.era-callout p:last-child { margin-bottom: 0; }
+.era-callout .era-callout-asof {
+	font-size: 0.75rem;
+	font-family: ui-monospace, monospace;
+	color: #78716c;
+	margin-top: 0.5rem;
+}
+
+/* Companion Claude-skill download card — used via
+   <a class="skill-card" href="/skills/<name>/SKILL.md"> ... </a> */
+.skill-card {
+	display: block;
+	border: 1px solid #d6d3d1;
+	border-radius: 0.5rem;
+	background: #fafaf9;
+	padding: 0.875rem 1.125rem;
+	margin: 1.5rem 0;
+	text-decoration: none;
+	transition: border-color 0.15s ease;
+}
+.skill-card:hover { border-color: #9f1239; }
+.skill-card .skill-card-name {
+	display: block;
+	font-family: ui-monospace, SFMono-Regular, monospace;
+	font-size: 0.8125rem;
+	font-weight: 600;
+	color: #9f1239;
+}
+.skill-card .skill-card-desc {
+	display: block;
+	font-size: 0.875rem;
+	color: #57534e;
+	margin-top: 0.25rem;
+}
+.skill-card .skill-card-download {
+	display: block;
+	font-size: 0.75rem;
+	color: #78716c;
+	margin-top: 0.5rem;
+}
+
+/* Series navigation (prev/next) on tutorial post pages */
+.series-nav {
+	display: flex;
+	justify-content: space-between;
+	gap: 1rem;
+	border-top: 1px solid #e7e5e4;
+	border-bottom: 1px solid #e7e5e4;
+	padding: 0.875rem 0;
+	margin: 2rem 0 0;
+	font-size: 0.875rem;
+}
+.series-nav a { color: #9f1239; text-decoration: underline; text-underline-offset: 3px; }
+.series-nav .series-nav-label {
+	font-size: 0.75rem;
+	font-family: ui-monospace, monospace;
+	color: #78716c;
+}

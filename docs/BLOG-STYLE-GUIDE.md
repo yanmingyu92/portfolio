@@ -10,6 +10,17 @@ All posts in `content/posts/` follow this guide. Enforced by `npm run qc:blog`.
 | `deep-dive` | Companion to a published paper (`paperRef` required) | 900–1,400 words | credibility → citations |
 | `explainer` | Field guide / hot topic, no paper required | 1,200–1,800 words | search traffic → deep-dives |
 | `note` | Short observation, tool tip, annotated link | 150–600 words | cadence + freshness |
+| `tutorial` | Systematic training series post (Clinical SP Bootcamp) | ≥1,500 words | beginner search traffic → explainers/deep-dives |
+
+Tutorials follow the three-layer structure (QC-enforced): `## The fundamentals`
+(L1, ~10-yr shelf life), `## The modern workflow` (L2, SCE/Git, 3–5 yr),
+`## The agentic way` (L3) plus an `.era-callout` box with an asOf date.
+Frontmatter requires `series` + `seriesOrder`; optional `skillArtifact` links
+the companion downloadable Claude skill in `public/skills/`. Curriculum, red
+lines (never redistribute third-party training artifacts), and the release
+plan live in `docs/BOOTCAMP-SERIES-PLAN.md`. Scaffold:
+`npm run new-post -- --kind tutorial --slug <slug> --order <n>`.
+QC skips files with `draft: true` (use `npm run qc:blog -- --all` to lint drafts).
 
 Surveys are the quarterly flagship (Lil'Log pattern): `## Scope and method`,
 evidence-tiered body, ≥3 tables, `## References` with **verified-URL-only**

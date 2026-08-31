@@ -14,15 +14,21 @@ const opt = (name, def) => {
 
 const slug = opt('slug');
 const kind = opt('kind', 'explainer');
+const series = opt('series', 'clinical-sp-bootcamp');
+const order = opt('order', '');
 const title = opt('title', slug ? slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) : null);
 
 if (!slug || !/^[a-z0-9]+(-[a-z0-9]+)*$/.test(slug)) {
 	console.error('error: --slug is required (kebab-case, e.g. --slug sas-to-r-migration)');
 	process.exit(1);
 }
-const TEMPLATES = { 'deep-dive': 'post-template.md', explainer: 'post-template.md', survey: 'survey-template.md', note: 'note-template.md' };
+const TEMPLATES = { 'deep-dive': 'post-template.md', explainer: 'post-template.md', survey: 'survey-template.md', note: 'note-template.md', tutorial: 'tutorial-template.md' };
 if (!TEMPLATES[kind]) {
 	console.error(`error: --kind must be one of ${Object.keys(TEMPLATES).join(', ')}`);
+	process.exit(1);
+}
+if (kind === 'tutorial' && order === '') {
+	console.error('error: --order <n> is required for --kind tutorial (series reading order)');
 	process.exit(1);
 }
 
@@ -37,8 +43,10 @@ const filled = readFileSync(join(root, 'templates', TEMPLATES[kind]), 'utf8')
 	.replaceAll('{{TITLE}}', title)
 	.replaceAll('{{DATE}}', date)
 	.replaceAll('{{SLUG}}', slug)
-	.replaceAll('{{KIND}}', kind);
+	.replaceAll('{{KIND}}', kind)
+	.replaceAll('{{SERIES}}', series)
+	.replaceAll('{{ORDER}}', order);
 
 writeFileSync(target, filled);
-console.log(`created content/posts/${slug}.md (kind=${kind}, date=${date})`);
+console.log(`created content/posts/${slug}.md (kind=${kind}, date=${date}${kind === 'tutorial' ? `, series=${series} #${order}` : ''})`);
 console.log('next: write the post per docs/BLOG-STYLE-GUIDE.md, then npm run qc:blog');

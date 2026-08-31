@@ -10,8 +10,10 @@ const posts = (await getCollection('posts', ({ data }) => !data.draft))
 
 const explainers = posts.filter(p => p.data.kind === 'explainer');
 const surveys = posts.filter(p => p.data.kind === 'survey');
-const deepDives = posts.filter(p => p.data.kind !== 'explainer' && p.data.kind !== 'note' && p.data.kind !== 'survey');
+const deepDives = posts.filter(p => p.data.kind === 'deep-dive');
 const notes = posts.filter(p => p.data.kind === 'note');
+const tutorials = posts.filter(p => p.data.kind === 'tutorial')
+	.sort((a, b) => (a.data.seriesOrder ?? 99) - (b.data.seriesOrder ?? 99));
 ---
 
 <!doctype html>
@@ -58,7 +60,17 @@ const notes = posts.filter(p => p.data.kind === 'note');
 				</section>
 			)}
 
-			{notes.length > 0 && (
+			{tutorials.length > 0 && (
+			<section class="mt-12" id="bootcamp">
+				<p class="eyebrow mb-1">Clinical SP Bootcamp</p>
+				<p class="text-sm text-stone-500 mb-4">A systematic training series: fundamentals, modern SCE workflow, and the agentic way — from raw data to TLF delivery. Each post ships a downloadable Claude skill.</p>
+				<div class="divide-y divide-stone-200 border-t border-b border-stone-200">
+					{tutorials.map(post => <PostCard post={post} part={post.data.seriesOrder} />)}
+				</div>
+			</section>
+		)}
+
+		{notes.length > 0 && (
 				<section class="mt-12">
 					<p class="eyebrow mb-1">Notes</p>
 					<p class="text-sm text-stone-500 mb-4">Short, frequent observations — tools, papers, and field notes. Longer arguments live in the sections above.</p>
