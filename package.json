@@ -8,6 +8,7 @@
     "preview": "astro preview",
     "new-post": "node scripts/new-post.mjs",
     "paper-kit": "node scripts/paper-kit.mjs",
+    "zenodo-kit": "node scripts/zenodo-kit.mjs",
     "qc:blog": "node scripts/blog-qc.mjs",
     "astro": "astro"
   },

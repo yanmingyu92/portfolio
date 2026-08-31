@@ -1,17 +1,17 @@
 ---
 title: "LLMs in Clinical Statistical Programming: Proven vs Hype (2026)"
 date: 2026-08-30
-description: "A tiered survey of LLM evidence in clinical trial statistical programming: benchmarked results, unproven promises, vendor hype, and the open gaps for 2026–2027."
+description: "A tiered survey of LLM evidence in clinical trial statistical programming: benchmarked results, promising single-team studies, vendor hype, and the open gaps for 2026–2027."
 tags: ["llm", "clinical-trials", "statistical-programming", "survey", "benchmarks", "gxp"]
 kind: survey
 canonicalPath: /blog/llm-clinical-statistical-programming-state-2026.html
 ---
 
-Two numbers define the state of LLMs in clinical trial statistical programming in 2026. The first is 20 out of 20: in a pre-registered benchmark, a graph-constrained LLM validation system detected every injected cross-domain contradiction in CDISC oncology data, where the CDISC CORE engine detected 8 and the Pinnacle 21 FDA engine detected 6 [1][17][23]. The second is 2.3%: the share of validation-topic papers in a structured review of this field that report any quantitative outcome at all [13].
+Two numbers define the state of LLMs in clinical trial statistical programming in 2026. The first is 20 out of 20: in a pre-registered benchmark, a graph-constrained LLM validation system detected every injected cross-domain contradiction in CDISC oncology data, against 8 for the CDISC CORE engine and 6 for the Pinnacle 21 engine [1][17][23]. The second is 2.3%: the share of validation-topic papers in a structured review of this field that report any quantitative outcome at all [13].
 
 Between those two numbers sits everything you need to know. Real, measured results now exist for specific statistical programming tasks. And most of what is said about AI in this field — conference talks, vendor decks, LinkedIn posts — carries no evaluation behind it. This survey separates the two, tier by tier, with the numbers attached.
 
-> **TL;DR** — LLMs have proven, benchmarked value in five statistical programming tasks: cross-domain validation (20/20 vs 8/20 for the incumbent engine), independent QC code generation (97.1–100% variable-level match), local small-model ADaM coding (OPS 0.36→0.82 after fine-tuning), TLF template generation (85.7 vs 81.7 quality for RAG over prompting, p < 0.05), and code debugging (>96% success across SAS, R, and Python). Specification generation, natural-language data querying, and synthetic data are promising but rest on single-team studies. End-to-end "autonomous submission" claims are hype: zero published quantitative evaluations exist. Below: the evidence map, the numbers, and what to watch through 2027.
+> **TL;DR** — LLMs have proven, benchmarked value in six statistical programming tasks: cross-domain validation (20/20 vs 8/20 and 6/20 for the incumbent engines), independent QC code generation (97.1–100% variable-level match), local small-model ADaM coding (OPS 0.36→0.82 after fine-tuning), TLF template generation (85.7 vs 81.7 quality for RAG over prompting, p < 0.05), code debugging (>96% success across SAS, R, and Python), and SAS-to-R migration (78% of a production library converted, 66% of converted code used unmodified). Specification generation, natural-language data querying, synthetic data, and legacy modernization are promising but rest on single-team evidence. End-to-end "autonomous submission" claims are hype: zero published quantitative evaluations exist. Below: the evidence map, the numbers, and what to watch through 2027.
 
 ## Scope and method
 
