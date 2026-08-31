@@ -68,6 +68,10 @@ Regulatory submissions must stay consistent across interdependent SDTM domains, 
 
 The result: 20 of 20 clinician-reviewed contradiction archetypes detected, versus 8 of 20 for the CDISC CORE engine [17] and 6 of 20 for the Pinnacle 21 engine [23] — both engines scored 0 of 10 on cross-domain RECIST contradictions, the class they structurally cannot express. On two real Project Data Sphere [24] oncology trials mapped to SDTM, the system stayed specific (0.06–0.09 flags per subject) while detecting 10 of 11 and 16 of 18 applicable archetypes.
 
+![Cross-domain contradiction detection benchmark](/figures/llm-clinical-statistical-programming-state-2026-validation-benchmark.svg)
+
+*Figure 1: Cross-domain contradiction detection on the pre-registered benchmark — all 20 archetypes and the RECIST cross-domain subset [1][17][23].*
+
 Two honest caveats. First, this is a construction validation of expressiveness — it proves the graph layer can express checks rule engines cannot, not that every real submission contains those contradictions at that rate. Second, it is single-team. It is also, to my knowledge, the only pre-registered LLM-system benchmark in this field, which is why it anchors the tier.
 
 ### Independent QC programming
@@ -83,6 +87,10 @@ The caveat is the benchmark itself: CDISCPilot01 is one small, clean study. The 
 Sponsors who cannot ship specifications to a cloud API need local models, and the base models start weak: stock Llama 3.1 8B scores an Overall Performance Score (OPS) of 0.36 on admiral code generation, with code execution accuracy of 0.35 — code that resembles admiral until it invents a parameter [4].
 
 The [PhUSE 2025 OS08 pipeline](/papers/phuse-2025-os08.html) fine-tunes that same model with LoRA on knowledge-graph-filtered admiral examples and validates output against a knowledge graph built from admiral documentation [4]. Evaluated on 75 variables from a Phase II study across six ADaM domains and three complexity tiers, OPS rises from 0.36 to 0.82 — within 0.09 of GPT-4o's 0.91 on the same tasks. Complex derivations sit at 0.76 OPS, which is why the paper's own framing is "drafting assistant, not autopilot." Everything runs on a workstation GPU; no data leaves the building.
+
+![Local model OPS comparison](/figures/llm-clinical-statistical-programming-state-2026-local-model-ops.svg)
+
+*Figure 2: admiral code generation, Overall Performance Score — stock vs LoRA fine-tuned Llama 3.1 8B vs GPT-4o, with the complex-derivation ceiling marked [4].*
 
 ### TLF template generation
 
@@ -169,6 +177,10 @@ Why does the hype persist? Because the review found only 42 of 262 included stud
 ## Maturity by task type
 
 Collapsing the tiers onto the task taxonomy a programming lead actually staffs:
+
+![Evidence maturity by task type](/figures/llm-clinical-statistical-programming-state-2026-maturity-map.svg)
+
+*Figure 3: The evidence ladder — where each task type sits as of August 2026. The visual summary of Table 3.*
 
 | Task | Maturity | Best evidence | Practical posture |
 |---|---|---|---|
