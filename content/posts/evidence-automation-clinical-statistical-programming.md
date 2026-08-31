@@ -10,7 +10,7 @@ paperRef: automation-scoping-review
 
 You're scoping a Phase III study. That's 200–500 TLFs, independent double programming costing 1.6–2.0× the primary programming effort, and refinement cycles that stretch timelines by 20–40%. Someone on the team says: "We should automate this — everyone says pharmaverse cuts development time by a quarter."
 
-Do you believe the number? That question pushed me into a structured review of the 2020–2025 literature on automating clinical trial statistical programming — TLF generation, validation frameworks, and AI/ML integration — reported per PRISMA-ScR with GRADE evidence ratings. The answer is more uncomfortable than the conference talks suggest.
+Do you believe the number? That question pushed me into a scoping review of the 2020–2025 literature on automating clinical trial statistical programming — TLF generation, validation frameworks, and AI/ML integration — reported per PRISMA-ScR with GRADE evidence ratings. The answer is more uncomfortable than the conference talks suggest.
 
 > **TL;DR** — The efficiency gains everyone quotes (15–25% for pharmaverse tooling, 30–50% for risk-based validation) are real but rest on Low to Very Low grade evidence: before/after comparisons, case reports, expert opinion. Only 12 of 527 validation papers report quantitative outcomes, and no RCT comparing validation approaches exists. Adopt the tools, but quote the numbers with the grade attached.
 

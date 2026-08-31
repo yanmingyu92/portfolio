@@ -328,7 +328,7 @@ export const publications: Publication[] = [
 	},
 	{
 		slug: 'automation-scoping-review',
-		title: 'Automation in Clinical Trial Statistical Programming: A Structured Review of TLF Generation, Validation Frameworks, and AI/ML Integration (2020–2025)',
+		title: 'Evidence Behind the Automation of Clinical Trial Statistical Programming: A Scoping Review of Technology Adoption, Validation Frameworks, and AI/ML Integration (2020–2025)',
 		authors: [AUTHOR, 'Jason Zhang', 'Tingting Tian'],
 		venue: 'medRxiv',
 		type: 'preprint',
@@ -337,8 +337,8 @@ export const publications: Publication[] = [
 		url: 'https://www.medrxiv.org/content/10.64898/2025.12.24.25342988v1',
 		note: 'cited by a Cytel author at PHUSE US Connect 2026',
 		abstract:
-			'This structured review (reported per PRISMA-ScR) maps the 2020–2025 evidence base on automating clinical trial statistical programming — from macro-based tooling to LLM-driven approaches — characterizing study types, claimed efficiency gains, evaluation rigor, and open gaps. From 1,247 records, 262 studies were included; reported gains include 15–25% development-time reduction for pharmaverse TLF tools, 30–50% effort reduction for risk-based validation with CI/CD, and 75–85% SDTM conversion-time reduction for REDCap2SDTM, alongside 88–93% F1 for domain-specific LLMs on clinical NLP versus 60–85% code-generation accuracy for general models. Evidence quality is predominantly Low to Very Low: only 12 of 527 validation papers (2.3%) report quantitative outcomes, and no RCTs comparing validation approaches exist, defining the critical research priorities for the field.',
-		keywords: ['structured review', 'TLF automation', 'validation', 'statistical programming', 'clinical trials', 'automation', 'LLM'],
+			'This scoping review (reported per PRISMA-ScR) maps the 2020–2025 evidence base on automating clinical trial statistical programming — from macro-based tooling to LLM-driven approaches — characterizing study types, claimed efficiency gains, evaluation rigor, and open gaps. From 1,247 records, 262 studies were included; reported gains include 15–25% development-time reduction for pharmaverse TLF tools, 30–50% effort reduction for risk-based validation with CI/CD, and 75–85% SDTM conversion-time reduction for REDCap2SDTM, alongside 88–93% F1 for domain-specific LLMs on clinical NLP versus 60–85% code-generation accuracy for general models. Evidence quality is predominantly Low to Very Low: only 12 of 527 validation papers (2.3%) report quantitative outcomes, and no RCTs comparing validation approaches exist, defining the critical research priorities for the field.',
+		keywords: ['scoping review', 'TLF automation', 'validation', 'statistical programming', 'clinical trials', 'automation', 'LLM'],
 	},
 ];
 
