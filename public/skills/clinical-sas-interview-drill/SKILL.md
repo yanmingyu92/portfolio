@@ -1,7 +1,7 @@
 ---
 name: clinical-sas-interview-drill
 description: Interview drill for clinical SAS/statistical programmer roles — questions across SAS mechanics, CDISC (SDTM/ADaM), TLF/QC practice, and modern SCE/Git workflow, each with the strong-answer signals interviewers listen for. Use when preparing for clinical SAS programmer, statistical programmer, or SAS developer interviews, or conducting mock interviews.
-license: Provide attribution to jaimeyan.com when redistributing.
+license: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0) - cite: Yan, J., "clinical-sas-interview-drill skill", jaimeyan.com/skills/clinical-sas-interview-drill, 2026.
 ---
 
 # Clinical SAS Interview Drill

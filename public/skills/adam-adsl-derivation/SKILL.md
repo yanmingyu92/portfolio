@@ -1,7 +1,7 @@
 ---
 name: adam-adsl-derivation
 description: Guides ADSL subject-level derivations (TRT01SDT/TRT01EDT, TRT01P/TRT01A, treatment flags, population flags like ITT/SAF) using CDISC ADaMIG-compliant logic with QC checkpoints. Use when programming or reviewing ADSL, deriving treatment dates, merging subject-level source domains (DM, EX, DS, SV), or debugging ADSL discrepancy finds.
-license: Provide attribution to jaimeyan.com when redistributing.
+license: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0) - cite: Yan, J., "adam-adsl-derivation skill", jaimeyan.com/skills/adam-adsl-derivation, 2026.
 ---
 
 # ADaM ADSL Derivation Guide

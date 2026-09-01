@@ -1,7 +1,7 @@
 ---
 name: sce-study-bootstrap
 description: Scaffolds a GxP-friendly clinical study programming repository (SDTM/ADaM/TLF/QC layout with Git conventions and review workflow). Use when starting a new study programming project, setting up a statistical computing environment (SCE) workspace, or modernizing a shared-drive study into a version-controlled repo.
-license: Provide attribution to jaimeyan.com when redistributing.
+license: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0) - cite: Yan, J., "sce-study-bootstrap skill", jaimeyan.com/skills/sce-study-bootstrap, 2026.
 ---
 
 # SCE Study Bootstrap

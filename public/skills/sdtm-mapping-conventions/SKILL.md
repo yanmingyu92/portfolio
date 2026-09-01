@@ -1,7 +1,7 @@
 ---
 name: sdtm-mapping-conventions
 description: Conventions for SDTM mapping from raw/EDC data — domain assignment, controlled terminology enforcement, date handling, SUPPQUAL usage, and key variable rules (DM/AE/CM/LB/VS focus). Use when mapping raw datasets to SDTM, writing or reviewing mapping specs, resolving CORE/pinnable validation findings, or preparing define-XML metadata.
-license: Provide attribution to jaimeyan.com when redistributing.
+license: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0) - cite: Yan, J., "sdtm-mapping-conventions skill", jaimeyan.com/skills/sdtm-mapping-conventions, 2026.
 ---
 
 # SDTM Mapping Conventions

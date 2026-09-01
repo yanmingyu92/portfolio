@@ -15,6 +15,12 @@ const BANNED = [
 	/unlock the power/i, /thrilled to (share|announce)/i, /ever-evolving/i, /\blandscape of\b/i,
 ];
 
+// Raw-resource provenance red lines — error on any post, draft or live.
+const REDLINE = [
+	/\bAIRIS\b/i, /\bROSHE\b/i, /\bShiva\b/, /043-1810/i, /\bMK0616\b/i,
+	/[A-Za-z]:\\ROSHE/i,
+];
+
 const files = process.argv.slice(2).filter(a => a !== '--all')
 	.map(a => (a.endsWith('.md') ? a : null))
 	.filter(Boolean);
@@ -100,6 +106,11 @@ for (const file of filesFinal) {
 	for (const re of BANNED) {
 		const hit = body.match(re);
 		if (hit) err(name, `banned phrase: "${hit[0]}"`);
+	}
+	// provenance red lines (identifiers from third-party training corpus)
+	for (const re of REDLINE) {
+		const hit = raw.match(re);
+		if (hit) err(name, `red-line identifier: "${hit[0]}"`);
 	}
 }
 

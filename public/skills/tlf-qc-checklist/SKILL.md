@@ -1,7 +1,7 @@
 ---
 name: tlf-qc-checklist
 description: Shell-to-output QC checklist for clinical tables, listings, and figures — population, denominators/percentages, footnotes, headers, pagination, and the independent-programming review workflow. Use when QC-ing TLF outputs against mock shells, running double programming review, or resolving shell-vs-output discrepancies before a delivery or submission.
-license: Provide attribution to jaimeyan.com when redistributing.
+license: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0) - cite: Yan, J., "tlf-qc-checklist skill", jaimeyan.com/skills/tlf-qc-checklist, 2026.
 ---
 
 # TLF QC Checklist
