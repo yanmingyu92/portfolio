@@ -67,13 +67,25 @@ for (const slug of slugs) {
 		}
 	}
 
-	// Dead-link scan: /blog/<x>.html where <x> is still a draft.
-	const body = raw.split(/^---\n[\s\S]*?\n---\n/).pop() || '';
-	const dead = [...body.matchAll(/\/blog\/([a-z0-9-]+)\.html/g)]
-		.map(m => m[1]).filter(s => isDraft(s));
-	if (dead.length) {
-		console.warn(`  WARN  body links to still-draft posts: ${[...new Set(dead)].join(', ')}`);
-		process.exitCode = 1;
+	// Forward-reference hygiene: markdown links to still-draft posts are
+	// de-linked to plain text (the series sidebar/nav already navigates
+	// published parts, so prose next/previous links are redundant while a
+	// neighbor is unreleased). Non-fatal by design — weekly drips always
+	// link their unreleased neighbors.
+	{
+		let cur = readFileSync(file, 'utf8');
+		let deLinked = 0;
+		cur = cur.replace(/\[([^\]]+)\]\(\/blog\/([a-z0-9-]+)\.html\)/g, (m, text, target) => {
+			if (target !== slug && isDraft(target)) { deLinked++; return text; }
+			return m;
+		});
+		if (deLinked) {
+			writeFileSync(file, cur);
+			console.log(`  de-linked ${deLinked} forward reference(s) to still-draft posts`);
+		}
+		const dead = [...cur.matchAll(/\/blog\/([a-z0-9-]+)\.html/g)]
+			.map(m => m[1]).filter(s => isDraft(s));
+		if (dead.length) console.warn(`  WARN  plain-text refs to still-draft posts (informational): ${[...new Set(dead)].join(', ')}`);
 	}
 
 	try {
