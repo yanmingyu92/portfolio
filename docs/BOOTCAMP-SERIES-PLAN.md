@@ -15,7 +15,7 @@ Three knowledge layers per post (all three are QC-enforced structure):
 
 | Layer | Shelf life | Content | Source |
 |---|---|---|---|
-| L1 `## The fundamentals` | ~10 yr | CDISC logic, derivations, GxP reasoning | ROSHE training set, **rewritten** |
+| L1 `## The fundamentals` | ~10 yr | CDISC logic, derivations, GxP reasoning | third-party training corpus, **rewritten** |
 | L2 `## The modern workflow` | 3–5 yr | Cloud SCE, Git, reproducibility, multi-engine | Field practice, Domino-class SCE docs |
 | L3 `## The agentic way` + `.era-callout` | ~6 mo (asOf stamped) | Claude/agent concrete use + failure modes | Own AI posts + fresh verification |
 
@@ -25,9 +25,12 @@ AI posts stay the brand layer. Do not blend the two voices.
 
 ## Hard red lines (non-negotiable)
 
-1. **Never redistribute ROSHE artifacts**: no .sas7bdat datasets, no xlsx
+1. **Never redistribute third-party training artifacts**: no .sas7bdat datasets, no xlsx
    specs, no RTF shells/outputs, no screenshots of them, no program
-   headers (AIRIS / author names / protocol 043-1810 / MK0616 references).
+   headers (client / author / protocol / project identifiers from the
+   source corpus). The literal banned tokens live only in the REDLINE
+   check (built from split literals) — do not spell them out in content
+   or docs.
 2. Code samples are **rewritten, minimal, generic** (Study XYZ), never
    adapted verbatim from the training programs.
 3. SAS book PDFs: outline inspiration only; no content reuse.
@@ -99,8 +102,13 @@ linkifies the roadmap title, dead-link scan, QC).
 | 2026-09-27 | 11 | career 2026 |
 | 2026-10-04 | 12 | Git |
 | 2026-10-11 | 13 | pipeline as code |
-| 2026-10-18 | 14 | flagship: AI in validated environments (capstone) — then tag `bootcamp-v1.0.0` for the Zenodo DOI |
+| 2026-10-18 | 14 | flagship: AI in validated environments (capstone) — then tag `bootcamp-v1.0.0` for the Zenodo version DOI |
 | 2026-10-25 | 15 | protocol/SAP reading (Wave 5 opens, from coverage-matrix backlog C) |
+| 2026-11-01 | 16 | define-XML + reviewer's guide (backlog F) |
+| 2026-11-08 | 17 | windowing/baseline/LOCF (backlog A) |
+| 2026-11-15 | 18 | SAS macros for TLF (backlog D) |
+| 2026-11-22 | 19 | p-values FAQ (backlog E) |
+| 2026-11-29 | 20 | ADRS/RECIST (backlog B) — series complete, tag `bootcamp-v1.1.0` |
 
 Weekly maintenance (one command): `node scripts/drip-release.mjs <slug>` —
 script linkifies the roadmap row automatically (upcoming rows keep the exact

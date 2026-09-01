@@ -74,6 +74,11 @@ The series runs four lines. The SDTM/TLF line is the production spine: raw data 
 | 13 — Pipeline as code | SCE | Describe the SDTM-to-ADaM-to-TLF flow as runnable code instead of drive letters |
 | 14 — AI in validated environments | SCE | State precisely where AI assistance may touch a GxP workflow and where it stops |
 | 15 — Reading the protocol and SAP | Start Here | Turn protocol and SAP sentences into artifacts: datasets, flags, spec rows, or logged queries |
+| 16 — Define-XML and the reviewer's guide | Submission | Ship submission metadata that answers the reviewer's questions before they ask them |
+| 17 — Windowing, baseline, LOCF | ADaM | Apply the three rule families that decide whether a BDS dataset is right |
+| 18 — SAS macros for TLF | TLF | Drive every output from one metadata table and debug the classics with MPRINT |
+| 19 — P-values FAQ | Statistics | Explain and QC the tests your tables report, without pretending to be the statistician |
+| 20 — ADRS and RECIST | ADaM | Derive oncology response analyses from TU/TR/RS without inventing rules |
 
 *Table 2: The fourteen parts grouped by line.*
 
