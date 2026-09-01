@@ -124,10 +124,11 @@ queue if one line dominates.
 ### Weekly distribution checklist (per release, ~15 min)
 
 1. `node scripts/drip-release.mjs <slug>` then push (Vercel deploys)
-2. YouTube (if the part has a companion video): `npm run video:build -- <slug>`
-   → review `temp/videos/<slug>/script.md` → `npm run video:upload -- <slug>`
-   → set "Altered content" + Public in Studio → put `videoId` in the post
-   frontmatter → rebuild/deploy. Full runbook: `docs/VIDEO-PIPELINE.md`
+2. YouTube (if the part has a companion video): review the script
+   (`npm run video:build -- <slug> --script-only`), then one command does the
+   rest — `npm run video:release -- <slug>` (render + upload + write videoId +
+   QC + commit + push). In Studio: flip "Altered content" + set Public.
+   Full runbook: `docs/VIDEO-PIPELINE.md`
 3. LinkedIn post: one concrete takeaway + link (clinical programming audience)
 4. dev.to: `node scripts/syndicate/run.mjs` (RSS import drafts into review/)
 5. Communities where on-topic (rotate, don't spam): PharmaSUG/PhUSE forums,

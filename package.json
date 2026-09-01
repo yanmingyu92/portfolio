@@ -13,6 +13,7 @@
     "video:build": "node tools/video/build-video.mjs",
     "video:upload": "node tools/video/upload-video.mjs",
     "video:auth": "node tools/video/auth-youtube.mjs",
+    "video:release": "node tools/video/release-video.mjs",
     "astro": "astro"
   },
   "dependencies": {

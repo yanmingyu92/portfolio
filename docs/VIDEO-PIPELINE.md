@@ -49,18 +49,24 @@ generic versions. The extractor hard-fails on training-set identifiers
 ## Weekly workflow (per new part)
 
 ```powershell
-# from the site root
+# from the site root — human gate first:
 npm run video:build -- <slug> --script-only   # 1. extract + review script
 #                                             #    → temp/videos/<slug>/script.md
 #                                             #    RED LINE: confirm script before rendering
-npm run video:build -- <slug>                 # 2. render mp4 + srt + cover (cached)
-#                                             #    spot-check SRT wording if desired
-npm run video:upload -- <slug>                # 3. upload (private) + thumbnail
-#   in YouTube Studio: flip Altered-content disclosure + set Public
-#   (or upload with --public and set disclosure via Studio afterwards)
-# 4. put videoId into the article frontmatter  → videoId: <id>
-npm run qc:blog && npm run build              # 5. verify site still green, deploy
+# then everything else is one command:
+npm run video:release -- <slug>               # 2. render + upload(private) + write videoId
+#                                             #    into frontmatter + QC + commit + push
+#                                             #    (Vercel deploys the embed automatically)
+# remaining manual (Studio, API cannot set):
+#   1. flip "Altered content" disclosure
+#   2. set Public (or pass --public on release to skip step 2)
 ```
+
+`release-video.mjs` flags: `--public` (upload public immediately),
+`--skip-upload` (reuse the id in `temp/videos/<slug>/video-id.txt` — e.g.
+after a manual upload), `--dry-run` (print the plan). Re-running release is
+safe: existing videoId → upload skipped, git step no-ops when unchanged.
+Without OAuth files the release stops after the manual-upload checklist.
 
 `upload-video.mjs` writes the id to `temp/videos/<slug>/video-id.txt`; copy it
 into the post frontmatter. Without OAuth files (or with `--dry-run`) the same
