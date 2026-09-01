@@ -99,7 +99,8 @@ linkifies the roadmap title, dead-link scan, QC).
 | 2026-09-27 | 11 | career 2026 |
 | 2026-10-04 | 12 | Git |
 | 2026-10-11 | 13 | pipeline as code |
-| 2026-10-18 | 14 | flagship: AI in validated environments (capstone) |
+| 2026-10-18 | 14 | flagship: AI in validated environments (capstone) — then tag `bootcamp-v1.0.0` for the Zenodo DOI |
+| 2026-10-25 | 15 | protocol/SAP reading (Wave 5 opens, from coverage-matrix backlog C) |
 
 Weekly maintenance (one command): `node scripts/drip-release.mjs <slug>` —
 script linkifies the roadmap row automatically (upcoming rows keep the exact

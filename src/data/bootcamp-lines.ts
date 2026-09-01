@@ -1,7 +1,7 @@
 // Line grouping for the Clinical SP Bootcamp series sidebar.
 // part numbers = seriesOrder values in content/posts (docs/BOOTCAMP-SERIES-PLAN.md).
 export const seriesLines = [
-	{ label: 'Start Here', parts: [0] },
+	{ label: 'Start Here', parts: [0, 15] },
 	{ label: 'SDTM', parts: [4, 5, 6] },
 	{ label: 'ADaM', parts: [2, 7, 8, 9] },
 	{ label: 'TLF', parts: [3] },

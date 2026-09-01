@@ -73,6 +73,7 @@ The series runs four lines. The SDTM/TLF line is the production spine: raw data 
 | 12 — Git for clinical programmers | SCE | Version-control programs and review changes the way modern teams do |
 | 13 — Pipeline as code | SCE | Describe the SDTM-to-ADaM-to-TLF flow as runnable code instead of drive letters |
 | 14 — AI in validated environments | SCE | State precisely where AI assistance may touch a GxP workflow and where it stops |
+| 15 — Reading the protocol and SAP | Start Here | Turn protocol and SAP sentences into artifacts: datasets, flags, spec rows, or logged queries |
 
 *Table 2: The fourteen parts grouped by line.*
 

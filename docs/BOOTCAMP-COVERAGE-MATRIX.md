@@ -17,7 +17,7 @@ Legend: ● covered · ◐ partial (dedicated post worthwhile) · ○ gap (backl
 | ADRS dataset + RECIST-flavored knowledge | response analysis datasets, oncology | ○ | **backlog B: ADRS/RECIST explainer** (bridges to CAVE-Onc paper) |
 | ADTTE + life-test books | TTE structure, censoring cascade | ● | Part 9 |
 | PROGRAMS tab*/lis*/fig* + MOCK SHELL + OUTPUTS | shell→program→RTF chain, QC passes | ● | Part 3 + `tlf-qc-checklist` |
-| DOC: protocol, SAP, study design, CSR plan | reading protocol/SAP as a programmer | ○ | **backlog C: "Read a protocol & SAP like a statistical programmer"** (evergreen, high search) |
+| DOC: protocol, SAP, study design, CSR plan | reading protocol/SAP as a programmer | ● | **Part 15 written 2026-09-01 (draft, releases 2026-10-25)** + `protocol-sap-extraction-checklist` skill |
 | EXTRA TOPIC: TLF types, windowing pptx | TLF taxonomy | ● | folded into Part 3; windowing → backlog A |
 | SAS BOOKS: cert guides, Little SAS Book | base SAS foundations | – | deliberately out (crowded, low differentiation); roadmap links out |
 | SAS BOOKS: Macro 9 steps, MACROS debug + macros interview Qs | macro design for TLF, %do-over-outputs, MPRINT/MLOGIC debugging | ○ | **backlog D: "SAS macros for clinical TLF"** |
@@ -48,6 +48,13 @@ Legend: ● covered · ◐ partial (dedicated post worthwhile) · ○ gap (backl
 - **DOI**: enable Zenodo–GitHub integration once; tag `bootcamp-v1.0.0` at the
   capstone release → automatic versioned DOI per future tag. Add DOI to
   CITATION.cff and post footers after minting.
+  **Runbook** — Step 1 (once): zenodo.org → Account Settings → GitHub → flip
+  toggle for `yanmingyu92/portfolio`. Step 2 (capstone day): after releasing
+  the final post, `git tag bootcamp-v1.0.0 && git push origin bootcamp-v1.0.0`,
+  then `gh release create bootcamp-v1.0.0 --title "Clinical SP Bootcamp v1.0"
+  --notes "..."` (Zenodo triggers on Releases, not bare tags). Copy the
+  concept DOI from Zenodo → backfill `CITATION.cff:preferred-citation`. Each
+  later wave bumps the tag (v1.1.0 ...) for chained version DOIs.
 - **Priority proof**: canonical URLs + sitemap timestamps + Zenodo deposit
   dates establish publication priority without exposing drafts.
 - **Red-line enforcement**: `blog-qc.mjs` fails on raw-resource identifiers
