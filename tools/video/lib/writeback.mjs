@@ -8,7 +8,7 @@ export function setVideoId(slug, videoId) {
 	const file = path.join(SITE_ROOT, 'content', 'posts', `${slug}.md`);
 	if (!fs.existsSync(file)) throw new Error(`post not found: ${slug}`);
 	let raw = fs.readFileSync(file, 'utf8');
-	if (!raw.startsWith('---\n')) throw new Error(`${slug}: missing frontmatter`);
+	if (!/^---\r?\n/.test(raw)) throw new Error(`${slug}: missing frontmatter`);
 
 	if (/^videoId:.*$/m.test(raw)) {
 		raw = raw.replace(/^videoId:.*$/m, `videoId: ${videoId}`);

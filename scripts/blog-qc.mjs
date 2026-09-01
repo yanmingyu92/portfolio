@@ -40,7 +40,7 @@ const warn = (f, m) => { warnings++; console.log(`  warn   ${m}`); };
 
 for (const file of filesFinal) {
 	const name = basename(file);
-	const raw = readFileSync(file, 'utf8');
+	const raw = readFileSync(file, 'utf8').replace(/\r\n/g, '\n');
 
 	if (!includeDrafts && /^draft:\s*true\s*$/m.test(raw)) {
 		console.log(`\n${name}\n  skip   draft (use --all to lint anyway)`);
