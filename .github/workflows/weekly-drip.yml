@@ -1,0 +1,68 @@
+name: weekly-drip
+
+# Automated Sunday release for the clinical-sp-bootcamp series.
+# Due entries come from docs/drip-queue.json (source of truth for the calendar).
+# Runs drip-release (date flip + roadmap linkify + QC), builds, pushes to main,
+# and on tag weeks creates the Zenodo-triggering GitHub Release.
+
+on:
+  schedule:
+    - cron: "0 9 * * 0" # Sundays 09:00 UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  drip:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - run: npm ci
+
+      - name: Plan due releases
+        id: plan
+        run: echo "due=$(node scripts/drip-next.mjs)" >> "$GITHUB_OUTPUT"
+
+      - name: Nothing due
+        if: steps.plan.outputs.due == '[]'
+        run: echo "No posts due this week — clean exit."
+
+      - name: Release, build, push
+        if: steps.plan.outputs.due != '[]'
+        run: |
+          set -e
+          SLUGS=$(echo '${{ steps.plan.outputs.due }}' | jq -r '.[].slug')
+          for s in $SLUGS; do
+            echo "== releasing $s =="
+            node scripts/drip-release.mjs "$s"
+          done
+          npm run build
+          git config user.name "drip-bot"
+          git config user.email "actions@github.com"
+          git add content/posts
+          if git diff --staged --quiet; then
+            echo "Nothing to commit (unexpected)"; exit 1
+          fi
+          git commit -m "chore(drip): auto-release week of $(date -u +%F)"
+          git push
+
+      - name: Tag and GitHub Release (Zenodo trigger)
+        if: steps.plan.outputs.due != '[]'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAGS=$(echo '${{ steps.plan.outputs.due }}' | jq -r '.[] | select(.tag) | .tag')
+          if [ -z "$TAGS" ]; then echo "No tag this week."; exit 0; fi
+          for TAG in $TAGS; do
+            TITLE=$(echo '${{ steps.plan.outputs.due }}' | jq -r --arg t "$TAG" '.[] | select(.tag == $t) | .releaseTitle')
+            git tag "$TAG"
+            git push origin "$TAG"
+            gh release create "$TAG" --title "$TITLE" \
+              --notes "Automated series release. Content CC BY 4.0 — cite the concept DOI 10.5281/zenodo.22233175."
+          done

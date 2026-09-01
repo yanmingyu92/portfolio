@@ -110,11 +110,16 @@ linkifies the roadmap title, dead-link scan, QC).
 | 2026-11-22 | 19 | p-values FAQ (backlog E) |
 | 2026-11-29 | 20 | ADRS/RECIST (backlog B) — series complete, tag `bootcamp-v1.1.0` |
 
-Weekly maintenance (one command): `node scripts/drip-release.mjs <slug>` —
-script linkifies the roadmap row automatically (upcoming rows keep the exact
-plain title). Before each release, optionally refresh the post's era-callout
-asOf date. Watch GSC at week 6-8: which line's keywords pull; adjust the
-remaining calendar if one line dominates.
+Weekly maintenance — **automated 2026-09-01**: the `weekly-drip` GitHub Action
+(Sundays 09:00 UTC, also `workflow_dispatch`) reads `docs/drip-queue.json`
+(the calendar source of truth), runs `scripts/drip-release.mjs` for due
+posts, builds, pushes to main (Vercel deploys), and on tag weeks (10-18
+v1.0.0, 11-29 v1.1.0) creates the Zenodo-triggering GitHub Release.
+Catch-up semantics: any missed week releases everything past due together.
+Manual per release: distribution checklist below (LinkedIn / dev.to /
+communities), and optionally refresh the era-callout asOf date.
+Watch GSC at week 6-8: which line's keywords pull; adjust the remaining
+queue if one line dominates.
 
 ### Weekly distribution checklist (per release, ~15 min)
 

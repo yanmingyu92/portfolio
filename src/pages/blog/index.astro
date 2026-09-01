@@ -64,7 +64,7 @@ const tutorials = posts.filter(p => p.data.kind === 'tutorial')
 			{tutorials.length > 0 && (
 				<section class="mt-12" id="bootcamp">
 					<p class="eyebrow mb-1">Clinical SP Bootcamp</p>
-					<p class="text-sm text-stone-600 mb-4">A systematic training series: fundamentals, modern SCE workflow, and the agentic way — from raw data to TLF delivery. Key parts ship a downloadable Claude skill.</p>
+					<p class="text-sm text-stone-600 mb-4">A systematic training series: fundamentals, modern SCE workflow, and the agentic way — from raw data to TLF delivery. Key parts ship a downloadable Claude skill. <a href="https://doi.org/10.5281/zenodo.22233175" class="text-rose-800 hover:underline">Series DOI: 10.5281/zenodo.22233175</a>.</p>
 					<div class="divide-y divide-stone-200 border-t border-b border-stone-200">
 						{tutorials.map(post => <PostCard post={post} part={post.data.seriesOrder} />)}
 					</div>

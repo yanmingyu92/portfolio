@@ -1,0 +1,15 @@
+[
+	{ "date": "2026-09-06", "slug": "adam-bds-adlb-advs-tutorial", "part": 7 },
+	{ "date": "2026-09-13", "slug": "adam-occds-adae-tutorial", "part": 8 },
+	{ "date": "2026-09-20", "slug": "adtte-survival-tutorial", "part": 9 },
+	{ "date": "2026-09-27", "slug": "statistical-programmer-career-2026", "part": 11 },
+	{ "date": "2026-10-04", "slug": "git-for-clinical-programmers", "part": 12 },
+	{ "date": "2026-10-11", "slug": "pipeline-as-code-sdtm-adam", "part": 13 },
+	{ "date": "2026-10-18", "slug": "ai-in-validated-environments", "part": 14, "tag": "bootcamp-v1.0.0", "releaseTitle": "Clinical SP Bootcamp v1.0 (16-part series complete)" },
+	{ "date": "2026-10-25", "slug": "protocol-sap-reading-guide", "part": 15 },
+	{ "date": "2026-11-01", "slug": "define-xml-reviewers-guide-tutorial", "part": 16 },
+	{ "date": "2026-11-08", "slug": "visit-windowing-baseline-locf-guide", "part": 17 },
+	{ "date": "2026-11-15", "slug": "sas-macros-for-tlf-tutorial", "part": 18 },
+	{ "date": "2026-11-22", "slug": "p-values-statistical-programmer-faq", "part": 19 },
+	{ "date": "2026-11-29", "slug": "adrs-recist-derivation-tutorial", "part": 20, "tag": "bootcamp-v1.1.0", "releaseTitle": "Clinical SP Bootcamp v1.1 (21-part series complete)" }
+]
