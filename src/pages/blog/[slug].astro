@@ -60,7 +60,18 @@ const jsonLd: Record<string, unknown> = {
 	description: post.data.description,
 	datePublished: post.data.date.toISOString(),
 	url: canonical,
-	author: { '@type': 'Person', name: 'Jaime Yan', url: 'https://jaimeyan.com' },
+	author: {
+		'@type': 'Person',
+		name: 'Jaime Yan',
+		url: 'https://jaimeyan.com',
+		jobTitle: 'Associate Director, Statistical Programming',
+		sameAs: [
+			'https://github.com/yanmingyu92',
+			'https://www.linkedin.com/in/jaime-y-66312a133/',
+			'https://scholar.google.com/citations?user=vo1hv04AAAAJ',
+			'https://orcid.org/0009-0007-1786-7259',
+		],
+	},
 	keywords: post.data.tags.join(', '),
 };
 if (post.data.series) {
@@ -120,7 +131,7 @@ if (post.data.kind === 'tutorial') jsonLd.articleSection = SERIES_TITLE;
 		)}
 
 		<p class={(post.data.series ? 'mt-1' : 'mt-10') + " text-xs font-mono text-stone-600"}>
-				{post.data.date.toISOString().slice(0, 10)} · {readingTime} min read
+				{post.data.date.toISOString().slice(0, 10)} · {readingTime} min read · By <a href="/#about" class="text-rose-800 hover:underline">Jaime Yan</a>, Associate Director, Statistical Programming
 			</p>
 			<h1 class="mt-2 font-display text-3xl sm:text-4xl font-medium tracking-tight leading-tight">{post.data.title}</h1>
 			{post.data.tags.length > 0 && (

@@ -109,6 +109,24 @@ plain title). Before each release, optionally refresh the post's era-callout
 asOf date. Watch GSC at week 6-8: which line's keywords pull; adjust the
 remaining calendar if one line dominates.
 
+### Weekly distribution checklist (per release, ~15 min)
+
+1. `node scripts/drip-release.mjs <slug>` then push (Vercel deploys)
+2. LinkedIn post: one concrete takeaway + link (clinical programming audience)
+3. dev.to: `node scripts/syndicate/run.mjs` (RSS import drafts into review/)
+4. Communities where on-topic (rotate, don't spam): PharmaSUG/PhUSE forums,
+   CDISC community, r/biostatistics — share the takeaway, not the link alone
+5. Check Vercel Analytics + GSC for last week's post at week boundaries
+
+### SEO backlog (adopted 2026-09, from external review)
+
+- Pillar explainer: "The Modern Clinical Statistical Programming Stack (2026)"
+  — targets mid-tail stack/overview terms; links every tutorial + AI post both
+  directions (cluster → pillar). Write after Wave 2 lands.
+- Gap explainer: "SDTM Mapping Automation with LLMs" — no post currently owns
+  this query; bridges tutorials and the LLM deep-dives.
+- Author E-E-A-T: done (byline + sameAs entity on all blog posts 2026-09-01).
+
 Options once Wave 1 is written (superseded — kept for reference):
 
 - **A. Drip weekly** — steady RSS/syndication cadence, builds habit audience
