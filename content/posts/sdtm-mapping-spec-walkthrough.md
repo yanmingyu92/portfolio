@@ -1,13 +1,13 @@
 ---
 title: "How to Write an SDTM Mapping Specification (Walkthrough)"
-date: 2026-08-30
+date: 2026-09-01
 description: "How to write an SDTM mapping specification: column anatomy, a row-by-row VS domain walk, hygiene rules, and how specs become define-XML and machine-usable code."
 tags: ["clinical-sas", "sdtm", "mapping-specification", "define-xml"]
 kind: tutorial
 series: clinical-sp-bootcamp
 seriesOrder: 6
 canonicalPath: /blog/sdtm-mapping-spec-walkthrough.html
-draft: true
+
 ---
 
 Mid-inspection, a reviewer points at one value in VS: systolic blood pressure 142, subject 004, week 8. One question follows — where did this come from? The program answers *how* it was computed; only the specification answers *why it was computed that way*, and who approved it. Studies that survive that question calmly all have the same artifact: a mapping spec where every SDTM variable traces to a source, a transformation, and a decision owner. Studies that struggle have code, and opinions.
@@ -151,4 +151,4 @@ Yes, constantly: data queries close, CT decisions land. The discipline is that t
 
 ---
 
-Previous in the series: [SDTM AE domain mapping](/blog/sdtm-ae-domain-mapping-example.html). Next in the series: [ADaM BDS structure with ADLB and ADVS](/blog/adam-bds-adlb-advs-tutorial.html). For the engine that validates what the spec produces, and the define-XML rule set that checks the metadata side, read [CDISC CORE Explained](/blog/cdisc-core-validation-explained.html).
+Previous in the series: [SDTM AE domain mapping](/blog/sdtm-ae-domain-mapping-example.html). Next in the series: ADaM BDS structure with ADLB and ADVS. For the engine that validates what the spec produces, and the define-XML rule set that checks the metadata side, read [CDISC CORE Explained](/blog/cdisc-core-validation-explained.html).

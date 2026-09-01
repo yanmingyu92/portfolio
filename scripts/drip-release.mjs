@@ -43,19 +43,26 @@ for (const slug of slugs) {
 		console.log(`${slug}: published (date=${today})`);
 	}
 
-	// Linkify plain title in the roadmap (skip for the roadmap itself).
+	// Linkify the roadmap row (skip for the roadmap itself).
+	// Row format: "| N — Short name | Line | ..." — match by part number first,
+	// fall back to exact full-title match.
 	if (slug !== ROADMAP) {
-		const title = (raw.match(/^title:\s*"([^"]+)"/m) || [])[1];
 		const roadmapPath = join(postsDir, `${ROADMAP}.md`);
-		if (title && existsSync(roadmapPath)) {
+		if (existsSync(roadmapPath)) {
 			const roadmap = readFileSync(roadmapPath, 'utf8');
-			if (roadmap.includes(`](/blog/${slug}.html)`)) {
+			const order = (raw.match(/^seriesOrder:\s*(\d+)\s*$/m) || [])[1];
+			let updated = roadmap;
+			if (order && roadmap.includes(`](/blog/${slug}.html)`)) {
 				console.log(`  roadmap: already linked`);
-			} else if (roadmap.includes(title)) {
-				writeFileSync(roadmapPath, roadmap.replace(title, `[${title}](/blog/${slug}.html)`));
-				console.log(`  roadmap: title linked`);
-			} else {
-				console.log(`  roadmap: title not found (update manually)`);
+			} else if (order) {
+				const rowRe = new RegExp(`^(\\|\\s*)${order}\\s*[—-]\\s*([^|]+?)(\\s*\\|)`, 'm');
+				updated = roadmap.replace(rowRe, `$1[${order} — $2](/blog/${slug}.html)$3`);
+				if (updated !== roadmap) {
+					writeFileSync(roadmapPath, updated);
+					console.log(`  roadmap: row ${order} linked`);
+				} else {
+					console.log(`  roadmap: row ${order} not found (update manually)`);
+				}
 			}
 		}
 	}

@@ -92,16 +92,14 @@ linkifies the roadmap title, dead-link scan, QC).
 | Date | Part(s) | Note |
 |---|---|---|
 | 2026-08-30 | 0, 1, 2, 3, 10 | layout check: one per line + roadmap entry point |
-| 2026-09-06 | 4 | SDTM basics |
-| 2026-09-13 | 5 | AE mapping |
-| 2026-09-20 | 6 | mapping spec |
-| 2026-09-27 | 7 | BDS |
-| 2026-10-04 | 8 | OCCDS |
-| 2026-10-11 | 9 | ADTTE |
-| 2026-10-18 | 11 | career 2026 |
-| 2026-10-25 | 12 | Git |
-| 2026-11-01 | 13 | pipeline as code |
-| 2026-11-08 | 14 | flagship: AI in validated environments (capstone) |
+| 2026-09-01 | 4, 5, 6 | SDTM line released as one arc (hybrid strategy C) |
+| 2026-09-06 | 7 | BDS |
+| 2026-09-13 | 8 | OCCDS |
+| 2026-09-20 | 9 | ADTTE |
+| 2026-09-27 | 11 | career 2026 |
+| 2026-10-04 | 12 | Git |
+| 2026-10-11 | 13 | pipeline as code |
+| 2026-10-18 | 14 | flagship: AI in validated environments (capstone) |
 
 Weekly maintenance (one command): `node scripts/drip-release.mjs <slug>` —
 script linkifies the roadmap row automatically (upcoming rows keep the exact
@@ -112,11 +110,15 @@ remaining calendar if one line dominates.
 ### Weekly distribution checklist (per release, ~15 min)
 
 1. `node scripts/drip-release.mjs <slug>` then push (Vercel deploys)
-2. LinkedIn post: one concrete takeaway + link (clinical programming audience)
-3. dev.to: `node scripts/syndicate/run.mjs` (RSS import drafts into review/)
-4. Communities where on-topic (rotate, don't spam): PharmaSUG/PhUSE forums,
+2. YouTube (if the part has a companion video): `npm run video:build -- <slug>`
+   → review `temp/videos/<slug>/script.md` → `npm run video:upload -- <slug>`
+   → set "Altered content" + Public in Studio → put `videoId` in the post
+   frontmatter → rebuild/deploy. Full runbook: `docs/VIDEO-PIPELINE.md`
+3. LinkedIn post: one concrete takeaway + link (clinical programming audience)
+4. dev.to: `node scripts/syndicate/run.mjs` (RSS import drafts into review/)
+5. Communities where on-topic (rotate, don't spam): PharmaSUG/PhUSE forums,
    CDISC community, r/biostatistics — share the takeaway, not the link alone
-5. Check Vercel Analytics + GSC for last week's post at week boundaries
+6. Check Vercel Analytics + GSC for last week's post at week boundaries
 
 ### SEO backlog (adopted 2026-09, from external review)
 

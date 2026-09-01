@@ -62,9 +62,9 @@ The series runs four lines. The SDTM/TLF line is the production spine: raw data 
 | [1 — The statistical computing environment](/blog/sce-statistical-computing-environment-guide.html) | SCE | Explain what an SCE actually enforces and stand up a study workspace that runs the same way twice |
 | [2 — ADSL derivations: TRT01SDT](/blog/adsl-derivation-tutorial-trtstdt.html) | ADaM | Turn a SAP rule into a defended derivation with documented fallback behavior |
 | [3 — TLF programming: shell to RTF](/blog/tlf-shell-to-rtf-tutorial.html) | SDTM/TLF | Take a static mock shell and ship the table behind it as a reviewable RTF |
-| 4 — SDTM domain basics | SDTM/TLF | Explain what a domain is and map one raw lab file into standard structure |
-| 5 — SDTM AE domain mapping | SDTM/TLF | Build the AE domain end to end: MedDRA coding, flags, dates, and --SEQ |
-| 6 — SDTM mapping specifications | SDTM/TLF | Read and write the spec that lets someone else reproduce your mapping |
+| [4 — SDTM domain basics](/blog/sdtm-tutorial-domain-basics.html) | SDTM/TLF | Explain what a domain is and map one raw lab file into standard structure |
+| [5 — SDTM AE domain mapping](/blog/sdtm-ae-domain-mapping-example.html) | SDTM/TLF | Build the AE domain end to end: MedDRA coding, flags, dates, and --SEQ |
+| [6 — SDTM mapping specifications](/blog/sdtm-mapping-spec-walkthrough.html) | SDTM/TLF | Read and write the spec that lets someone else reproduce your mapping |
 | 7 — ADaM BDS: ADLB and ADVS | ADaM | Structure BDS datasets with parameters, baselines, and analysis visits |
 | 8 — ADaM OCCDS: ADAE | ADaM | Build occurrence datasets that answer who had what, and when |
 | 9 — ADaM ADTTE: time to event | ADaM | Derive a time-to-event dataset that survives a statistician's questions |

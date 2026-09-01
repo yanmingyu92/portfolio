@@ -1,13 +1,13 @@
 ---
 title: "SDTM AE Domain Mapping: A Worked Example from Raw EDC Data"
-date: 2026-08-30
+date: 2026-09-01
 description: "A worked SDTM AE domain mapping example: MedDRA coding, serious flags, partial ISO dates, AESEQ derivation, SUPPAE, and CORE validation triage from a mock raw extract."
 tags: ["clinical-sas", "sdtm", "adverse-events", "meddra"]
 kind: tutorial
 series: clinical-sp-bootcamp
 seriesOrder: 5
 canonicalPath: /blog/sdtm-ae-domain-mapping-example.html
-draft: true
+
 ---
 
 The AE extract for Study XYZ arrives on a Tuesday. Four subjects, eleven columns, three different date formats, a severity column that mixes "Grade 1 (Mild)" with "MODERATE", and a relatedness column full of free text like "possible". Nothing about it is unusual — this is what adverse event data looks like before anyone maps it. The distance between this table and a clean, submission-grade AE domain is about forty decisions, and every one of them belongs in the mapping spec before it belongs in code.

@@ -1,6 +1,6 @@
 ---
 title: "SDTM Domain Basics: The Model Every Clinical Programmer Must Know"
-date: 2026-08-30
+date: 2026-09-01
 description: "SDTM domains explained: domain classes, the topic-timing-qualifier variable pattern, USUBJID, controlled terminology, SUPPQUAL, and a day-one reading order."
 tags: ["clinical-sas", "sdtm", "cdisc", "controlled-terminology"]
 kind: tutorial
@@ -8,7 +8,7 @@ series: clinical-sp-bootcamp
 seriesOrder: 4
 skillArtifact: /skills/sdtm-mapping-conventions/SKILL.md
 canonicalPath: /blog/sdtm-tutorial-domain-basics.html
-draft: true
+
 ---
 
 Day one on Study XYZ: someone hands you a raw EDC export, forty-plus datasets with columns like `CMED_DOSE_TXT2`, and the SDTM Implementation Guide, several hundred pages of it. Your job is to turn the first into something a reviewer who has never seen your CRF can read. Nothing in the raw export hints at the target shape; the model does. Once you know its grammar, each raw dataset becomes a predictable table: one row per observation, standard variables, and a single identifier gluing every table together.
