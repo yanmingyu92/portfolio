@@ -8,6 +8,7 @@ series: clinical-sp-bootcamp
 seriesOrder: 7
 skillArtifact: /skills/adam-adsl-derivation/SKILL.md
 canonicalPath: /blog/adam-bds-adlb-advs-tutorial.html
+videoId: nwkP3I4BBVQ
 
 ---
 
