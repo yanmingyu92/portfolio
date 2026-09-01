@@ -5,6 +5,7 @@ import { getCollection, render } from 'astro:content';
 import { getPublication } from '../../data/publications';
 import { seriesLines, seriesSlugify } from '../../data/bootcamp-lines';
 import Newsletter from '../../components/Newsletter.astro';
+import VideoEmbed from '../../components/VideoEmbed.astro';
 
 export async function getStaticPaths() {
 	const posts = await getCollection('posts', ({ data }) => !data.draft);
@@ -146,6 +147,17 @@ if (post.data.kind === 'tutorial') jsonLd.articleSection = SERIES_TITLE;
 			<Content />
 		</article>
 
+		{post.data.videoId && <VideoEmbed videoId={post.data.videoId} />}
+		{post.data.videoId && (
+			<script is:inline>
+				// Move the video embed up, right below the TL;DR (first blockquote). Runs before first paint.
+				(function () {
+					var m = document.getElementById('video-embed-mount');
+					var b = document.querySelector('.prose-custom blockquote');
+					if (m && b && b.parentNode) b.after(m);
+				})();
+			</script>
+		)}
 
 			{related && (
 				<aside class="mt-12 border-l-2 border-rose-300 pl-4">

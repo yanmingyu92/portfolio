@@ -17,6 +17,18 @@ pnpm-debug.log*
 .env
 .env.production
 
+# video pipeline: YouTube OAuth secrets & tokens (never commit)
+tools/video/.google-*
+
+# video pipeline working output (tools/video)
+temp/
+
+# video pipeline deps (own package.json inside tools/video)
+tools/video/node_modules/
+
+# python venv for tools/video
+.venv/
+
 # macOS-specific files
 .DS_Store
 

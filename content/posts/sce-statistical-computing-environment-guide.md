@@ -8,6 +8,7 @@ series: clinical-sp-bootcamp
 seriesOrder: 1
 skillArtifact: /skills/sce-study-bootstrap/SKILL.md
 canonicalPath: /blog/sce-statistical-computing-environment-guide.html
+videoId: KuCVygk_Dn8
 
 ---
 

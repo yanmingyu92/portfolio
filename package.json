@@ -10,6 +10,9 @@
     "paper-kit": "node scripts/paper-kit.mjs",
     "zenodo-kit": "node scripts/zenodo-kit.mjs",
     "qc:blog": "node scripts/blog-qc.mjs",
+    "video:build": "node tools/video/build-video.mjs",
+    "video:upload": "node tools/video/upload-video.mjs",
+    "video:auth": "node tools/video/auth-youtube.mjs",
     "astro": "astro"
   },
   "dependencies": {

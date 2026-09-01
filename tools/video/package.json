@@ -1,0 +1,17 @@
+{
+  "name": "video-pipeline",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "description": "Markdown lecture -> slide video pipeline for jaimeyan.com tutorial series",
+  "scripts": {
+    "build": "node build-video.mjs"
+  },
+  "dependencies": {
+    "ffmpeg-static": "^5.2.0",
+    "ffprobe-static": "^3.1.0",
+    "googleapis": "^178.0.0",
+    "marked": "^15.0.0",
+    "puppeteer-core": "^24.10.2"
+  }
+}

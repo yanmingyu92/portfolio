@@ -1,0 +1,46 @@
+---
+// Lazy YouTube embed — click-to-load (no iframe until click, protects LCP).
+// Poster uses the video's custom thumbnail (maxres) with hqdefault fallback.
+interface Props {
+	videoId: string;
+}
+const { videoId } = Astro.props;
+---
+
+<div class="video-embed" id="video-embed-mount" data-video={videoId}>
+	<div class="ve-frame">
+		<button class="ve-poster" type="button" aria-label="Play the video companion">
+			<img
+				src={`https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`}
+				alt=""
+				loading="lazy"
+				width="1280"
+				height="720"
+				onerror={`this.onerror=null;this.src='https://i.ytimg.com/vi/${videoId}/hqdefault.jpg'`}
+			/>
+			<span class="ve-play" aria-hidden="true">▶</span>
+		</button>
+	</div>
+	<p class="ve-caption">
+		Video companion — <a href={`https://youtu.be/${videoId}`} target="_blank" rel="noopener">watch on YouTube</a> · AI-generated narration
+	</p>
+</div>
+
+<script>
+	document.querySelectorAll<HTMLElement>('.video-embed .ve-poster').forEach((btn) => {
+		btn.addEventListener('click', () => {
+			const wrap = btn.closest<HTMLElement>('.video-embed');
+			if (!wrap) return;
+			const id = wrap.dataset.video;
+			const frame = wrap.querySelector('.ve-frame');
+			if (!id || !frame) return;
+			const iframe = document.createElement('iframe');
+			iframe.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`;
+			iframe.title = 'Video companion';
+			iframe.allow = 'autoplay; encrypted-media; picture-in-picture';
+			iframe.allowFullscreen = true;
+			frame.innerHTML = '';
+			frame.appendChild(iframe);
+		});
+	});
+</script>

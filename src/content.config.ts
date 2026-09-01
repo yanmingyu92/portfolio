@@ -17,6 +17,8 @@ const posts = defineCollection({
 		seriesOrder: z.number().optional(),
 		/** Path to the companion downloadable Claude skill artifact, e.g. /skills/adam-adsl-derivation/SKILL.md */
 		skillArtifact: z.string().optional(),
+		/** YouTube video id of the companion video (set after upload-video.mjs / manual upload) */
+		videoId: z.string().optional(),
 		/** Site-relative canonical path, e.g. /blog/my-post.html */
 		canonicalPath: z.string().optional(),
 		/** Slug of a related entry in src/data/publications.ts */
