@@ -1,6 +1,6 @@
 ---
 title: "ADaM BDS Structure: Building ADLB and ADVS Step by Step"
-date: 2026-08-30
+date: 2026-09-01
 description: "The BDS skeleton behind ADaM analysis datasets: PARAM/PARAMCD/AVAL, baseline flags, change from baseline, and how ADVS and ADLB are built visit by visit."
 tags: ["clinical-sas", "adam", "bds", "adlb", "advs"]
 kind: tutorial
@@ -8,7 +8,7 @@ series: clinical-sp-bootcamp
 seriesOrder: 7
 skillArtifact: /skills/adam-adsl-derivation/SKILL.md
 canonicalPath: /blog/adam-bds-adlb-advs-tutorial.html
-draft: true
+
 ---
 
 A change-from-baseline table shows a mean CHG of −7 mmHg for a vital-sign parameter nobody expected to move. The QC listing finds it in an afternoon: for eleven subjects, BASE came from the first record in the dataset, a screening value, while the SAP said last value on or prior to first dose. One baseline flag picked off the wrong record, and every change-from-baseline table in the study inherited the same error.
@@ -178,4 +178,4 @@ Per the windowing rules in the SAP. Each analysis visit is defined by a date ran
 
 ---
 
-From here in the series: [Part 8, OCCDS and ADAE](/blog/adam-occds-adae-tutorial.html), then [Part 9, ADTTE and time-to-event](/blog/adtte-survival-tutorial.html). Earlier in the arc: [Part 2, the ADSL walkthrough](/blog/adsl-derivation-tutorial-trtstdt.html) and [Part 3, TLF programming](/blog/tlf-shell-to-rtf-tutorial.html). The [series roadmap](/blog/clinical-sp-bootcamp-roadmap.html) lists everything published so far.
+From here in the series: Part 8, OCCDS and ADAE, then Part 9, ADTTE and time-to-event. Earlier in the arc: [Part 2, the ADSL walkthrough](/blog/adsl-derivation-tutorial-trtstdt.html) and [Part 3, TLF programming](/blog/tlf-shell-to-rtf-tutorial.html). The [series roadmap](/blog/clinical-sp-bootcamp-roadmap.html) lists everything published so far.
