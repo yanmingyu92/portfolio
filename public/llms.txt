@@ -9,6 +9,9 @@
 
 - [Home](https://jaimeyan.com/): bio, experience, publications, projects
 - [Blog](https://jaimeyan.com/blog.html): field guides, research deep-dives, notes
+- [Interactive explainers](https://jaimeyan.com/explainers.html): self-contained
+  animated walkthroughs of the bootcamp's flagship topics (start with
+  [From Raw Data to TLF](https://jaimeyan.com/explainers/clinical-data-journey.html))
 - [Paper pages](https://jaimeyan.com/): per-publication pages under /papers/*.html
   with full abstracts and citation metadata
 - [RSS feed](https://jaimeyan.com/rss.xml)

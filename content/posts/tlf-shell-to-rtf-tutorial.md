@@ -8,6 +8,8 @@ series: clinical-sp-bootcamp
 seriesOrder: 3
 skillArtifact: /skills/tlf-qc-checklist/SKILL.md
 canonicalPath: /blog/tlf-shell-to-rtf-tutorial.html
+explainer: /explainers/clinical-data-journey.html
+videoId: q_3AVwsb5wE
 
 ---
 

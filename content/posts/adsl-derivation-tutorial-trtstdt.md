@@ -8,6 +8,8 @@ series: clinical-sp-bootcamp
 seriesOrder: 2
 skillArtifact: /skills/adam-adsl-derivation/SKILL.md
 canonicalPath: /blog/adsl-derivation-tutorial-trtstdt.html
+explainer: /explainers/clinical-data-journey.html
+videoId: CkOl-p3lQRM
 
 ---
 

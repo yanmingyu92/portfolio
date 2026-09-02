@@ -1,0 +1,89 @@
+---
+// Explainer index — lists self-contained interactive walkthroughs (public/explainers/).
+import '../../styles/global.css';
+import Newsletter from '../../components/Newsletter.astro';
+import { explainers } from '../../data/explainers';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('posts', ({ data }) => !data.draft);
+const postTitle = (id: string) => posts.find(p => p.id === id)?.data.title;
+
+const canonical = 'https://jaimeyan.com/explainers.html';
+const jsonLd = {
+	'@context': 'https://schema.org',
+	'@type': 'CollectionPage',
+	name: 'Interactive Explainers',
+	description: 'Self-contained interactive walkthroughs of clinical statistical programming — play them like a lecture, one beat at a time.',
+	url: canonical,
+	hasPart: explainers.map(e => ({
+		'@type': ['TechArticle', 'LearningResource'],
+		headline: e.title,
+		description: e.description,
+		url: `https://jaimeyan.com${e.path}`,
+		datePublished: e.published,
+		learningResourceType: 'interactive explainer',
+	})),
+};
+---
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<title>Interactive Explainers — Jaime Yan</title>
+		<meta name="description" content="Self-contained interactive walkthroughs of clinical statistical programming: SDTM, ADaM, TLF production, and the full clinical data journey — step by step." />
+		<link rel="canonical" href={canonical} />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={canonical} />
+		<meta property="og:title" content="Interactive Explainers — Jaime Yan" />
+		<meta property="og:description" content="Self-contained interactive walkthroughs of clinical statistical programming — play them like a lecture, one beat at a time." />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+		<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+		<script defer src="/_vercel/insights/script.js"></script>
+	</head>
+	<body class="bg-[#fafaf9] text-stone-900">
+		<main class="max-w-3xl mx-auto px-6 py-16 sm:py-24">
+			<a href="/blog.html" class="text-sm text-stone-600 hover:text-stone-900 transition-colors">← All posts</a>
+			<p class="eyebrow mt-10 mb-3">Interactive Explainers</p>
+			<h1 class="font-display text-3xl sm:text-4xl font-medium tracking-tight">Walkthroughs you can play</h1>
+			<p class="mt-3 text-stone-600 leading-relaxed">
+				Companion walkthroughs for the <a href="/blog.html#bootcamp" class="text-rose-800 hover:underline">Clinical SP Bootcamp</a>:
+				animated, step-by-step schematics of the whole clinical data journey. Each page is self-contained
+				(no external scripts or styles), works on a phone, respects reduced motion, and degrades to a fully
+				readable final state without JavaScript. Keyboard: <span class="font-mono text-sm">Space / → / ← / R</span>.
+			</p>
+
+			<div class="divide-y divide-stone-200 border-t border-b border-stone-200 mt-10">
+				{explainers.map(e => (
+					<article class="py-6">
+						<p class="font-mono text-xs text-rose-800">{e.published} · {e.scenes} scenes · interactive</p>
+						<h2 class="mt-1 text-xl font-medium">
+							<a href={e.path} class="hover:text-rose-800">{e.title}</a>
+						</h2>
+						<p class="mt-2 text-stone-600 leading-relaxed">{e.description}</p>
+						<p class="mt-3 text-xs text-stone-600">
+							<span class="font-semibold uppercase tracking-widest">Built from</span>
+							{e.sourcePosts.map(id => postTitle(id) && (
+								<a href={`/blog/${id}.html`} class="ml-2 text-rose-800 hover:underline">{postTitle(id)}</a>
+							))}
+						</p>
+						<a href={e.path} class="explainer-card mt-4">
+							<span class="skill-card-name">Open interactive walkthrough →</span>
+							<span class="skill-card-desc">Play / step / reset, or read it as a static schematic. Illustrative data only (fictional Study XYZ).</span>
+						</a>
+					</article>
+				))}
+			</div>
+
+			<p class="mt-8 text-sm text-stone-600">
+				More planned for flagship topics only — see <a href="/blog/clinical-sp-bootcamp-roadmap.html" class="text-rose-800 hover:underline">the series roadmap</a>.
+				Honesty rule for every explainer: teaching schematics, illustrative values, never presented as measured study data.
+			</p>
+
+			<Newsletter />
+		</main>
+	</body>
+</html>

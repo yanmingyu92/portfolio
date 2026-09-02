@@ -1,0 +1,1019 @@
+<!doctype html>
+<!--
+  Interactive explainer —?pilot. Self-contained single file; engine + spec: templates/explainer-template.html.
+  Content sources (discipline: blog posts only; all data fictional Study XYZ, Subjects 001-004):
+    Scene 1  roadmap + Part 4   (clinical-sp-bootcamp-roadmap, sdtm-tutorial-domain-basics)
+    Scene 2  Part 5 Table 1     (sdtm-ae-domain-mapping-example)
+    Scene 3  Part 5 + Part 6    (sdtm-ae-domain-mapping-example, sdtm-mapping-spec-walkthrough)
+    Scene 4  Part 4             (sdtm-tutorial-domain-basics, SUPPQUAL)
+    Scene 5  Part 2             (adsl-derivation-tutorial-trtstdt)
+    Scene 6  Part 7 + Part 17   (adam-bds-adlb-advs-tutorial, visit-windowing-baseline-locf-guide)
+    Scene 7  Part 3             (tlf-shell-to-rtf-tutorial)
+    Scene 8  Part 16 + Part 6   (define-xml-reviewers-guide-tutorial, sdtm-mapping-spec-walkthrough)
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>From Raw Data to TLF: The Clinical Data Journey —?Interactive Walkthrough —?Jaime Yan</title>
+<meta name="description" content="An interactive, step-by-step walkthrough of how clinical trial data travels from raw EDC extracts to SDTM domains, ADaM analysis datasets, and submission-ready TLFs. Play it like a lecture, one beat at a time.">
+<link rel="canonical" href="https://jaimeyan.com/explainers/clinical-data-journey.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231c1917'/%3E%3Cpath d='M8 10l8 7 8-7' stroke='%23fafaf9' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://jaimeyan.com/explainers/clinical-data-journey.html">
+<meta property="og:title" content="From Raw Data to TLF: The Clinical Data Journey">
+<meta property="og:description" content="Interactive walkthrough: raw EDC data to SDTM domains, ADaM analysis datasets, and submission-ready TLFs —?one beat at a time.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":["TechArticle","LearningResource"],
+"headline":"From Raw Data to TLF: The Clinical Data Journey —?Interactive Walkthrough",
+"description":"An interactive, step-by-step walkthrough of how clinical trial data travels from raw EDC extracts to SDTM domains, ADaM analysis datasets, and submission-ready TLFs.",
+"datePublished":"2026-09-01","dateModified":"2026-09-01",
+"url":"https://jaimeyan.com/explainers/clinical-data-journey.html",
+"inLanguage":"en","learningResourceType":"interactive explainer","interactivityType":"active",
+"educationalUse":["explanation","self study"],
+"teaches":["SDTM domain mapping","SUPPQUAL","ADSL one-row-per-subject discipline","BDS parameters, baseline and windowing","TLF shell-to-RTF production and QC","Define-XML and the submission package"],
+"author":{"@type":"Person","name":"Jaime Yan","url":"https://jaimeyan.com","jobTitle":"Associate Director, Statistical Programming",
+"sameAs":["https://github.com/yanmingyu92","https://www.linkedin.com/in/jaime-y-66312a133/","https://scholar.google.com/citations?user=vo1hv04AAAAJ","https://orcid.org/0009-0007-1786-7259"]},
+"isPartOf":{"@type":"CreativeWorkSeries","name":"Clinical SP Bootcamp","url":"https://jaimeyan.com/blog.html#bootcamp"},
+"isBasedOn":["https://jaimeyan.com/blog/sdtm-tutorial-domain-basics.html","https://jaimeyan.com/blog/sdtm-ae-domain-mapping-example.html","https://jaimeyan.com/blog/sdtm-mapping-spec-walkthrough.html","https://jaimeyan.com/blog/adsl-derivation-tutorial-trtstdt.html","https://jaimeyan.com/blog/tlf-shell-to-rtf-tutorial.html","https://jaimeyan.com/blog/define-xml-reviewers-guide-tutorial.html"]}
+</script>
+<style>
+/* ---- Design language: stone/rose (site palette; system fonts; zero external requests) ---- */
+:root{
+  --ink:#1c1917; --ink-2:#44403c; --ink-3:#57534e;
+  --rose:#9f1239; --rose-soft:#e7d4db; --rose-bg:#fdf7f8;
+  --line:#d6d3d1; --line-2:#e7e5e4;
+  --paper:#fafaf9; --panel:#f5f5f4;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.6;font-size:16px}
+a{color:var(--rose)}
+.wrap{max-width:60rem;margin:0 auto;padding:0 1.25rem}
+.mast{background:var(--ink);color:#fafaf9;padding:2.25rem 0 1.9rem}
+.mast .kicker{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:#d6d3d1;margin:0 0 .5rem}
+.mast .kicker a{color:#d6d3d1;text-decoration:none}
+.mast .kicker a:hover{color:#fff}
+.mast h1{font-family:var(--serif);font-weight:600;font-size:clamp(1.6rem,4vw,2.4rem);line-height:1.15;margin:0 0 .6rem;letter-spacing:-.01em}
+.mast .lede{max-width:44rem;color:#d6d3d1;margin:0;font-size:.95rem}
+.honest-banner{margin:1.25rem 0 0;padding:.55rem .85rem;border:1px solid #57534e;border-radius:.5rem;font-family:var(--mono);font-size:.72rem;color:#d6d3d1;display:inline-block}
+.honest-banner b{color:#fafaf9;font-weight:600}
+.player{position:sticky;top:0;z-index:40;background:var(--paper);border-bottom:1px solid var(--line)}
+.player-inner{max-width:60rem;margin:0 auto;padding:.5rem 1.25rem;display:flex;align-items:center;gap:.6rem;flex-wrap:nowrap;overflow-x:auto}
+.pbtn{font-family:var(--mono);font-size:.78rem;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:.4rem;padding:.32rem .6rem;cursor:pointer;white-space:nowrap}
+.pbtn:hover{border-color:var(--rose);color:var(--rose)}
+.pbtn[disabled]{opacity:.45;cursor:default}
+.pbtn.speed{min-width:3.2rem;text-align:center}
+.pmeta{font-family:var(--mono);font-size:.74rem;color:var(--ink-3);white-space:nowrap;margin-left:auto}
+.pdots{display:flex;gap:.3rem;align-items:center}
+.pdot{width:.45rem;height:.45rem;border-radius:50%;background:var(--line);border:0;padding:0;cursor:pointer}
+.pdot.done{background:var(--rose-soft)}
+.pdot.now{background:var(--rose)}
+.kbd-hint{font-family:var(--mono);font-size:.68rem;color:var(--ink-3);padding:.4rem 1.25rem .5rem;max-width:60rem;margin:0 auto}
+.kbd-hint kbd{border:1px solid var(--line);border-bottom-width:2px;border-radius:.25rem;padding:0 .3rem;background:var(--panel);font-family:var(--mono)}
+html:not(.js) .player,html.static .player{display:none}
+.static-note{display:none;font-family:var(--mono);font-size:.72rem;color:var(--ink-3);padding:.55rem 1.25rem;border-bottom:1px solid var(--line)}
+html.static .static-note{display:block}
+main{padding-bottom:4rem}
+.scene{padding:2.5rem 0 1.75rem;border-bottom:1px solid var(--line-2)}
+.scene-head{display:flex;align-items:baseline;gap:.75rem;flex-wrap:wrap;margin-bottom:.25rem}
+.scene-no{font-family:var(--mono);font-size:.72rem;color:var(--rose);letter-spacing:.1em}
+.scene h2{font-family:var(--serif);font-weight:600;font-size:1.35rem;margin:.1rem 0 .4rem;letter-spacing:-.01em}
+.scene-sub{color:var(--ink-2);font-size:.92rem;max-width:46rem;margin:0 0 1rem}
+.stage{border:1px solid var(--line);border-radius:.6rem;background:#fff;padding:.75rem;margin:0 0 .9rem;overflow-x:auto}
+.stage svg{display:block;width:100%;height:auto;min-width:min(100%,340px)}
+text{font-family:var(--sans)}
+.t-mono{font-family:var(--mono)}
+[data-beat]{transition:opacity .45s ease,transform .45s ease}
+html.js svg [data-beat]{opacity:0;transform:translateY(6px)}
+html.js svg [data-beat].on{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  [data-beat]{transition:none!important}
+  html.js svg [data-beat]{opacity:1;transform:none}
+}
+.caption{margin:0 0 .9rem}
+.beats{list-style:none;margin:0;padding:0;counter-reset:bt}
+.beats li{position:relative;padding:.3rem 0 .3rem 2rem;font-size:.9rem;color:var(--ink-3);border-left:2px solid var(--line-2);margin-left:.9rem}
+.beats li::before{counter-increment:bt;content:counter(bt);position:absolute;left:-.95rem;top:.42rem;width:1.85rem;height:1.85rem;line-height:1.85rem;text-align:center;border-radius:50%;background:var(--panel);border:1px solid var(--line);font-family:var(--mono);font-size:.66rem;color:var(--ink-3)}
+html.js .beats li{opacity:.45}
+html.js .beats li.done{opacity:.75;color:var(--ink-2)}
+html.js .beats li.now{opacity:1;color:var(--ink);border-left-color:var(--rose)}
+html.js .beats li.now::before{background:var(--rose);border-color:var(--rose);color:#fff}
+.scene-notes{display:flex;flex-direction:column;gap:.45rem;font-size:.78rem;color:var(--ink-3)}
+.legend{display:flex;flex-wrap:wrap;gap:.35rem 1.1rem;margin:0;padding:0;list-style:none;font-family:var(--mono);font-size:.7rem}
+.legend .chip{display:inline-block;width:.8rem;height:.8rem;border-radius:.2rem;vertical-align:-.1rem;margin-right:.3rem;border:1px solid rgba(0,0,0,.12)}
+.honest{font-family:var(--mono);font-size:.68rem;color:var(--ink-3)}
+.honest b{font-weight:600;color:var(--ink-2)}
+.src{font-size:.74rem}
+.src a{white-space:nowrap}
+.foot{padding:2rem 0 3rem;color:var(--ink-3);font-size:.8rem}
+.foot p{margin:.25rem 0}
+@media (max-width:480px){
+  .pmeta{display:none}
+  .scene{padding:1.9rem 0 1.4rem}
+}
+</style>
+</head>
+<body>
+<script>document.documentElement.classList.add('js');</script>
+
+<header class="mast">
+  <div class="wrap">
+    <p class="kicker"><a href="https://jaimeyan.com/explainers.html">jaimeyan.com</a> / interactive explainer</p>
+    <h1>From Raw Data to TLF: The Clinical Data Journey</h1>
+    <p class="lede">How a handful of messy EDC extracts becomes a submission package: eight animated scenes covering SDTM mapping, SUPPQUAL, ADSL, BDS baseline and windowing, TLF production and QC, and Define-XML. Press play, or step through one beat at a time.</p>
+    <p class="honest-banner"><b>Honest label:</b> teaching schematic &mdash; illustrative data only (fictional Study XYZ, Subjects 001&ndash;004) &mdash; not measured results. Rules summarized per SDTMIG/ADaMIG; the sourced posts are the authority.</p>
+  </div>
+</header>
+
+<div class="player" id="player" role="region" aria-label="Explainer player">
+  <div class="player-inner">
+    <button class="pbtn" id="btn-play" aria-label="Play or pause">Play</button>
+    <button class="pbtn" id="btn-prev" aria-label="Previous beat">&#8630; Prev</button>
+    <button class="pbtn" id="btn-next" aria-label="Next beat">Next &#8631;</button>
+    <button class="pbtn" id="btn-reset" aria-label="Reset scene">Reset</button>
+    <button class="pbtn speed" id="btn-speed" aria-label="Playback speed">1x</button>
+    <span class="pdots" id="pdots" aria-label="Scenes"></span>
+    <span class="pmeta" id="pmeta">scene &mdash; beat 0/0</span>
+  </div>
+  <p class="kbd-hint"><kbd>Space</kbd> play/pause &nbsp;<kbd>&rarr;</kbd> next beat &nbsp;<kbd>&larr;</kbd> previous beat &nbsp;<kbd>R</kbd> reset</p>
+  <p class="static-note">Static mode: animation disabled (reduced motion or no JavaScript) &mdash; every scene is shown in its complete final state.</p>
+</div>
+
+<main class="wrap" id="scenes">
+
+<!-- ==================== SCENE 1 ==================== -->
+<section class="scene" data-title="The journey map" id="s1">
+  <div class="scene-head"><span class="scene-no">SCENE 1 / 8</span></div>
+  <h2>One journey, four stations</h2>
+  <p class="scene-sub">Every clinical study moves its data through the same four stations, each with its own contract.</p>
+  <figure class="stage">
+    <svg viewBox="0 0 660 250" role="img" aria-label="Pipeline map: raw EDC extracts flow through SDTM tabulation domains and ADaM analysis datasets into TLF deliverables and the submission package, with a mapping specification, ADaM spec, mock shell, and define-XML as the contract at each station.">
+      <defs>
+        <marker id="arr1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#9f1239"/></marker>
+      </defs>
+      <g data-beat="1">
+        <rect x="10" y="40" width="130" height="66" rx="8" fill="#f5f5f4" stroke="#d6d3d1"/>
+        <text x="75" y="66" text-anchor="middle" font-size="13" fill="#1c1917" font-weight="600">Raw EDC</text>
+        <text x="75" y="84" text-anchor="middle" font-size="10" fill="#57534e">40+ extract tables</text>
+        <rect x="180" y="40" width="130" height="66" rx="8" fill="#f5f5f4" stroke="#d6d3d1"/>
+        <text x="245" y="66" text-anchor="middle" font-size="13" fill="#1c1917" font-weight="600">SDTM</text>
+        <text x="245" y="84" text-anchor="middle" font-size="10" fill="#57534e">tabulation domains</text>
+        <rect x="350" y="40" width="130" height="66" rx="8" fill="#f5f5f4" stroke="#d6d3d1"/>
+        <text x="415" y="66" text-anchor="middle" font-size="13" fill="#1c1917" font-weight="600">ADaM</text>
+        <text x="415" y="84" text-anchor="middle" font-size="10" fill="#57534e">analysis datasets</text>
+        <rect x="520" y="40" width="130" height="66" rx="8" fill="#f5f5f4" stroke="#d6d3d1"/>
+        <text x="585" y="66" text-anchor="middle" font-size="13" fill="#1c1917" font-weight="600">TLF</text>
+        <text x="585" y="84" text-anchor="middle" font-size="10" fill="#57534e">tables &middot; listings &middot; figures</text>
+      </g>
+      <g data-beat="2">
+        <path d="M140 73 H176" stroke="#9f1239" stroke-width="2.5" marker-end="url(#arr1)"/>
+        <path d="M310 73 H346" stroke="#9f1239" stroke-width="2.5" marker-end="url(#arr1)"/>
+        <path d="M480 73 H516" stroke="#9f1239" stroke-width="2.5" marker-end="url(#arr1)"/>
+      </g>
+      <g data-beat="3">
+        <rect x="10" y="150" width="130" height="52" rx="8" fill="#fdf7f8" stroke="#9f1239" stroke-dasharray="4 3"/>
+        <text x="75" y="172" text-anchor="middle" font-size="10.5" fill="#9f1239" font-weight="600">contract:</text>
+        <text x="75" y="187" text-anchor="middle" font-size="10.5" fill="#44403c">mapping spec</text>
+        <rect x="180" y="150" width="130" height="52" rx="8" fill="#fdf7f8" stroke="#9f1239" stroke-dasharray="4 3"/>
+        <text x="245" y="172" text-anchor="middle" font-size="10.5" fill="#9f1239" font-weight="600">contract:</text>
+        <text x="245" y="187" text-anchor="middle" font-size="10.5" fill="#44403c">ADaM spec</text>
+        <rect x="350" y="150" width="130" height="52" rx="8" fill="#fdf7f8" stroke="#9f1239" stroke-dasharray="4 3"/>
+        <text x="415" y="172" text-anchor="middle" font-size="10.5" fill="#9f1239" font-weight="600">contract:</text>
+        <text x="415" y="187" text-anchor="middle" font-size="10.5" fill="#44403c">mock shell</text>
+        <rect x="520" y="150" width="130" height="52" rx="8" fill="#fdf7f8" stroke="#9f1239" stroke-dasharray="4 3"/>
+        <text x="585" y="172" text-anchor="middle" font-size="10.5" fill="#9f1239" font-weight="600">contract:</text>
+        <text x="585" y="187" text-anchor="middle" font-size="10.5" fill="#44403c">define-XML</text>
+      </g>
+      <g data-beat="4">
+        <path d="M75 150 V116" stroke="#57534e" stroke-width="1.5" stroke-dasharray="3 3"/>
+        <path d="M245 150 V116" stroke="#57534e" stroke-width="1.5" stroke-dasharray="3 3"/>
+        <path d="M415 150 V116" stroke="#57534e" stroke-width="1.5" stroke-dasharray="3 3"/>
+        <path d="M585 150 V116" stroke="#57534e" stroke-width="1.5" stroke-dasharray="3 3"/>
+      </g>
+      <g data-beat="5">
+        <rect x="180" y="222" width="300" height="22" rx="6" fill="#1c1917"/>
+        <text x="330" y="237" text-anchor="middle" font-size="10.5" fill="#fafaf9">traceable in both directions &mdash; any number walks back to a collected value</text>
+      </g>
+      <g data-beat="6">
+        <text x="330" y="18" text-anchor="middle" font-size="10.5" fill="#57534e">fictional Study XYZ &middot; 4 subjects &middot; this walkthrough: 8 scenes</text>
+      </g>
+    </svg>
+  </figure>
+  <div class="caption">
+    <ol class="beats">
+      <li data-beat="1">Data enters as raw EDC extracts and leaves as TLF deliverables, passing through SDTM tabulation domains and ADaM analysis datasets.</li>
+      <li data-beat="2">Every arrow is a governed transformation: validated programs, reviewed specifications, no hand edits.</li>
+      <li data-beat="3">Each station has a written contract &mdash; mapping spec, ADaM spec, mock shell, define-XML &mdash; and code that produces anything the contract does not name is a finding.</li>
+      <li data-beat="4">The contracts govern the stations; you can be checked against every row in them.</li>
+      <li data-beat="5">Traceability runs both directions: any number in any table can be walked back to the value a site collected.</li>
+      <li data-beat="6">This page walks the whole road with one fictional study: Study XYZ, subjects 001&ndash;004.</li>
+    </ol>
+  </div>
+  <div class="scene-notes">
+    <ul class="legend" aria-label="Legend">
+      <li><span class="chip" style="background:#f5f5f4"></span>data station</li>
+      <li><span class="chip" style="background:#fdf7f8;border-color:#9f1239"></span>contract document</li>
+      <li><span class="chip" style="background:#9f1239"></span>governed flow</li>
+    </ul>
+    <p class="honest"><b>Teaching schematic &mdash; not measured.</b> Illustrative structure only; rules per SDTMIG/ADaMIG.</p>
+    <p class="src">Sources: <a href="https://jaimeyan.com/blog/clinical-sp-bootcamp-roadmap.html">series roadmap</a> &middot; <a href="https://jaimeyan.com/blog/sdtm-tutorial-domain-basics.html">Part 4, SDTM domain basics</a>.</p>
+  </div>
+</section>
+
+<!-- ==================== SCENE 2 ==================== -->
+<section class="scene" data-title="Raw data as it arrives" id="s2">
+  <div class="scene-head"><span class="scene-no">SCENE 2 / 8</span></div>
+  <h2>Raw data as it actually arrives</h2>
+  <p class="scene-sub">A mock adverse-event extract: four subjects, eleven raw columns, and every classic mapping problem in one screen.</p>
+  <figure class="stage">
+    <svg viewBox="0 0 660 232" role="img" aria-label="Raw AE extract table for Study XYZ with subjects 001 to 004. Problem cells highlighted: partial date 2023-02 for subject 002, unknown dates UNK for subjects 003 and 004, mixed severity scale Grade 1 Mild and Grade 3 Severe, free-text relatedness, and missing MedDRA preferred term for subject 004.">
+      <g data-beat="1">
+        <rect x="10" y="14" width="640" height="24" fill="#1c1917"/>
+        <text x="30" y="30" font-size="10.5" fill="#fafaf9" class="t-mono">SUBJID</text>
+        <text x="85" y="30" font-size="10.5" fill="#fafaf9" class="t-mono">AETERM_RAW</text>
+        <text x="230" y="30" font-size="10.5" fill="#fafaf9" class="t-mono">AESTDAT_RAW</text>
+        <text x="340" y="30" font-size="10.5" fill="#fafaf9" class="t-mono">AESEV_RAW</text>
+        <text x="470" y="30" font-size="10.5" fill="#fafaf9" class="t-mono">AESER_RAW</text>
+        <text x="555" y="30" font-size="10.5" fill="#fafaf9" class="t-mono">MDRPT</text>
+      </g>
+      <g data-beat="2">
+        <rect x="10" y="38" width="640" height="40" fill="#fff" stroke="#e7e5e4"/>
+        <rect x="10" y="78" width="640" height="40" fill="#f5f5f4" stroke="#e7e5e4"/>
+        <rect x="10" y="118" width="640" height="40" fill="#fff" stroke="#e7e5e4"/>
+        <rect x="10" y="158" width="640" height="40" fill="#f5f5f4" stroke="#e7e5e4"/>
+        <text x="30" y="63" font-size="10.5" fill="#1c1917" class="t-mono">001</text>
+        <text x="85" y="63" font-size="10.5" fill="#1c1917" class="t-mono">Nausea and vomiting</text>
+        <text x="230" y="63" font-size="10.5" fill="#1c1917" class="t-mono">2023-03-04</text>
+        <text x="340" y="63" font-size="10.5" fill="#1c1917" class="t-mono">Grade 1 (Mild)</text>
+        <text x="470" y="63" font-size="10.5" fill="#1c1917" class="t-mono">No</text>
+        <text x="555" y="63" font-size="10.5" fill="#1c1917" class="t-mono">Nausea</text>
+        <text x="30" y="103" font-size="10.5" fill="#1c1917" class="t-mono">002</text>
+        <text x="85" y="103" font-size="10.5" fill="#1c1917" class="t-mono">pneumonia</text>
+        <text x="470" y="103" font-size="10.5" fill="#1c1917" class="t-mono">Yes</text>
+        <text x="555" y="103" font-size="10.5" fill="#1c1917" class="t-mono">Pneumonia</text>
+        <text x="30" y="143" font-size="10.5" fill="#1c1917" class="t-mono">003</text>
+        <text x="85" y="143" font-size="10.5" fill="#1c1917" class="t-mono">head ache</text>
+        <text x="230" y="143" font-size="10.5" fill="#1c1917" class="t-mono">2023-01-20</text>
+        <text x="470" y="143" font-size="10.5" fill="#1c1917" class="t-mono">N</text>
+        <text x="555" y="143" font-size="10.5" fill="#1c1917" class="t-mono">Headache</text>
+        <text x="30" y="183" font-size="10.5" fill="#1c1917" class="t-mono">004</text>
+        <text x="85" y="183" font-size="10.5" fill="#1c1917" class="t-mono">COVID-19</text>
+        <text x="470" y="183" font-size="10.5" fill="#1c1917" class="t-mono">.</text>
+      </g>
+      <g data-beat="3">
+        <rect x="225" y="78" width="70" height="40" fill="#fdf7f8" stroke="#9f1239" stroke-width="1.8"/>
+        <text x="230" y="103" font-size="10.5" fill="#9f1239" class="t-mono" font-weight="700">2023-02</text>
+      </g>
+      <g data-beat="4">
+        <rect x="225" y="118" width="70" height="40" fill="#fdf7f8" stroke="#9f1239" stroke-width="1.8"/>
+        <text x="230" y="143" font-size="10.5" fill="#9f1239" class="t-mono" font-weight="700">2023-01-20</text>
+        <text x="305" y="143" font-size="10.5" fill="#9f1239" class="t-mono">end: UNK</text>
+        <rect x="225" y="158" width="70" height="40" fill="#fdf7f8" stroke="#9f1239" stroke-width="1.8"/>
+        <text x="230" y="183" font-size="10.5" fill="#9f1239" class="t-mono" font-weight="700">UNK</text>
+      </g>
+      <g data-beat="5">
+        <rect x="335" y="38" width="125" height="40" fill="#fdf7f8" stroke="#9f1239" stroke-width="1.8"/>
+        <rect x="335" y="78" width="125" height="40" fill="#fdf7f8" stroke="#9f1239" stroke-width="1.8"/>
+        <text x="340" y="103" font-size="10.5" fill="#9f1239" class="t-mono" font-weight="700">Grade 3 (Severe)</text>
+        <text x="340" y="143" font-size="10.5" fill="#44403c" class="t-mono">MODERATE</text>
+      </g>
+      <g data-beat="6">
+        <rect x="550" y="158" width="90" height="40" fill="#fdf7f8" stroke="#9f1239" stroke-width="1.8"/>
+        <text x="555" y="183" font-size="10.5" fill="#9f1239" class="t-mono" font-weight="700">(pending)</text>
+      </g>
+      <g data-beat="7">
+        <rect x="10" y="206" width="640" height="20" rx="4" fill="#f5f5f4" stroke="#d6d3d1"/>
+        <text x="330" y="220" text-anchor="middle" font-size="10" fill="#57534e" class="t-mono">also in the extract: AEREL_RAW free text ("possible", "unlikely related") &middot; three different date formats</text>
+      </g>
+    </svg>
+  </figure>
+  <div class="caption">
+    <ol class="beats">
+      <li data-beat="1" data-dur="2200">The AE extract for Study XYZ arrives on a Tuesday: eleven columns, no standard names, no standard formats.</li>
+      <li data-beat="2" data-dur="3000">Four subjects, four events &mdash; and nothing about the table hints at the target shape. The SDTM model does.</li>
+      <li data-beat="3" data-dur="2400">Subject 002's onset is a partial date, month precision only: 2023-02. That is valid, collected data &mdash; not a bug.</li>
+      <li data-beat="4" data-dur="2400">Subjects 003 and 004 carry unknown dates (UNK). Unknown is stored as missing and raised as a data query &mdash; never invented.</li>
+      <li data-beat="5" data-dur="2400">Severity mixes two scales: CT-assigned Grade 1 (Mild) and Grade 3 (Severe) beside bare MODERATE. Relatedness is free text.</li>
+      <li data-beat="6" data-dur="2400">Subject 004's MedDRA coding is still pending. The row ships with AEDECOD blank, tracked by an open query.</li>
+      <li data-beat="7">None of this is unusual. The distance from this table to a submission-grade domain is about forty decisions &mdash; and every one belongs in the spec before the code.</li>
+    </ol>
+  </div>
+  <div class="scene-notes">
+    <ul class="legend" aria-label="Legend">
+      <li><span class="chip" style="background:#1c1917"></span>raw column header</li>
+      <li><span class="chip" style="background:#fff;border-color:#e7e5e4"></span>collected row</li>
+      <li><span class="chip" style="background:#fdf7f8;border-color:#9f1239"></span>mapping decision needed</li>
+    </ul>
+    <p class="honest"><b>Teaching schematic &mdash; not measured.</b> Table reproduced from the Part 5 mock extract (itself synthetic, fictional Study XYZ).</p>
+    <p class="src">Source: <a href="https://jaimeyan.com/blog/sdtm-ae-domain-mapping-example.html">Part 5, SDTM AE domain mapping</a>.</p>
+  </div>
+</section>
+
+<!-- ==================== SCENE 3 ==================== -->
+<section class="scene" data-title="Mapping into SDTM" id="s3">
+  <div class="scene-head"><span class="scene-no">SCENE 3 / 8</span></div>
+  <h2>Mapping into an SDTM domain</h2>
+  <p class="scene-sub">Spec rows turn the raw extract into the AE domain: identifiers, verbatim topic, controlled terminology, coded terms, dates, sequence.</p>
+  <figure class="stage">
+    <svg viewBox="0 0 660 330" role="img" aria-label="Mapping flow from raw AE extract through a mapping specification with decision rows into the SDTM AE domain table showing USUBJID, AESEQ, AETERM, AEDECOD, AESTDTC, AESEV and AESER for subjects 001 to 004.">
+      <defs>
+        <marker id="arr3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#9f1239"/></marker>
+      </defs>
+      <g data-beat="1">
+        <rect x="10" y="60" width="150" height="180" rx="8" fill="#f5f5f4" stroke="#d6d3d1"/>
+        <text x="85" y="84" text-anchor="middle" font-size="12" fill="#1c1917" font-weight="600">raw AE extract</text>
+        <text x="85" y="106" text-anchor="middle" font-size="10" fill="#57534e" class="t-mono">AETERM_RAW</text>
+        <text x="85" y="122" text-anchor="middle" font-size="10" fill="#57534e" class="t-mono">AESTDAT_RAW</text>
+        <text x="85" y="138" text-anchor="middle" font-size="10" fill="#57534e" class="t-mono">AESEV_RAW</text>
+        <text x="85" y="154" text-anchor="middle" font-size="10" fill="#57534e" class="t-mono">AESER_RAW</text>
+        <text x="85" y="170" text-anchor="middle" font-size="10" fill="#57534e" class="t-mono">MDRPT</text>
+        <text x="85" y="200" text-anchor="middle" font-size="10" fill="#57534e" class="t-mono">+ 6 more</text>
+      </g>
+      <g data-beat="2">
+        <rect x="220" y="30" width="220" height="250" rx="8" fill="#fdf7f8" stroke="#9f1239"/>
+        <text x="330" y="52" text-anchor="middle" font-size="12" fill="#9f1239" font-weight="600">mapping spec (the contract)</text>
+        <text x="235" y="76" font-size="9.5" fill="#44403c" class="t-mono">1 STUDYID = "XYZ-001" (assigned)</text>
+        <text x="235" y="94" font-size="9.5" fill="#44403c" class="t-mono">2 USUBJID = cats(STUDYID,SUBJID)</text>
+        <text x="235" y="112" font-size="9.5" fill="#44403c" class="t-mono">3 AETERM = strip(raw) verbatim</text>
+        <text x="235" y="130" font-size="9.5" fill="#44403c" class="t-mono">4 AESEV: "Grade 1 (Mild)"&#8594;MILD</text>
+        <text x="235" y="148" font-size="9.5" fill="#44403c" class="t-mono">5 AESER: "Yes"/"No" &#8594; Y/N</text>
+        <text x="235" y="166" font-size="9.5" fill="#44403c" class="t-mono">6 AEDECOD = join MDRPT only</text>
+        <text x="235" y="184" font-size="9.5" fill="#44403c" class="t-mono">7 AESTDTC = string as collected</text>
+        <text x="235" y="202" font-size="9.5" fill="#44403c" class="t-mono">8 AESEQ = count after sort</text>
+        <text x="235" y="228" font-size="9.5" fill="#57534e" class="t-mono">every variable traces to a row;</text>
+        <text x="235" y="244" font-size="9.5" fill="#57534e" class="t-mono">formulas, not prose</text>
+        <path d="M160 150 H214" stroke="#9f1239" stroke-width="2.5" marker-end="url(#arr3)"/>
+      </g>
+      <g data-beat="3">
+        <rect x="470" y="30" width="180" height="250" rx="8" fill="#fff" stroke="#d6d3d1"/>
+        <rect x="470" y="30" width="180" height="24" rx="8" fill="#1c1917"/>
+        <text x="560" y="46" text-anchor="middle" font-size="10.5" fill="#fafaf9" class="t-mono">SDTM AE domain</text>
+        <text x="480" y="72" font-size="9" fill="#57534e" class="t-mono">USUBJID</text>
+        <text x="480" y="88" font-size="9" fill="#57534e" class="t-mono">XYZ-001-001</text>
+        <text x="480" y="104" font-size="9" fill="#57534e" class="t-mono">XYZ-001-002</text>
+        <text x="480" y="120" font-size="9" fill="#57534e" class="t-mono">XYZ-001-003</text>
+        <text x="480" y="136" font-size="9" fill="#57534e" class="t-mono">XYZ-001-004</text>
+        <path d="M440 150 H464" stroke="#9f1239" stroke-width="2.5" marker-end="url(#arr3)"/>
+      </g>
+      <g data-beat="4">
+        <text x="565" y="72" font-size="9" fill="#9f1239" class="t-mono" font-weight="700">built once, reused</text>
+        <text x="565" y="88" font-size="9" fill="#44403c" class="t-mono">&#8592; same string</text>
+        <text x="565" y="104" font-size="9" fill="#44403c" class="t-mono">&#8592; in every</text>
+        <text x="565" y="120" font-size="9" fill="#44403c" class="t-mono">&#8592; domain</text>
+      </g>
+      <g data-beat="5">
+        <text x="480" y="164" font-size="9" fill="#57534e" class="t-mono">AETERM (verbatim)</text>
+        <text x="480" y="180" font-size="9" fill="#1c1917" class="t-mono">"head ache" stays</text>
+        <text x="480" y="196" font-size="9" fill="#57534e" class="t-mono">AEDECOD (MedDRA PT)</text>
+        <text x="480" y="212" font-size="9" fill="#1c1917" class="t-mono">Headache &middot; 004: blank</text>
+      </g>
+      <g data-beat="6">
+        <text x="480" y="232" font-size="9" fill="#57534e" class="t-mono">AESTDTC (ISO 8601)</text>
+        <text x="480" y="248" font-size="9" fill="#1c1917" class="t-mono">2023-02 ships as 2023-02</text>
+        <text x="480" y="264" font-size="9" fill="#9f1239" class="t-mono" font-weight="700">never completed</text>
+      </g>
+      <g data-beat="7">
+        <text x="480" y="284" font-size="9" fill="#57534e" class="t-mono">AESEV: MILD/SEV&#8727;...</text>
+        <text x="235" y="268" font-size="9.5" fill="#9f1239" class="t-mono" font-weight="700">decision rows &#8594; CT values</text>
+        <text x="480" y="298" font-size="8.5" fill="#44403c" class="t-mono">AESER: Y/N &#183; criteria blank</text>
+      </g>
+      <g data-beat="8">
+        <rect x="10" y="288" width="420" height="32" rx="6" fill="#1c1917"/>
+        <text x="220" y="300" text-anchor="middle" font-size="9.5" fill="#fafaf9" class="t-mono">AESEQ = count within subject after sort by</text>
+        <text x="220" y="313" text-anchor="middle" font-size="9.5" fill="#fafaf9" class="t-mono">STUDYID USUBJID AEDECOD AESTDTC AETERM (deterministic)</text>
+      </g>
+      <g data-beat="9">
+        <text x="330" y="22" text-anchor="middle" font-size="9" fill="#9f1239" class="t-mono" font-weight="700">&#9650; submission-grade AE: 4 rows, 40 decisions, all sourced</text>
+      </g>
+    </svg>
+  </figure>
+  <div class="caption">
+    <ol class="beats">
+      <li data-beat="1" data-dur="2200">Mapping starts from the raw table: which columns move directly, which need a decision row, which need a data query.</li>
+      <li data-beat="2" data-dur="2600">The mapping specification is the contract between data management, programming, and inspection &mdash; target, source, transformation, CT, notes.</li>
+      <li data-beat="3" data-dur="2200">The AE domain takes shape: one row per observation per subject, standard variables, standard names.</li>
+      <li data-beat="4" data-dur="2400">USUBJID is STUDYID + '-' + SUBJID, built in one program and reused verbatim everywhere &mdash; two programs building it is how trailing-blank ghosts are born.</li>
+      <li data-beat="5" data-dur="2600">AETERM keeps the verbatim string ("head ache" stays "head ache"); AEDECOD comes only from the version-pinned MedDRA coding deliverable &mdash; 004 stays blank with an open query.</li>
+      <li data-beat="6" data-dur="2600">Dates ship as collected ISO 8601 strings: 2023-02 keeps month precision. Completing a partial in SDTM changes clinical meaning.</li>
+      <li data-beat="7" data-dur="2600">Severity collapses to MILD/MODERATE/SEVERE through decision rows; AESER becomes Y/N; the six seriousness criteria stay blank unless checked, never defaulted to N.</li>
+      <li data-beat="8" data-dur="2600">AESEQ numbers records within subject from a deterministic sort &mdash; never EDC row numbers, which reshuffle on every re-extract.</li>
+      <li data-beat="9" data-dur="2400">Result: a submission-grade AE domain where every variable traces to a spec row &mdash; the code contains no judgment, only transcription.</li>
+    </ol>
+  </div>
+  <div class="scene-notes">
+    <ul class="legend" aria-label="Legend">
+      <li><span class="chip" style="background:#f5f5f4"></span>raw extract</li>
+      <li><span class="chip" style="background:#fdf7f8;border-color:#9f1239"></span>mapping spec rows</li>
+      <li><span class="chip" style="background:#fff;border-color:#d6d3d1"></span>SDTM AE</li>
+    </ul>
+    <p class="honest"><b>Teaching schematic &mdash; not measured.</b> Variables and rules per SDTMIG; fictional Study XYZ data.</p>
+    <p class="src">Sources: <a href="https://jaimeyan.com/blog/sdtm-ae-domain-mapping-example.html">Part 5, AE mapping</a> &middot; <a href="https://jaimeyan.com/blog/sdtm-mapping-spec-walkthrough.html">Part 6, mapping specification</a>.</p>
+  </div>
+</section>
+
+<!-- ==================== SCENE 4 ==================== -->
+<section class="scene" data-title="SUPPQUAL" id="s4">
+  <div class="scene-head"><span class="scene-no">SCENE 4 / 8</span></div>
+  <h2>SUPPQUAL: the pressure valve</h2>
+  <p class="scene-sub">CRF values with no IG variable go vertical: one row per stored value, linked back through the parent's sequence number.</p>
+  <figure class="stage">
+    <svg viewBox="0 0 660 260" role="img" aria-label="Two supplemental qualifier rows stored vertically in SUPPAE: QNAM AERELVER holding verbatim causality text and QNAM AETOXLOC holding the local toxicity grade string, each linked to a parent AE record through IDVAR equals AESEQ and IDVARVAL.">
+      <defs>
+        <marker id="arr4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#9f1239"/></marker>
+      </defs>
+      <g data-beat="1">
+        <rect x="10" y="60" width="230" height="120" rx="8" fill="#fff" stroke="#d6d3d1"/>
+        <rect x="10" y="60" width="230" height="24" rx="8" fill="#1c1917"/>
+        <text x="125" y="76" text-anchor="middle" font-size="10.5" fill="#fafaf9" class="t-mono">parent: AE record 001/1</text>
+        <text x="25" y="104" font-size="9.5" fill="#57534e" class="t-mono">AETERM = "Nausea and vomiting"</text>
+        <text x="25" y="122" font-size="9.5" fill="#57534e" class="t-mono">AEREL = "POSSIBLY RELATED" (CT)</text>
+        <text x="25" y="140" font-size="9.5" fill="#57534e" class="t-mono">AESEV = "MILD" (CT)</text>
+        <text x="25" y="158" font-size="9.5" fill="#9f1239" class="t-mono" font-weight="700">but the CRF also collected:</text>
+        <text x="25" y="174" font-size="9.5" fill="#9f1239" class="t-mono" font-weight="700">"possible" (verbatim) &middot; "Grade 1 (Mild)"</text>
+      </g>
+      <g data-beat="2">
+        <rect x="318" y="40" width="332" height="190" rx="8" fill="#fdf7f8" stroke="#9f1239"/>
+        <rect x="318" y="40" width="332" height="24" rx="8" fill="#9f1239"/>
+        <text x="484" y="56" text-anchor="middle" font-size="10.5" fill="#fafaf9" class="t-mono">SUPPAE (vertical)</text>
+        <text x="333" y="84" font-size="9.5" fill="#57534e" class="t-mono">RDOMAIN</text>
+        <text x="415" y="84" font-size="9.5" fill="#57534e" class="t-mono">IDVAR</text>
+        <text x="470" y="84" font-size="9.5" fill="#57534e" class="t-mono">IDVARVAL</text>
+        <text x="528" y="84" font-size="9.5" fill="#57534e" class="t-mono">QNAM</text>
+        <text x="585" y="84" font-size="9.5" fill="#57534e" class="t-mono">QVAL</text>
+      </g>
+      <g data-beat="3">
+        <text x="333" y="110" font-size="9.5" fill="#1c1917" class="t-mono">AE</text>
+        <text x="415" y="110" font-size="9.5" fill="#1c1917" class="t-mono">AESEQ</text>
+        <text x="470" y="110" font-size="9.5" fill="#1c1917" class="t-mono">1</text>
+        <text x="528" y="110" font-size="9.5" fill="#1c1917" class="t-mono">AERELVER</text>
+        <text x="585" y="110" font-size="8.5" fill="#1c1917" class="t-mono">possible</text>
+      </g>
+      <g data-beat="4">
+        <text x="333" y="132" font-size="9.5" fill="#1c1917" class="t-mono">AE</text>
+        <text x="415" y="132" font-size="9.5" fill="#1c1917" class="t-mono">AESEQ</text>
+        <text x="470" y="132" font-size="9.5" fill="#1c1917" class="t-mono">1</text>
+        <text x="528" y="132" font-size="9.5" fill="#1c1917" class="t-mono">AETOXLOC</text>
+        <text x="585" y="132" font-size="8.5" fill="#1c1917" class="t-mono">Grade 1 (Mild)</text>
+        <text x="333" y="156" font-size="9" fill="#57534e" class="t-mono">+ QLABEL &middot; QORIG = "CRF" &middot; QEVAL = "INVESTIGATOR"</text>
+        <text x="333" y="172" font-size="9" fill="#57534e" class="t-mono">QNAM max 8 characters</text>
+      </g>
+      <g data-beat="5">
+        <path d="M240 110 H314" stroke="#9f1239" stroke-width="2.5" marker-end="url(#arr4)"/>
+        <text x="277" y="102" text-anchor="middle" font-size="9" fill="#9f1239" class="t-mono">link</text>
+      </g>
+      <g data-beat="6">
+        <rect x="10" y="200" width="640" height="44" rx="6" fill="#1c1917"/>
+        <text x="330" y="217" text-anchor="middle" font-size="9.5" fill="#fafaf9" class="t-mono">why AESEQ must be deterministic: a re-run that reshuffles sequence numbers</text>
+        <text x="330" y="231" text-anchor="middle" font-size="9.5" fill="#fafaf9" class="t-mono">silently orphans every supplemental qualifier attached to those records</text>
+      </g>
+    </svg>
+  </figure>
+  <div class="caption">
+    <ol class="beats">
+      <li data-beat="1" data-dur="2400">Real CRFs collect things the Implementation Guide has no variable for &mdash; verbatim relatedness, a local toxicity grade.</li>
+      <li data-beat="2" data-dur="2200">Those values go to a supplemental qualifier dataset, vertical: one row per stored value instead of one extra column.</li>
+      <li data-beat="3" data-dur="2400">Each response becomes a SUPPAE row: QNAM = AERELVER, QLABEL = "Causality, Verbatim", QVAL = the collected string.</li>
+      <li data-beat="4" data-dur="2400">The local grade string rides along as AETOXLOC because safety review uses the raw scale &mdash; with QORIG = CRF and QEVAL = INVESTIGATOR.</li>
+      <li data-beat="5" data-dur="2400">The link back to the parent record runs through IDVAR = AESEQ and the sequence number in IDVARVAL.</li>
+      <li data-beat="6" data-dur="2600">That link is exactly why AESEQ must be derived deterministically &mdash; reshuffled sequences silently orphan every attached qualifier.</li>
+    </ol>
+  </div>
+  <div class="scene-notes">
+    <ul class="legend" aria-label="Legend">
+      <li><span class="chip" style="background:#fff;border-color:#d6d3d1"></span>parent domain record</li>
+      <li><span class="chip" style="background:#fdf7f8;border-color:#9f1239"></span>SUPP-- row (vertical)</li>
+      <li><span class="chip" style="background:#9f1239"></span>IDVAR/IDVARVAL link</li>
+    </ul>
+    <p class="honest"><b>Teaching schematic &mdash; not measured.</b> SUPP-- structure per SDTMIG; values from the fictional Study XYZ extract.</p>
+    <p class="src">Source: <a href="https://jaimeyan.com/blog/sdtm-tutorial-domain-basics.html">Part 4, SDTM domain basics</a>.</p>
+  </div>
+</section>
+
+<!-- ==================== SCENE 5 ==================== -->
+<section class="scene" data-title="ADSL: one row per subject" id="s5">
+  <div class="scene-head"><span class="scene-no">SCENE 5 / 8</span></div>
+  <h2>ADSL: one row per subject is the whole job</h2>
+  <p class="scene-sub">The Subject-Level Analysis Dataset is the spine every other analysis dataset inherits &mdash; and merge discipline is what keeps it one row per subject.</p>
+  <figure class="stage">
+    <svg viewBox="0 0 660 300" role="img" aria-label="DM provides the one-row-per-subject spine; EX is aggregated to the earliest qualifying dose giving TRT01SDT; population flags SAFFL and ITT are attached with SAP citations; a fan-out merge raises the alarm 204 rows versus 200 subjects; final ADSL holds one row per subject with TRT01P and TRT01A kept separately.">
+      <defs>
+        <marker id="arr5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#9f1239"/></marker>
+      </defs>
+      <g data-beat="1">
+        <rect x="10" y="70" width="120" height="64" rx="8" fill="#fff" stroke="#d6d3d1"/>
+        <text x="70" y="94" text-anchor="middle" font-size="12" fill="#1c1917" font-weight="600">DM</text>
+        <text x="70" y="112" text-anchor="middle" font-size="9.5" fill="#57534e">1 row / subject</text>
+        <text x="70" y="126" text-anchor="middle" font-size="9.5" fill="#57534e">the spine</text>
+      </g>
+      <g data-beat="2">
+        <rect x="10" y="160" width="120" height="64" rx="8" fill="#f5f5f4" stroke="#d6d3d1"/>
+        <text x="70" y="182" text-anchor="middle" font-size="12" fill="#1c1917" font-weight="600">EX</text>
+        <text x="70" y="198" text-anchor="middle" font-size="9.5" fill="#57534e">many rows / subject</text>
+        <text x="70" y="212" text-anchor="middle" font-size="9.5" fill="#9f1239">aggregate first:</text>
+        <text x="70" y="224" text-anchor="middle" font-size="9.5" fill="#9f1239">earliest EXDOSE&gt;0</text>
+      </g>
+      <g data-beat="3">
+        <rect x="180" y="120" width="150" height="56" rx="8" fill="#fdf7f8" stroke="#9f1239"/>
+        <text x="255" y="142" text-anchor="middle" font-size="11" fill="#9f1239" font-weight="600" class="t-mono">TRT01SDT</text>
+        <text x="255" y="160" text-anchor="middle" font-size="9" fill="#44403c">cascade: qualifying EX &#8594;</text>
+        <text x="255" y="171" text-anchor="middle" font-size="9" fill="#44403c">earliest date &#8594; SAP fallback</text>
+        <path d="M130 102 H175 l5 30" stroke="#9f1239" stroke-width="2" fill="none" marker-end="url(#arr5)"/>
+        <path d="M130 192 H175 l5 -30" stroke="#9f1239" stroke-width="2" fill="none" marker-end="url(#arr5)"/>
+      </g>
+      <g data-beat="4">
+        <rect x="180" y="200" width="150" height="58" rx="8" fill="#f5f5f4" stroke="#d6d3d1"/>
+        <text x="255" y="220" text-anchor="middle" font-size="10" fill="#1c1917" class="t-mono">SAFFL &middot; ITT01FL</text>
+        <text x="255" y="236" text-anchor="middle" font-size="9" fill="#57534e">each flag ships with its</text>
+        <text x="255" y="248" text-anchor="middle" font-size="9" fill="#57534e">SAP citation + QC listing</text>
+      </g>
+      <g data-beat="5">
+        <rect x="380" y="60" width="270" height="120" rx="8" fill="#fff" stroke="#d6d3d1"/>
+        <rect x="380" y="60" width="270" height="24" rx="8" fill="#1c1917"/>
+        <text x="515" y="76" text-anchor="middle" font-size="10.5" fill="#fafaf9" class="t-mono">ADSL &mdash; 1 row per subject</text>
+        <text x="395" y="102" font-size="9.5" fill="#57534e" class="t-mono">USUBJID</text>
+        <text x="500" y="102" font-size="9.5" fill="#57534e" class="t-mono">TRT01P</text>
+        <text x="585" y="102" font-size="9.5" fill="#57534e" class="t-mono">TRT01A</text>
+        <text x="622" y="102" font-size="9.5" fill="#57534e" class="t-mono">SAFFL</text>
+        <text x="395" y="120" font-size="9.5" fill="#1c1917" class="t-mono">-001</text>
+        <text x="500" y="120" font-size="9.5" fill="#1c1917" class="t-mono">Study Drug</text>
+        <text x="585" y="120" font-size="9.5" fill="#1c1917" class="t-mono">Study Drug</text>
+        <text x="622" y="120" font-size="9.5" fill="#1c1917" class="t-mono">Y</text>
+        <text x="395" y="138" font-size="9.5" fill="#1c1917" class="t-mono">-002</text>
+        <text x="500" y="138" font-size="9.5" fill="#1c1917" class="t-mono">Study Drug</text>
+        <text x="585" y="138" font-size="9.5" fill="#9f1239" class="t-mono" font-weight="700">Placebo!</text>
+        <text x="622" y="138" font-size="9.5" fill="#1c1917" class="t-mono">Y</text>
+        <text x="395" y="156" font-size="9.5" fill="#1c1917" class="t-mono">-003</text>
+        <text x="500" y="156" font-size="9.5" fill="#1c1917" class="t-mono">Placebo</text>
+        <text x="585" y="156" font-size="9.5" fill="#1c1917" class="t-mono">Placebo</text>
+        <text x="622" y="156" font-size="9.5" fill="#1c1917" class="t-mono">Y</text>
+        <text x="395" y="174" font-size="9.5" fill="#1c1917" class="t-mono">-004</text>
+        <text x="500" y="174" font-size="9.5" fill="#1c1917" class="t-mono">Study Drug</text>
+        <text x="585" y="174" font-size="9.5" fill="#1c1917" class="t-mono">(not dosed)</text>
+        <text x="622" y="174" font-size="9.5" fill="#9f1239" class="t-mono" font-weight="700">N</text>
+        <path d="M330 148 H376" stroke="#9f1239" stroke-width="2.5" marker-end="url(#arr5)"/>
+      </g>
+      <g data-beat="6">
+        <text x="515" y="196" text-anchor="middle" font-size="8.5" fill="#9f1239" class="t-mono">002 randomized A, dosed B &#8594;</text>
+        <text x="515" y="208" text-anchor="middle" font-size="8.5" fill="#9f1239" class="t-mono">keep both, list for medical review</text>
+      </g>
+      <g data-beat="7">
+        <rect x="380" y="216" width="270" height="52" rx="6" fill="#1c1917"/>
+        <text x="515" y="236" text-anchor="middle" font-size="9.5" fill="#fafaf9" class="t-mono">invariant check after EVERY merge:</text>
+        <text x="515" y="252" text-anchor="middle" font-size="9.5" fill="#fafaf9" class="t-mono">rows = subjects, or the merge fanned out</text>
+      </g>
+      <g data-beat="8">
+        <rect x="10" y="10" width="340" height="44" rx="6" fill="#fdf7f8" stroke="#9f1239"/>
+        <text x="180" y="28" text-anchor="middle" font-size="9.5" fill="#9f1239" class="t-mono" font-weight="700">the classic defect: 204 rows, 200 subjects</text>
+        <text x="180" y="44" text-anchor="middle" font-size="9" fill="#44403c">a DS extract with two records per subject broke the invariant</text>
+      </g>
+    </svg>
+  </figure>
+  <div class="caption">
+    <ol class="beats">
+      <li data-beat="1" data-dur="2200">ADSL carries demographics, treatment variables, key dates, and population flags at exactly one record per subject.</li>
+      <li data-beat="2" data-dur="2400">Sources with many rows per subject &mdash; EX, SV, DS &mdash; are aggregated before the merge, never after.</li>
+      <li data-beat="3" data-dur="2600">TRT01SDT is a cascade: restrict EX to qualifying records, take the earliest date, then the SAP-defined fallback &mdash; not a lookup.</li>
+      <li data-beat="4" data-dur="2400">Every population flag ships with three things: the SAP citation it implements, the derivation, and a QC listing of disagreements.</li>
+      <li data-beat="5" data-dur="2600">Merges land on the spine: rows must equal distinct subjects at every step.</li>
+      <li data-beat="6" data-dur="2600">Subject 002 randomized to A but dosed B: TRT01P and TRT01A disagree &mdash; that is data for medical review, never a code fix.</li>
+      <li data-beat="7" data-dur="2400">The running check catches fan-out the moment it happens &mdash; a mystery N=204 becomes a five-minute fix.</li>
+      <li data-beat="8" data-dur="2400">Get ADSL right and every downstream dataset inherits the right answer on every row; get it wrong and they inherit the wrong answer just as consistently.</li>
+    </ol>
+  </div>
+  <div class="scene-notes">
+    <ul class="legend" aria-label="Legend">
+      <li><span class="chip" style="background:#fff;border-color:#d6d3d1"></span>ADSL row (the spine)</li>
+      <li><span class="chip" style="background:#fdf7f8;border-color:#9f1239"></span>derivation cascade</li>
+      <li><span class="chip" style="background:#1c1917"></span>invariant check</li>
+    </ul>
+    <p class="honest"><b>Teaching schematic &mdash; not measured.</b> Treatment scenarios per the Part 2 discrepancy table (illustrative).</p>
+    <p class="src">Source: <a href="https://jaimeyan.com/blog/adsl-derivation-tutorial-trtstdt.html">Part 2, ADSL derivation walkthrough</a>.</p>
+  </div>
+</section>
+
+<!-- ==================== SCENE 6 ==================== -->
+<section class="scene" data-title="BDS: baseline &amp; windows" id="s6">
+  <div class="scene-head"><span class="scene-no">SCENE 6 / 8</span></div>
+  <h2>BDS: parameters, baseline, windows</h2>
+  <p class="scene-sub">One subject's systolic blood pressure shows how windowing, the baseline flag, and change from baseline decide whether a BDS dataset is right.</p>
+  <figure class="stage">
+    <svg viewBox="0 0 660 300" role="img" aria-label="Timeline of subject 001 systolic blood pressure records by analysis day: Day minus 21 screening value 124, Day minus 2 value 128 flagged as baseline ABLFL equals Y, Day 5 value 122 in Week 1 window, Day 71 value 118 and Day 95 recheck value 120 both in the Week 12 window with the Day 95 record winning ANL01FL, and a Day 130 visit of 116 falling in the gap between windows marked NOT IN WINDOW. Windows per SAP: Baseline day minus 30 to minus 1, Week 1 day 1 to 7, Week 12 day 64 to 98, Week 24 day 141 to 189.">
+      <defs>
+        <marker id="arr6" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#9f1239"/></marker>
+      </defs>
+      <!-- axis -->
+      <g data-beat="1">
+        <line x1="40" y1="240" x2="640" y2="240" stroke="#57534e" stroke-width="1.5"/>
+        <text x="40" y="262" font-size="9.5" fill="#57534e" class="t-mono">Day -21</text>
+        <text x="150" y="262" font-size="9.5" fill="#57534e" class="t-mono">Day -2</text>
+        <text x="260" y="262" font-size="9.5" fill="#57534e" class="t-mono">Day 5</text>
+        <text x="390" y="262" font-size="9.5" fill="#57534e" class="t-mono">Day 71</text>
+        <text x="470" y="262" font-size="9.5" fill="#57534e" class="t-mono">Day 95</text>
+        <text x="570" y="262" font-size="9.5" fill="#57534e" class="t-mono">Day 130</text>
+        <text x="40" y="284" font-size="9.5" fill="#57534e" class="t-mono">PARAMCD = SYSBP &middot; PARAM = "Systolic Blood Pressure (mmHg)" &middot; ADY anchored to TRT01SDT (no Day 0)</text>
+      </g>
+      <!-- records -->
+      <g data-beat="2">
+        <circle cx="40" cy="146" r="7" fill="#f5f5f4" stroke="#57534e"/><text x="40" y="128" text-anchor="middle" font-size="10" fill="#44403c" class="t-mono">124</text>
+        <circle cx="150" cy="112" r="7" fill="#f5f5f4" stroke="#57534e"/><text x="150" y="94" text-anchor="middle" font-size="10" fill="#44403c" class="t-mono">128</text>
+        <circle cx="260" cy="130" r="7" fill="#f5f5f4" stroke="#57534e"/><text x="260" y="112" text-anchor="middle" font-size="10" fill="#44403c" class="t-mono">122</text>
+        <circle cx="390" cy="86" r="7" fill="#f5f5f4" stroke="#57534e"/><text x="390" y="68" text-anchor="middle" font-size="10" fill="#44403c" class="t-mono">118</text>
+        <circle cx="470" cy="104" r="7" fill="#f5f5f4" stroke="#57534e"/><text x="470" y="86" text-anchor="middle" font-size="10" fill="#44403c" class="t-mono">120</text>
+        <circle cx="570" cy="122" r="7" fill="#f5f5f4" stroke="#57534e"/><text x="570" y="104" text-anchor="middle" font-size="10" fill="#44403c" class="t-mono">116</text>
+        <text x="330" y="30" text-anchor="middle" font-size="10.5" fill="#1c1917" font-weight="600">collected VS records, subject 001 (mmHg, illustrative)</text>
+      </g>
+      <!-- windows -->
+      <g data-beat="3">
+        <rect x="20" y="52" width="240" height="176" fill="#f5f5f4" opacity="0.55"/>
+        <rect x="240" y="52" width="90" height="176" fill="#fdf7f8" opacity="0.8"/>
+        <rect x="330" y="52" width="180" height="176" fill="#f5f5f4" opacity="0.55"/>
+        <rect x="510" y="52" width="60" height="176" fill="#f5f5f4" opacity="0.55"/>
+        <text x="140" y="46" text-anchor="middle" font-size="9" fill="#44403c" class="t-mono">BASELINE (-30..-1)</text>
+        <text x="285" y="46" text-anchor="middle" font-size="9" fill="#9f1239" class="t-mono">WEEK 1 (1..7)</text>
+        <text x="420" y="46" text-anchor="middle" font-size="9" fill="#44403c" class="t-mono">WEEK 12 (64..98)</text>
+        <text x="540" y="46" text-anchor="middle" font-size="9" fill="#44403c" class="t-mono">WK24 (141..)</text>
+      </g>
+      <!-- stranded -->
+      <g data-beat="4">
+        <rect x="545" y="60" width="90" height="34" rx="5" fill="none" stroke="#9f1239" stroke-dasharray="3 2"/>
+        <text x="590" y="76" text-anchor="middle" font-size="8.5" fill="#9f1239" class="t-mono">gap: Day 99-140</text>
+        <text x="590" y="87" text-anchor="middle" font-size="8.5" fill="#9f1239" class="t-mono">NOT IN WINDOW</text>
+        <text x="570" y="144" text-anchor="middle" font-size="8.5" fill="#9f1239" class="t-mono">stays in data,</text>
+        <text x="570" y="155" text-anchor="middle" font-size="8.5" fill="#9f1239" class="t-mono">ANL01FL off</text>
+      </g>
+      <!-- baseline -->
+      <g data-beat="5">
+        <circle cx="150" cy="112" r="11" fill="none" stroke="#9f1239" stroke-width="2.5"/>
+        <text x="150" y="176" text-anchor="middle" font-size="9" fill="#9f1239" class="t-mono" font-weight="700">ABLFL = Y</text>
+        <text x="150" y="188" text-anchor="middle" font-size="8.5" fill="#44403c">last value on/before</text>
+        <text x="150" y="199" text-anchor="middle" font-size="8.5" fill="#44403c">first dose &mdash; not the</text>
+        <text x="150" y="210" text-anchor="middle" font-size="8.5" fill="#44403c">first record (124!)</text>
+      </g>
+      <!-- base/chg -->
+      <g data-beat="6">
+        <text x="330" y="160" text-anchor="middle" font-size="9.5" fill="#1c1917" class="t-mono">BASE = 128 on every record</text>
+        <text x="330" y="176" text-anchor="middle" font-size="9.5" fill="#9f1239" class="t-mono" font-weight="700">CHG = AVAL - BASE</text>
+        <text x="390" y="106" text-anchor="middle" font-size="9" fill="#9f1239" class="t-mono">118-128 = -10</text>
+        <path d="M352 84 H366" stroke="#9f1239" stroke-width="1.5" marker-end="url(#arr6)"/>
+      </g>
+      <!-- anl01fl -->
+      <g data-beat="7">
+        <circle cx="470" cy="104" r="11" fill="none" stroke="#9f1239" stroke-width="2.5"/>
+        <text x="452" y="140" text-anchor="middle" font-size="8.5" fill="#9f1239" class="t-mono" font-weight="700">ANL01FL=Y</text>
+        <text x="452" y="151" text-anchor="middle" font-size="8.5" fill="#44403c">(SAP: last record</text>
+        <text x="452" y="162" text-anchor="middle" font-size="8.5" fill="#44403c">wins in-window)</text>
+        <text x="390" y="56" text-anchor="middle" font-size="8.5" fill="#57534e" class="t-mono">loser: flag off, kept</text>
+      </g>
+    </svg>
+  </figure>
+  <div class="caption">
+    <ol class="beats">
+      <li data-beat="1" data-dur="2400">BDS grain: one record per subject per parameter per analysis timepoint, with ADY anchored to first dose and no Day 0.</li>
+      <li data-beat="2" data-dur="2600">Subject 001's collected SYSBP records: screening 124, Day -2 value 128, Week 1 value 122, a Week 12 visit 118, an unscheduled recheck 120, and a late visit 116.</li>
+      <li data-beat="3" data-dur="2600">Windows are day ranges transcribed from the SAP: Baseline -30..-1, Week 1 1..7, Week 12 64..98, Week 24 141..189.</li>
+      <li data-beat="4" data-dur="2600">The Day 130 visit lands in the gap between windows: it stays in the dataset flagged off &mdash; dropping it would destroy the query trail.</li>
+      <li data-beat="5" data-dur="2800">Baseline is the last non-missing value on or before first dose &mdash; 128 at Day -2, not the first record (124). Picking the wrong record here corrupts every change-from-baseline table at once.</li>
+      <li data-beat="6" data-dur="2600">BASE copies onto every record; CHG = AVAL - BASE, so the Week 12 visit reads -10 mmHg.</li>
+      <li data-beat="7" data-dur="2600">Two records sit inside Week 12: the SAP names the winner &mdash; last record, so the recheck carries ANL01FL = Y and the loser stays, flag off.</li>
+    </ol>
+  </div>
+  <div class="scene-notes">
+    <ul class="legend" aria-label="Legend">
+      <li><span class="chip" style="background:#fff;border-color:#57534e"></span>collected record (illustrative mmHg)</li>
+      <li><span class="chip" style="background:#fdf7f8;border-color:#9f1239"></span>flagged: ABLFL / ANL01FL</li>
+      <li><span class="chip" style="background:#f5f5f4"></span>SAP window band</li>
+    </ul>
+    <p class="honest"><b>Teaching schematic &mdash; not measured.</b> Values invented for teaching; window boundaries per the Part 17 worked example.</p>
+    <p class="src">Sources: <a href="https://jaimeyan.com/blog/adam-bds-adlb-advs-tutorial.html">Part 7, ADaM BDS</a> &middot; <a href="https://jaimeyan.com/blog/visit-windowing-baseline-locf-guide.html">Part 17, windowing &amp; baseline</a>.</p>
+  </div>
+</section>
+
+<!-- ==================== SCENE 7 ==================== -->
+<section class="scene" data-title="TLF: shell to RTF" id="s7">
+  <div class="scene-head"><span class="scene-no">SCENE 7 / 8</span></div>
+  <h2>TLF: the shell is a contract</h2>
+  <p class="scene-sub">From mock shell to shipped RTF &mdash; and the four-pass QC order that catches the N=24/N=26 class of defect at its cheapest point.</p>
+  <figure class="stage">
+    <svg viewBox="0 0 660 310" role="img" aria-label="A mock shell for output 14.1.1 specifies the safety population with N=24; the produced output header reads N=26, caught at QC pass 2; four QC passes run cheapest first: format, data definitions, numbers, consistency; a discrepancy record documents observed N=26 versus expected N=24 with a disposition to the statistician; the shipped RTF carries titles, footnotes, page x of y.">
+      <defs>
+        <marker id="arr7" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#9f1239"/></marker>
+      </defs>
+      <g data-beat="1">
+        <rect x="10" y="26" width="200" height="180" rx="6" fill="#fff" stroke="#d6d3d1"/>
+        <rect x="10" y="26" width="200" height="22" fill="#1c1917"/>
+        <text x="110" y="41" text-anchor="middle" font-size="9.5" fill="#fafaf9" class="t-mono">mock shell 14.1.1</text>
+        <text x="22" y="66" font-size="8.5" fill="#44403c" class="t-mono">Title: AEs, Safety Population</text>
+        <text x="22" y="82" font-size="8.5" fill="#44403c" class="t-mono">Pop: first dose + 30-min obs</text>
+        <text x="22" y="98" font-size="8.5" fill="#9f1239" class="t-mono" font-weight="700">headers: N=24 / N=24 / N=48</text>
+        <text x="22" y="114" font-size="8.5" fill="#44403c" class="t-mono">rows: SOC / PT, n (%)</text>
+        <text x="22" y="130" font-size="8.5" fill="#44403c" class="t-mono">footnotes: MedDRA vX.Y</text>
+        <text x="22" y="146" font-size="8.5" fill="#44403c" class="t-mono">page x of y &middot; (Continued)</text>
+        <text x="22" y="176" font-size="8.5" fill="#57534e" class="t-mono">every element is a</text>
+        <text x="22" y="188" font-size="8.5" fill="#57534e" class="t-mono">checkable commitment</text>
+      </g>
+      <g data-beat="2">
+        <path d="M210 116 H246" stroke="#9f1239" stroke-width="2.5" marker-end="url(#arr7)"/>
+        <rect x="250" y="26" width="180" height="180" rx="6" fill="#f5f5f4" stroke="#d6d3d1"/>
+        <text x="340" y="48" text-anchor="middle" font-size="9.5" fill="#1c1917" class="t-mono">produced output</text>
+        <text x="340" y="76" text-anchor="middle" font-size="8.5" fill="#44403c" class="t-mono">counts from ADAE joined to ADSL</text>
+        <text x="340" y="98" text-anchor="middle" font-size="8.5" fill="#44403c" class="t-mono">denominator: ADSL where</text>
+        <text x="340" y="112" text-anchor="middle" font-size="8.5" fill="#44403c" class="t-mono">SAFFL = "Y", by TRT01P</text>
+        <text x="340" y="140" text-anchor="middle" font-size="9" fill="#9f1239" class="t-mono" font-weight="700">header reads: N=26</text>
+        <text x="340" y="162" text-anchor="middle" font-size="8.5" fill="#57534e" class="t-mono">program counted every subject</text>
+        <text x="340" y="176" text-anchor="middle" font-size="8.5" fill="#57534e" class="t-mono">with any exposure &mdash; defensible,</text>
+        <text x="340" y="190" text-anchor="middle" font-size="8.5" fill="#57534e" class="t-mono">but not the contract</text>
+      </g>
+      <g data-beat="3">
+        <rect x="460" y="26" width="190" height="58" rx="6" fill="#fdf7f8" stroke="#9f1239"/>
+        <text x="555" y="46" text-anchor="middle" font-size="9" fill="#9f1239" class="t-mono" font-weight="700">Pass 2 catch:</text>
+        <text x="555" y="60" text-anchor="middle" font-size="8.5" fill="#44403c">data definitions &mdash; the N=24/N=26</text>
+        <text x="555" y="72" text-anchor="middle" font-size="8.5" fill="#44403c">class of defect, before any recompute</text>
+      </g>
+      <g data-beat="4">
+        <rect x="460" y="98" width="190" height="108" rx="6" fill="#fff" stroke="#d6d3d1"/>
+        <text x="555" y="116" text-anchor="middle" font-size="9" fill="#1c1917" class="t-mono" font-weight="600">four passes, cheapest first</text>
+        <text x="475" y="136" font-size="8.5" fill="#44403c" class="t-mono">1 Format: titles, footnotes, pages</text>
+        <text x="475" y="152" font-size="8.5" fill="#9f1239" class="t-mono" font-weight="700">2 Definitions: pop, denominators</text>
+        <text x="475" y="168" font-size="8.5" fill="#44403c" class="t-mono">3 Numbers: independent recompute</text>
+        <text x="475" y="184" font-size="8.5" fill="#44403c" class="t-mono">4 Consistency: same N everywhere</text>
+        <text x="475" y="200" font-size="8" fill="#57534e">each pass gates the next</text>
+      </g>
+      <g data-beat="5">
+        <rect x="10" y="226" width="360" height="66" rx="6" fill="#1c1917"/>
+        <text x="190" y="244" text-anchor="middle" font-size="8.5" fill="#fafaf9" class="t-mono">discrepancy record: output 14.1.1</text>
+        <text x="190" y="258" text-anchor="middle" font-size="8.5" fill="#fafaf9" class="t-mono">observed N=26 &middot; expected N=24 (SAP 6.2)</text>
+        <text x="190" y="272" text-anchor="middle" font-size="8.5" fill="#fafaf9" class="t-mono">disposition: query to statistician &mdash; never silently fixed</text>
+      </g>
+      <g data-beat="6">
+        <rect x="390" y="226" width="260" height="66" rx="6" fill="#fdf7f8" stroke="#9f1239"/>
+        <text x="520" y="246" text-anchor="middle" font-size="9" fill="#9f1239" class="t-mono" font-weight="700">shipped RTF conventions</text>
+        <text x="520" y="262" text-anchor="middle" font-size="8.5" fill="#44403c">titles/footnotes inside the file &middot; style template</text>
+        <text x="520" y="276" text-anchor="middle" font-size="8.5" fill="#44403c">page x of y &middot; n (100) without decimals &middot; program ID</text>
+      </g>
+      <g data-beat="7">
+        <text x="330" y="14" text-anchor="middle" font-size="9.5" fill="#57534e">read the shell into decisions in order: population &#8594; data source &#8594; rows &#8594; columns &#8594; statistics &#8594; footnotes</text>
+      </g>
+    </svg>
+  </figure>
+  <div class="caption">
+    <ol class="beats">
+      <li data-beat="1" data-dur="2600">The mock shell is a contract: output ID, titles, population statement, column blocks, denominators, footnotes &mdash; every element checkable.</li>
+      <li data-beat="2" data-dur="2600">The program builds the table with denominators pulled from ADSL under the population flag &mdash; never from the event dataset.</li>
+      <li data-beat="3" data-dur="2400">The output says N=26 where the shell says N=24: both defensible, only one is the deliverable &mdash; caught at Pass 2, data definitions.</li>
+      <li data-beat="4" data-dur="2600">QC runs four passes cheapest-first: format, definitions, numbers, consistency &mdash; and never recomputes an output that fails an earlier pass.</li>
+      <li data-beat="5" data-dur="2600">Every discrepancy gets a record &mdash; observed, expected, disposition, owner &mdash; because a silently fixed discrepancy resurfaces at the next data cut.</li>
+      <li data-beat="6" data-dur="2600">The shipped RTF carries titles inside the file, one style template, page x of y, precision exactly per shell &mdash; including the n (100) convention.</li>
+      <li data-beat="7" data-dur="2400">Read the shell into decisions in order, population first &mdash; skipping step one is the single most common serious discrepancy on a first QC cycle.</li>
+    </ol>
+  </div>
+  <div class="scene-notes">
+    <ul class="legend" aria-label="Legend">
+      <li><span class="chip" style="background:#fff;border-color:#d6d3d1"></span>shell / output</li>
+      <li><span class="chip" style="background:#fdf7f8;border-color:#9f1239"></span>QC catch</li>
+      <li><span class="chip" style="background:#1c1917"></span>discrepancy record</li>
+    </ul>
+    <p class="honest"><b>Teaching schematic &mdash; not measured.</b> The N=24/N=26 scene is the Part 3 worked example (illustrative).</p>
+    <p class="src">Source: <a href="https://jaimeyan.com/blog/tlf-shell-to-rtf-tutorial.html">Part 3, mock shell to RTF</a>.</p>
+  </div>
+</section>
+
+<!-- ==================== SCENE 8 ==================== -->
+<section class="scene" data-title="Define-XML &amp; the package" id="s8">
+  <div class="scene-head"><span class="scene-no">SCENE 8 / 8</span></div>
+  <h2>Define-XML and the package that ships</h2>
+  <p class="scene-sub">The spec becomes machine-readable metadata, the guide explains what machines cannot, and the whole package travels together.</p>
+  <figure class="stage">
+    <svg viewBox="0 0 660 300" role="img" aria-label="Mapping spec columns generate define-XML elements one to one: origin becomes the ItemDef origin attribute, the CT column becomes a CodeList reference, parameter-varying transformations become ValueListDef with WhereClauseDef, and derivation text becomes MethodDef. Define-XML is generated, never hand-typed. The ADRG adds orientation, special derivations, population filters and known issues. The eCTD package ships datasets, define.xml, define.pdf, reviewer guide and annotated CRF together.">
+      <defs>
+        <marker id="arr8" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#9f1239"/></marker>
+      </defs>
+      <g data-beat="1">
+        <rect x="10" y="46" width="180" height="170" rx="8" fill="#f5f5f4" stroke="#d6d3d1"/>
+        <text x="100" y="68" text-anchor="middle" font-size="11" fill="#1c1917" font-weight="600">spec columns</text>
+        <text x="25" y="94" font-size="9" fill="#44403c" class="t-mono">Target &middot; Source</text>
+        <text x="25" y="112" font-size="9" fill="#44403c" class="t-mono">Transformation</text>
+        <text x="25" y="130" font-size="9" fill="#44403c" class="t-mono">CT / Origin</text>
+        <text x="25" y="148" font-size="9" fill="#44403c" class="t-mono">Notes / Query</text>
+        <text x="100" y="186" text-anchor="middle" font-size="8.5" fill="#57534e">e.g. row 9: TEMP in &deg;F</text>
+        <text x="100" y="198" text-anchor="middle" font-size="8.5" fill="#57534e">&rarr; (x-32)&times;5/9 rule</text>
+      </g>
+      <g data-beat="2">
+        <rect x="250" y="46" width="190" height="170" rx="8" fill="#fdf7f8" stroke="#9f1239"/>
+        <text x="345" y="66" text-anchor="middle" font-size="11" fill="#9f1239" font-weight="600">define-XML 2.1</text>
+        <text x="263" y="90" font-size="8.5" fill="#44403c" class="t-mono">ItemGroupDef = one dataset</text>
+        <text x="263" y="106" font-size="8.5" fill="#44403c" class="t-mono">ItemDef = one variable + origin</text>
+        <text x="263" y="122" font-size="8.5" fill="#44403c" class="t-mono">CodeList = CT binding + version</text>
+        <text x="263" y="138" font-size="8.5" fill="#44403c" class="t-mono">MethodDef = derivation text</text>
+        <path d="M190 100 H246" stroke="#9f1239" stroke-width="2.5" marker-end="url(#arr8)"/>
+        <text x="218" y="92" text-anchor="middle" font-size="8" fill="#9f1239" class="t-mono">generates</text>
+      </g>
+      <g data-beat="3">
+        <rect x="263" y="150" width="164" height="52" rx="5" fill="#fff" stroke="#9f1239" stroke-dasharray="3 2"/>
+        <text x="345" y="168" text-anchor="middle" font-size="8.5" fill="#9f1239" class="t-mono" font-weight="700">ValueListDef + WhereClauseDef</text>
+        <text x="345" y="182" text-anchor="middle" font-size="8" fill="#44403c">one variable, two rules:</text>
+        <text x="345" y="193" text-anchor="middle" font-size="8" fill="#44403c">WHERE VSTESTCD = TEMP</text>
+      </g>
+      <g data-beat="4">
+        <text x="345" y="232" text-anchor="middle" font-size="8.5" fill="#9f1239" class="t-mono" font-weight="700">generated from the spec &mdash; never hand-typed</text>
+        <text x="345" y="244" text-anchor="middle" font-size="8" fill="#57534e">drift between data and metadata = build failure, not a discovery</text>
+      </g>
+      <g data-beat="5">
+        <rect x="480" y="46" width="170" height="80" rx="8" fill="#fff" stroke="#d6d3d1"/>
+        <text x="565" y="68" text-anchor="middle" font-size="10" fill="#1c1917" font-weight="600">ADRG</text>
+        <text x="565" y="86" text-anchor="middle" font-size="8.5" fill="#44403c">orientation &middot; special</text>
+        <text x="565" y="98" text-anchor="middle" font-size="8.5" fill="#44403c">derivations &middot; population</text>
+        <text x="565" y="110" text-anchor="middle" font-size="8.5" fill="#44403c">filters &middot; known issues</text>
+        <path d="M440 86 H476" stroke="#9f1239" stroke-width="2.5" marker-end="url(#arr8)"/>
+      </g>
+      <g data-beat="6">
+        <rect x="480" y="140" width="170" height="140" rx="8" fill="#1c1917"/>
+        <text x="565" y="162" text-anchor="middle" font-size="9.5" fill="#fafaf9" class="t-mono">eCTD module 5 package</text>
+        <text x="565" y="184" text-anchor="middle" font-size="8.5" fill="#d6d3d1" class="t-mono">transport datasets (XPT)</text>
+        <text x="565" y="202" text-anchor="middle" font-size="8.5" fill="#d6d3d1" class="t-mono">define.xml + define.pdf</text>
+        <text x="565" y="220" text-anchor="middle" font-size="8.5" fill="#d6d3d1" class="t-mono">reviewer's guide</text>
+        <text x="565" y="238" text-anchor="middle" font-size="8.5" fill="#d6d3d1" class="t-mono">annotated CRF</text>
+        <text x="565" y="262" text-anchor="middle" font-size="8" fill="#9f9">arrives as one unit</text>
+      </g>
+      <g data-beat="7">
+        <rect x="10" y="240" width="420" height="40" rx="6" fill="#f5f5f4" stroke="#d6d3d1"/>
+        <text x="220" y="256" text-anchor="middle" font-size="9" fill="#1c1917" class="t-mono">the journey, end to end: raw EDC &#8594; SDTM &#8594; ADaM &#8594; TLF &#8594; package</text>
+        <text x="220" y="270" text-anchor="middle" font-size="8.5" fill="#57534e">every value traceable to collection &middot; every rule traceable to a spec row &middot; every claim checkable</text>
+      </g>
+    </svg>
+  </figure>
+  <div class="caption">
+    <ol class="beats">
+      <li data-beat="1" data-dur="2200">The mapping spec's columns are the source: target, source, transformation, CT/origin, notes.</li>
+      <li data-beat="2" data-dur="2600">They generate define-XML almost one-to-one: origin column &rarr; ItemDef origin attribute, CT column &rarr; CodeList reference, transformation &rarr; MethodDef text.</li>
+      <li data-beat="3" data-dur="2600">A rule that varies by parameter &mdash; TEMP converted from Fahrenheit, weight passed through &mdash; becomes ValueListDef plus WhereClauseDef: value-level metadata.</li>
+      <li data-beat="4" data-dur="2600">Define-XML is generated, never hand-typed &mdash; generation is what makes data/metadata disagreement structurally impossible.</li>
+      <li data-beat="5" data-dur="2400">The ADRG covers what machines cannot: orientation, special derivations, population filters, and known issues &mdash; disclosed rough edges earn trust.</li>
+      <li data-beat="6" data-dur="2400">The package ships as one unit in eCTD module 5: datasets, define.xml, define.pdf, the guide, and the annotated CRF.</li>
+      <li data-beat="7" data-dur="2600">That closes the journey: every value traceable to collection, every rule to a spec row, every claim checkable &mdash; the whole point of the road you just walked.</li>
+    </ol>
+  </div>
+  <div class="scene-notes">
+    <ul class="legend" aria-label="Legend">
+      <li><span class="chip" style="background:#f5f5f4"></span>spec columns</li>
+      <li><span class="chip" style="background:#fdf7f8;border-color:#9f1239"></span>define-XML element</li>
+      <li><span class="chip" style="background:#1c1917"></span>submission package</li>
+    </ul>
+    <p class="honest"><b>Teaching schematic &mdash; not measured.</b> Element-to-column mapping per the Part 16 table (summarized).</p>
+    <p class="src">Sources: <a href="https://jaimeyan.com/blog/define-xml-reviewers-guide-tutorial.html">Part 16, define-XML &amp; the reviewer's guide</a> &middot; <a href="https://jaimeyan.com/blog/sdtm-mapping-spec-walkthrough.html">Part 6, mapping specification</a>.</p>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Built as a self-contained teaching page: no external scripts, styles, or images. Keyboard: <span class="t-mono">Space / &rarr; / &larr; / R</span>; reduced motion and no-JavaScript both degrade to the complete final state.</p>
+    <p><a href="https://jaimeyan.com/explainers.html">All explainers</a> &middot; <a href="https://jaimeyan.com/blog.html#bootcamp">Clinical SP Bootcamp</a> &middot; <a href="https://jaimeyan.com/">jaimeyan.com</a></p>
+    <p>&copy; 2026 Jaime Yan &middot; CC BY 4.0 &middot; cite as: Yan, J., &ldquo;From Raw Data to TLF: The Clinical Data Journey&rdquo;, jaimeyan.com/explainers/clinical-data-journey.html (2026-09-01).</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+  var html = document.documentElement;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    html.classList.add('static');
+    return;
+  }
+
+  var DEFAULT_DUR = 1600;
+  var scenes = Array.prototype.slice.call(document.querySelectorAll('.scene')).map(function (el, i) {
+    var beats = {};
+    Array.prototype.forEach.call(el.querySelectorAll('svg [data-beat]'), function (g) {
+      var n = +g.getAttribute('data-beat');
+      (beats[n] = beats[n] || []).push(g);
+    });
+    var caps = {};
+    var list = Array.prototype.slice.call(el.querySelectorAll('.beats li'));
+    list.forEach(function (li) { caps[+li.getAttribute('data-beat')] = li; });
+    var max = list.length;
+    return {
+      el: el, i: i, beats: beats, caps: caps, list: list, max: max,
+      k: 0, timer: null,
+      title: el.getAttribute('data-title') || ('Scene ' + (i + 1))
+    };
+  });
+
+  var playing = false, speed = 1, current = 0;
+  var $ = function (id) { return document.getElementById(id); };
+  var btnPlay = $('btn-play'), btnPrev = $('btn-prev'), btnNext = $('btn-next'),
+      btnReset = $('btn-reset'), btnSpeed = $('btn-speed'),
+      pmeta = $('pmeta'), pdots = $('pdots');
+
+  scenes.forEach(function (s) { s.el.id = s.el.id || ('scene-' + (s.i + 1)); });
+  var dots = scenes.map(function (s) {
+    var d = document.createElement('button');
+    d.className = 'pdot'; d.setAttribute('aria-label', 'Go to ' + s.title);
+    d.addEventListener('click', function () { go(s.i, true); });
+    pdots.appendChild(d); return d;
+  });
+
+  function render(s) {
+    for (var n = 1; n <= s.max; n++) {
+      var on = n <= s.k;
+      (s.beats[n] || []).forEach(function (g) { g.classList.toggle('on', on); });
+      var li = s.caps[n];
+      if (li) {
+        li.classList.toggle('now', n === s.k);
+        li.classList.toggle('done', n < s.k);
+      }
+    }
+    pmeta.textContent = 'S' + (s.i + 1) + ' ' + s.title + ' \u2014 beat ' + s.k + '/' + s.max;
+    dots.forEach(function (d, j) {
+      d.classList.toggle('now', j === s.i);
+      d.classList.toggle('done', j < s.i || (j === s.i && s.k >= scenes[j].max));
+    });
+    btnPrev.disabled = s.i === 0 && s.k === 0;
+    btnNext.disabled = s.i === scenes.length - 1 && s.k >= s.max;
+  }
+
+  function stopTimer(s) { if (s && s.timer) { clearTimeout(s.timer); s.timer = null; } }
+  function setPlay(v) {
+    playing = v;
+    btnPlay.textContent = playing ? 'Pause' : 'Play';
+    if (!playing) scenes.forEach(stopTimer);
+    else tick();
+  }
+  function dur(s) {
+    var li = s.caps[s.k];
+    var d = li && li.getAttribute('data-dur');
+    return (d ? +d : DEFAULT_DUR) / speed;
+  }
+  function tick() {
+    var s = scenes[current];
+    stopTimer(s);
+    if (!playing) return;
+    if (s.k >= s.max) {
+      if (current < scenes.length - 1) { go(current + 1, true); }
+      else setPlay(false);
+      return;
+    }
+    s.timer = setTimeout(function () {
+      step(1); tick();
+    }, dur(s));
+  }
+  function step(d) {
+    var s = scenes[current];
+    var k = s.k + d;
+    if (k < 0) { if (current > 0) go(current - 1, false, scenes[current - 1].max); return; }
+    if (k > s.max) { if (current < scenes.length - 1) { go(current + 1, true); return; } k = s.max; }
+    s.k = k; render(s);
+  }
+  function go(i, fromStart, atBeat) {
+    var s = scenes[i];
+    stopTimer(scenes[current]);
+    current = i;
+    s.k = Math.max(0, Math.min(s.max, atBeat !== undefined ? atBeat : (fromStart ? 0 : s.max)));
+    render(s);
+    if (playing) tick();
+    s.el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  btnPlay.addEventListener('click', function () { setPlay(!playing); });
+  btnNext.addEventListener('click', function () { step(1); if (playing) tick(); });
+  btnPrev.addEventListener('click', function () { step(-1); if (playing) tick(); });
+  btnReset.addEventListener('click', function () { setPlay(false); go(current, true); });
+  btnSpeed.addEventListener('click', function () {
+    speed = speed === 1 ? 1.5 : speed === 1.5 ? 2 : 1;
+    btnSpeed.textContent = speed + 'x';
+    if (playing) tick();
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.target.closest && e.target.closest('a,button,input,textarea,select')) return;
+    if (e.code === 'Space') { e.preventDefault(); setPlay(!playing); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); step(1); if (playing) tick(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); step(-1); if (playing) tick(); }
+    else if (e.key === 'r' || e.key === 'R') { setPlay(false); go(current, true); }
+  });
+
+  var spy = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) {
+      if (en.isIntersecting) {
+        var idx = scenes.findIndex(function (s) { return s.el === en.target; });
+        if (idx >= 0 && idx !== current) {
+          stopTimer(scenes[current]);
+          current = idx; render(scenes[current]);
+          if (playing) tick();
+        }
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  scenes.forEach(function (s) { spy.observe(s.el); });
+
+  render(scenes[0]);
+})();
+</script>
+</body>
+</html>

@@ -134,6 +134,12 @@ queue if one line dominates.
 5. Communities where on-topic (rotate, don't spam): PharmaSUG/PhUSE forums,
    CDISC community, r/biostatistics — share the takeaway, not the link alone
 6. Check Vercel Analytics + GSC for last week's post at week boundaries
+7. Optional explainer touchpoint (only when this part is an explainer source,
+   or its video description needs the backlink): if a sourced post changed,
+   re-run `npm run explainer:audit` (must stay 0 failures); if the part has a
+   companion video AND a sourced explainer, append the `/explainers/<slug>.html`
+   link to the YouTube description. Explainers are flagship-only (3–5 total for
+   the series) — runbook: `docs/EXPLAINER-PIPELINE.md`
 
 ### SEO backlog (adopted 2026-09, from external review)
 
@@ -143,6 +149,9 @@ queue if one line dominates.
 - Gap explainer: "SDTM Mapping Automation with LLMs" — no post currently owns
   this query; bridges tutorials and the LLM deep-dives.
 - Author E-E-A-T: done (byline + sameAs entity on all blog posts 2026-09-01).
+- Interactive explainers (2026-09-01): flagship topics only, 3–5 total for the
+  series; pilot live (`/explainers/clinical-data-journey.html`, sources Parts
+  2–6/7/16/17). Planned fleet + runbook: `docs/EXPLAINER-PIPELINE.md`.
 
 Options once Wave 1 is written (superseded — kept for reference):
 

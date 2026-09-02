@@ -14,6 +14,7 @@
     "video:upload": "node tools/video/upload-video.mjs",
     "video:auth": "node tools/video/auth-youtube.mjs",
     "video:release": "node tools/video/release-video.mjs",
+    "explainer:audit": "node tools/explainer-audit.mjs",
     "astro": "astro"
   },
   "dependencies": {

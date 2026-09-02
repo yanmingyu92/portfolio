@@ -1,0 +1,373 @@
+<!doctype html>
+<!--
+  jaimeyan.com — interactive explainer template (self-contained single file).
+
+  PAGE SPEC (enforced by tools/explainer-audit.mjs; full workflow in docs/EXPLAINER-PIPELINE.md):
+    S1  One self-contained .html file: no external JS/CSS/images at runtime.
+        Fonts + KaTeX CDN are the only whitelisted external requests, and both
+        must degrade to plain text / system fonts when offline (pilot ships
+        with zero external requests: system font stack, no KaTeX).
+    S2  Size budget: <= 300 KB before gzip.
+    S3  Usable at 375px width (no horizontal overflow at 375 or 1280).
+    S4  Keyboard: Space = play/pause, ArrowRight = next beat, ArrowLeft =
+        previous beat, R = reset. Player never captures keys from links.
+    S5  prefers-reduced-motion: reduce -> full final state of every scene is
+        shown immediately; player is replaced by a static-mode notice.
+    S6  JavaScript disabled -> same full-final-state degradation via CSS
+        defaults (beats and captions are visible without the .js class).
+    S7  Beats change opacity/transform inside a fixed SVG viewBox only:
+        no layout-flow changes, no first-screen layout shift.
+    S8  Every scene carries a legend and an honest-label line ("teaching
+        schematic - illustrative data - not measured"), plus source links
+        back to the blog posts the scene is derived from.
+    S9  Content discipline: scenes derive from content/posts/*.md and
+        src/data/publications.ts only. Numbers in schematic figures are
+        labelled illustrative; paper data must cite figure/table numbers.
+
+  ENGINE CONTRACT (do not fork casually; the pilot copies this verbatim):
+    - <html> gets class "js" via a tiny inline script at the top of <body>;
+      without it, CSS shows every [data-beat] and every caption (S6).
+    - Each scene: <section class="scene" data-title="...">. Inside:
+        .stage > svg  with <g data-beat="N"> groups (N = 1..n, may repeat)
+        .caption > ol.beats > li[data-beat="N"] narration (one short sentence)
+        .scene-notes legend + honest label + sources
+    - Beat reveal is additive: beat k visible iff current >= k.
+    - Autoplay advances one beat per data-dur (ms, default 1600) / speed.
+      At scene end, play auto-advances to the next scene (scroll-synced).
+    - Sticky player bar shows: play/pause, prev/next beat, reset, speed
+      (1x/1.5x/2x), scene label + beat counter, scene progress dots.
+    - IntersectionObserver keeps the player bound to the scene in view.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- PLACEHOLDER: per-page metadata -->
+<title>EXPLAINER TITLE — Jaime Yan</title>
+<meta name="description" content="PLACEHOLDER 120-170 chars">
+<link rel="canonical" href="https://jaimeyan.com/explainers/PLACEHOLDER-SLUG.html">
+<!-- favicon as data URI: keeps the file self-contained (file:// audits stay clean) -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231c1917'/%3E%3Cpath d='M8 10l8 7 8-7' stroke='%23fafaf9' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<script type="application/ld+json">
+/* PLACEHOLDER: TechArticle/LearningResource JSON-LD — see docs/EXPLAINER-PIPELINE.md */
+</script>
+<style>
+/* ---- Design language: stone/rose (site palette, system-font fallbacks; S1) ---- */
+:root{
+  --ink:#1c1917; --ink-2:#44403c; --ink-3:#57534e;
+  --rose:#9f1239; --rose-soft:#e7d4db; --rose-bg:#fdf7f8;
+  --line:#d6d3d1; --line-2:#e7e5e4;
+  --paper:#fafaf9; --panel:#f5f5f4;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.6;font-size:16px}
+a{color:var(--rose)}
+.wrap{max-width:60rem;margin:0 auto;padding:0 1.25rem}
+
+/* ---- Masthead ---- */
+.mast{background:var(--ink);color:#fafaf9;padding:2.25rem 0 1.9rem}
+.mast .kicker{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:#d6d3d1;margin:0 0 .5rem}
+.mast .kicker a{color:#d6d3d1;text-decoration:none}
+.mast .kicker a:hover{color:#fff}
+.mast h1{font-family:var(--serif);font-weight:600;font-size:clamp(1.6rem,4vw,2.4rem);line-height:1.15;margin:0 0 .6rem;letter-spacing:-.01em}
+.mast .lede{max-width:44rem;color:#d6d3d1;margin:0;font-size:.95rem}
+.honest-banner{margin:1.25rem 0 0;padding:.55rem .85rem;border:1px solid #57534e;border-radius:.5rem;font-family:var(--mono);font-size:.72rem;color:#d6d3d1;display:inline-block}
+.honest-banner b{color:#fafaf9;font-weight:600}
+
+/* ---- Player bar ---- */
+.player{position:sticky;top:0;z-index:40;background:var(--paper);border-bottom:1px solid var(--line);backdrop-filter:none}
+.player-inner{max-width:60rem;margin:0 auto;padding:.5rem 1.25rem;display:flex;align-items:center;gap:.6rem;flex-wrap:nowrap;overflow-x:auto}
+.pbtn{font-family:var(--mono);font-size:.78rem;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:.4rem;padding:.32rem .6rem;cursor:pointer;white-space:nowrap}
+.pbtn:hover{border-color:var(--rose);color:var(--rose)}
+.pbtn[disabled]{opacity:.45;cursor:default}
+.pbtn.speed{min-width:3.2rem;text-align:center}
+.pmeta{font-family:var(--mono);font-size:.74rem;color:var(--ink-3);white-space:nowrap;margin-left:auto}
+.pdots{display:flex;gap:.3rem;align-items:center}
+.pdot{width:.45rem;height:.45rem;border-radius:50%;background:var(--line);border:0;padding:0;cursor:pointer}
+.pdot.done{background:var(--rose-soft)}
+.pdot.now{background:var(--rose)}
+.kbd-hint{font-family:var(--mono);font-size:.68rem;color:var(--ink-3);padding:.4rem 1.25rem .5rem;max-width:60rem;margin:0 auto}
+.kbd-hint kbd{border:1px solid var(--line);border-bottom-width:2px;border-radius:.25rem;padding:0 .3rem;background:var(--panel);font-family:var(--mono)}
+html:not(.js) .player,html.static .player{display:none}
+.static-note{display:none;font-family:var(--mono);font-size:.72rem;color:var(--ink-3);padding:.55rem 1.25rem;border-bottom:1px solid var(--line)}
+html.static .static-note{display:block}
+
+/* ---- Scenes ---- */
+main{padding-bottom:4rem}
+.scene{padding:2.5rem 0 1.75rem;border-bottom:1px solid var(--line-2)}
+.scene.inview{animation:none}
+.scene-head{display:flex;align-items:baseline;gap:.75rem;flex-wrap:wrap;margin-bottom:.25rem}
+.scene-no{font-family:var(--mono);font-size:.72rem;color:var(--rose);letter-spacing:.1em}
+.scene h2{font-family:var(--serif);font-weight:600;font-size:1.35rem;margin:.1rem 0 .4rem;letter-spacing:-.01em}
+.scene-sub{color:var(--ink-2);font-size:.92rem;max-width:46rem;margin:0 0 1rem}
+
+/* stage + figure: fixed viewBox, beats only ever toggle opacity/transform (S7) */
+.stage{border:1px solid var(--line);border-radius:.6rem;background:#fff;padding:.75rem;margin:0 0 .9rem;overflow-x:auto}
+.stage svg{display:block;width:100%;height:auto;min-width:min(100%,340px)}
+text{font-family:var(--sans)}
+.t-mono{font-family:var(--mono)}
+
+/* beat reveal: visible by default (no-JS final state, S6); JS dims future beats */
+[data-beat]{transition:opacity .45s ease,transform .45s ease}
+html.js svg [data-beat]{opacity:0;transform:translateY(6px)}
+html.js svg [data-beat].on{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  [data-beat]{transition:none!important}
+  html.js svg [data-beat]{opacity:1;transform:none}   /* S5: full final state */
+}
+
+/* caption list: all sentences live in the DOM (readable no-JS); player highlights current */
+.caption{margin:0 0 .9rem}
+.beats{list-style:none;margin:0;padding:0;counter-reset:bt}
+.beats li{position:relative;padding:.3rem 0 .3rem 2rem;font-size:.9rem;color:var(--ink-3);border-left:2px solid var(--line-2);margin-left:.9rem}
+.beats li::before{counter-increment:bt;content:counter(bt);position:absolute;left:-.95rem;top:.42rem;width:1.85rem;height:1.85rem;line-height:1.85rem;text-align:center;border-radius:50%;background:var(--panel);border:1px solid var(--line);font-family:var(--mono);font-size:.66rem;color:var(--ink-3)}
+html.js .beats li{opacity:.45}
+html.js .beats li.done{opacity:.75;color:var(--ink-2)}
+html.js .beats li.now{opacity:1;color:var(--ink);border-left-color:var(--rose)}
+html.js .beats li.now::before{background:var(--rose);border-color:var(--rose);color:#fff}
+
+/* legend + honest label + sources (S8) */
+.scene-notes{display:flex;flex-direction:column;gap:.45rem;font-size:.78rem;color:var(--ink-3)}
+.legend{display:flex;flex-wrap:wrap;gap:.35rem 1.1rem;margin:0;padding:0;list-style:none;font-family:var(--mono);font-size:.7rem}
+.legend .chip{display:inline-block;width:.8rem;height:.8rem;border-radius:.2rem;vertical-align:-.1rem;margin-right:.3rem;border:1px solid rgba(0,0,0,.12)}
+.honest{font-family:var(--mono);font-size:.68rem;color:var(--ink-3)}
+.honest b{font-weight:600;color:var(--ink-2)}
+.src{font-size:.74rem}
+.src a{white-space:nowrap}
+
+/* ---- Footer ---- */
+.foot{padding:2rem 0 3rem;color:var(--ink-3);font-size:.8rem}
+.foot p{margin:.25rem 0}
+@media (max-width:480px){
+  .pmeta{display:none}
+  .scene{padding:1.9rem 0 1.4rem}
+}
+</style>
+</head>
+<body>
+<script>document.documentElement.classList.add('js');</script>
+<!-- ============================================================ MASTHEAD -->
+<header class="mast">
+  <div class="wrap">
+    <p class="kicker"><a href="https://jaimeyan.com/explainers/">jaimeyan.com</a> / interactive explainer</p>
+    <h1>PLACEHOLDER: Explainer title</h1>
+    <p class="lede">PLACEHOLDER: one-sentence framing of the journey and what the reader will be able to explain afterwards.</p>
+    <p class="honest-banner"><b>Honest label:</b> teaching schematic &mdash; illustrative data only (fictional Study XYZ, Subjects 001&ndash;004) &mdash; not measured results. Rules summarized per SDTMIG / ADaMIG; the posts are the source of truth.</p>
+  </div>
+</header>
+
+<!-- ============================================================ PLAYER -->
+<div class="player" id="player" role="region" aria-label="Explainer player">
+  <div class="player-inner">
+    <button class="pbtn" id="btn-play" aria-label="Play or pause">Play</button>
+    <button class="pbtn" id="btn-prev" aria-label="Previous beat">&#8630; Prev</button>
+    <button class="pbtn" id="btn-next" aria-label="Next beat">Next &#8631;</button>
+    <button class="pbtn" id="btn-reset" aria-label="Reset scene">Reset</button>
+    <button class="pbtn speed" id="btn-speed" aria-label="Playback speed">1x</button>
+    <span class="pdots" id="pdots" aria-label="Scenes"></span>
+    <span class="pmeta" id="pmeta">scene &mdash; beat 0/0</span>
+  </div>
+  <p class="kbd-hint"><kbd>Space</kbd> play/pause &nbsp;<kbd>&rarr;</kbd> next beat &nbsp;<kbd>&larr;</kbd> previous beat &nbsp;<kbd>R</kbd> reset</p>
+  <p class="static-note">Static mode: animation disabled (reduced motion or no JavaScript) &mdash; every scene is shown in its complete final state.</p>
+</div>
+
+<main class="wrap" id="scenes">
+
+<!-- ============================================================ SCENE (repeat per scene; 5-10 beats each) -->
+<section class="scene" data-title="PLACEHOLDER short scene title" id="s1">
+  <div class="scene-head"><span class="scene-no">SCENE 1 / N</span></div>
+  <h2>PLACEHOLDER scene headline</h2>
+  <p class="scene-sub">PLACEHOLDER one sentence: what this scene shows.</p>
+
+  <figure class="stage">
+    <!-- viewBox fixed; groups reveal in order; repeated data-beat numbers reveal together -->
+    <svg viewBox="0 0 640 360" role="img" aria-label="PLACEHOLDER figure description of the final state">
+      <!-- PLACEHOLDER: draw the schematic. Example beat groups: -->
+      <g data-beat="1">
+        <rect x="20" y="150" width="130" height="60" rx="8" fill="#f5f5f4" stroke="#d6d3d1"/>
+        <text x="85" y="185" text-anchor="middle" font-size="13" fill="#1c1917">first reveal</text>
+      </g>
+      <g data-beat="2">
+        <path d="M150 180 H230" stroke="#9f1239" stroke-width="2.5" marker-end="url(#arr)"/>
+      </g>
+      <!-- define markers once per svg -->
+      <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#9f1239"/></marker></defs>
+    </svg>
+  </figure>
+
+  <div class="caption">
+    <ol class="beats">
+      <li data-beat="1">PLACEHOLDER narration sentence for beat 1.</li>
+      <li data-beat="2">PLACEHOLDER narration sentence for beat 2.</li>
+    </ol>
+  </div>
+
+  <div class="scene-notes">
+    <ul class="legend" aria-label="Legend">
+      <li><span class="chip" style="background:#f5f5f4"></span>PLACEHOLDER key</li>
+      <li><span class="chip" style="background:#9f1239"></span>PLACEHOLDER key</li>
+    </ul>
+    <p class="honest"><b>Teaching schematic &mdash; not measured.</b> Data: fictional Study XYZ (illustrative). Rules per SDTMIG/ADaMIG; see sourced posts.</p>
+    <p class="src">Source: <a href="https://jaimeyan.com/blog/PLACEHOLDER.html">PLACEHOLDER post title</a>.</p>
+  </div>
+</section>
+
+</main>
+
+<!-- ============================================================ FOOTER -->
+<footer class="foot">
+  <div class="wrap">
+    <p>Built as a self-contained teaching page: no external scripts, styles, or images. Keyboard: Space / &rarr; / &larr; / R.</p>
+    <p><a href="https://jaimeyan.com/explainers/">All explainers</a> &middot; <a href="https://jaimeyan.com/blog.html#bootcamp">Clinical SP Bootcamp</a> &middot; <a href="https://jaimeyan.com/">jaimeyan.com</a></p>
+    <p>&copy; 2026 Jaime Yan &middot; CC BY 4.0 &middot; cite as: Yan, J., &ldquo;PLACEHOLDER title&rdquo;, jaimeyan.com/explainers/PLACEHOLDER-SLUG.html.</p>
+  </div>
+</footer>
+
+<script>
+/* ============================================================ ENGINE (vanilla, ~zero deps)
+   Contract documented in the file header. Reduced-motion exits to static mode. */
+(function () {
+  'use strict';
+  var html = document.documentElement;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    html.classList.add('static');
+    return;
+  }
+
+  var DEFAULT_DUR = 1600;
+  var scenes = Array.prototype.slice.call(document.querySelectorAll('.scene')).map(function (el, i) {
+    var beats = {};
+    Array.prototype.forEach.call(el.querySelectorAll('svg [data-beat]'), function (g) {
+      var n = +g.getAttribute('data-beat');
+      (beats[n] = beats[n] || []).push(g);
+    });
+    var caps = {};
+    var list = Array.prototype.slice.call(el.querySelectorAll('.beats li'));
+    list.forEach(function (li) { caps[+li.getAttribute('data-beat')] = li; });
+    var max = list.length;
+    return {
+      el: el, i: i, beats: beats, caps: caps, list: list, max: max,
+      k: 0, timer: null,
+      title: el.getAttribute('data-title') || ('Scene ' + (i + 1))
+    };
+  });
+
+  var playing = false, speed = 1, current = 0;
+  var $ = function (id) { return document.getElementById(id); };
+  var btnPlay = $('btn-play'), btnPrev = $('btn-prev'), btnNext = $('btn-next'),
+      btnReset = $('btn-reset'), btnSpeed = $('btn-speed'),
+      pmeta = $('pmeta'), pdots = $('pdots');
+
+  scenes.forEach(function (s) { s.el.id = s.el.id || ('scene-' + (s.i + 1)); });
+  var dots = scenes.map(function (s) {
+    var d = document.createElement('button');
+    d.className = 'pdot'; d.setAttribute('aria-label', 'Go to ' + s.title);
+    d.addEventListener('click', function () { go(s.i, true); });
+    pdots.appendChild(d); return d;
+  });
+
+  function render(s) {
+    for (var n = 1; n <= s.max; n++) {
+      var on = n <= s.k;
+      (s.beats[n] || []).forEach(function (g) { g.classList.toggle('on', on); });
+      var li = s.caps[n];
+      if (li) {
+        li.classList.toggle('now', n === s.k);
+        li.classList.toggle('done', n < s.k);
+      }
+    }
+    pmeta.textContent = 'S' + (s.i + 1) + ' ' + s.title + ' \u2014 beat ' + s.k + '/' + s.max;
+    dots.forEach(function (d, j) {
+      d.classList.toggle('now', j === s.i);
+      d.classList.toggle('done', j < s.i || (j === s.i && s.k >= scenes[j].max));
+    });
+    btnPrev.disabled = s.i === 0 && s.k === 0;
+    btnNext.disabled = s.i === scenes.length - 1 && s.k >= s.max;
+  }
+
+  function stopTimer(s) { if (s && s.timer) { clearTimeout(s.timer); s.timer = null; } }
+  function setPlay(v) {
+    playing = v;
+    btnPlay.textContent = playing ? 'Pause' : 'Play';
+    if (!playing) scenes.forEach(stopTimer);
+    else tick();
+  }
+  function dur(s) {
+    var li = s.caps[s.k];
+    var d = li && li.getAttribute('data-dur');
+    return (d ? +d : DEFAULT_DUR) / speed;
+  }
+  function tick() {
+    var s = scenes[current];
+    stopTimer(s);
+    if (!playing) return;
+    if (s.k >= s.max) { // scene complete -> next scene
+      if (current < scenes.length - 1) { go(current + 1, true); }
+      else setPlay(false);
+      return;
+    }
+    s.timer = setTimeout(function () {
+      step(1); tick();
+    }, dur(s));
+  }
+  function step(d) {
+    var s = scenes[current];
+    var k = s.k + d;
+    if (k < 0) { if (current > 0) go(current - 1, false, scenes[current - 1].max); return; }
+    if (k > s.max) { if (current < scenes.length - 1) { go(current + 1, true); return; } k = s.max; }
+    s.k = k; render(s);
+  }
+  function go(i, fromStart, atBeat) {
+    var s = scenes[i];
+    stopTimer(scenes[current]);
+    current = i;
+    s.k = Math.max(0, Math.min(s.max, atBeat !== undefined ? atBeat : (fromStart ? 0 : s.max)));
+    render(s);
+    if (playing) tick();
+    if (i !== current || true) s.el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  btnPlay.addEventListener('click', function () { setPlay(!playing); });
+  btnNext.addEventListener('click', function () { step(1); if (playing) tick(); });
+  btnPrev.addEventListener('click', function () { step(-1); if (playing) tick(); });
+  btnReset.addEventListener('click', function () { setPlay(false); go(current, true); });
+  btnSpeed.addEventListener('click', function () {
+    speed = speed === 1 ? 1.5 : speed === 1.5 ? 2 : 1;
+    btnSpeed.textContent = speed + 'x';
+    if (playing) tick();
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.target.closest && e.target.closest('a,button,input,textarea,select')) return;
+    if (e.code === 'Space') { e.preventDefault(); setPlay(!playing); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); step(1); if (playing) tick(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); step(-1); if (playing) tick(); }
+    else if (e.key === 'r' || e.key === 'R') { setPlay(false); go(current, true); }
+  });
+
+  // Scroll-sync: bind the player to the scene crossing the viewport top.
+  var spy = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) {
+      if (en.isIntersecting) {
+        var idx = scenes.findIndex(function (s) { return s.el === en.target; });
+        if (idx >= 0 && idx !== current) {
+          stopTimer(scenes[current]);
+          current = idx; render(scenes[current]);
+          if (playing) tick();
+        }
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  scenes.forEach(function (s) { spy.observe(s.el); });
+
+  // Initial state: scene 1 at beat 0 (all hidden until play/step).
+  render(scenes[0]);
+})();
+</script>
+</body>
+</html>

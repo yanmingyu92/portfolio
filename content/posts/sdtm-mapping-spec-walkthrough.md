@@ -7,6 +7,7 @@ kind: tutorial
 series: clinical-sp-bootcamp
 seriesOrder: 6
 canonicalPath: /blog/sdtm-mapping-spec-walkthrough.html
+explainer: /explainers/clinical-data-journey.html
 
 ---
 

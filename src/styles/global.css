@@ -165,8 +165,11 @@ section[id] {
 }
 
 /* Companion Claude-skill download card — used via
-   <a class="skill-card" href="/skills/<name>/SKILL.md"> ... </a> */
-.skill-card {
+   <a class="skill-card" href="/skills/<name>/SKILL.md"> ... </a>
+   Interactive-explainer entry card shares the same family:
+   <a class="explainer-card" href="/explainers/<slug>.html"> ... </a> */
+.skill-card,
+.explainer-card {
 	display: block;
 	border: 1px solid #d6d3d1;
 	border-radius: 0.5rem;
@@ -176,21 +179,24 @@ section[id] {
 	text-decoration: none;
 	transition: border-color 0.15s ease;
 }
-.skill-card:hover { border-color: #9f1239; }
-.skill-card .skill-card-name {
+.skill-card:hover, .explainer-card:hover { border-color: #9f1239; }
+.skill-card .skill-card-name,
+.explainer-card .skill-card-name {
 	display: block;
 	font-family: ui-monospace, SFMono-Regular, monospace;
 	font-size: 0.8125rem;
 	font-weight: 600;
 	color: #9f1239;
 }
-.skill-card .skill-card-desc {
+.skill-card .skill-card-desc,
+.explainer-card .skill-card-desc {
 	display: block;
 	font-size: 0.875rem;
 	color: #57534e;
 	margin-top: 0.25rem;
 }
-.skill-card .skill-card-download {
+.skill-card .skill-card-download,
+.explainer-card .skill-card-download {
 	display: block;
 	font-size: 0.75rem;
 	color: #57534e;

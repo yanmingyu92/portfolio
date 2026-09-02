@@ -1,0 +1,1 @@
+{"name":"explainer-audit","private":true,"type":"module","version":"0.1.0","description":"Playwright auditor for jaimeyan.com interactive explainers (site build untouched)","dependencies":{"playwright-core":"^1.62.1"}}

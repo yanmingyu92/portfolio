@@ -4,6 +4,7 @@ import '../../styles/global.css';
 import { getCollection } from 'astro:content';
 import PostCard from '../../components/PostCard.astro';
 import Newsletter from '../../components/Newsletter.astro';
+import { explainers as explainerRegistry } from '../../data/explainers';
 
 const posts = (await getCollection('posts', ({ data }) => !data.draft))
 	.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
@@ -61,15 +62,31 @@ const tutorials = posts.filter(p => p.data.kind === 'tutorial')
 				</section>
 			)}
 
-			{tutorials.length > 0 && (
-				<section class="mt-12" id="bootcamp">
-					<p class="eyebrow mb-1">Clinical SP Bootcamp</p>
-					<p class="text-sm text-stone-600 mb-4">A systematic training series: fundamentals, modern SCE workflow, and the agentic way — from raw data to TLF delivery. Key parts ship a downloadable Claude skill. <a href="https://doi.org/10.5281/zenodo.22233175" class="text-rose-800 hover:underline">Series DOI: 10.5281/zenodo.22233175</a>.</p>
-					<div class="divide-y divide-stone-200 border-t border-b border-stone-200">
-						{tutorials.map(post => <PostCard post={post} part={post.data.seriesOrder} />)}
-					</div>
-				</section>
-			)}
+		{tutorials.length > 0 && (
+			<section class="mt-12" id="bootcamp">
+				<p class="eyebrow mb-1">Clinical SP Bootcamp</p>
+				<p class="text-sm text-stone-600 mb-4">A systematic training series: fundamentals, modern SCE workflow, and the agentic way — from raw data to TLF delivery. Key parts ship a downloadable Claude skill. <a href="https://doi.org/10.5281/zenodo.22233175" class="text-rose-800 hover:underline">Series DOI: 10.5281/zenodo.22233175</a>.</p>
+				<div class="divide-y divide-stone-200 border-t border-b border-stone-200">
+					{tutorials.map(post => <PostCard post={post} part={post.data.seriesOrder} />)}
+				</div>
+			</section>
+		)}
+
+		<section class="mt-12" id="explainers">
+			<p class="eyebrow mb-1">Interactive Explainers</p>
+			<p class="text-sm text-stone-600 mb-4">Self-contained animated walkthroughs of the series' flagship topics — play them like a lecture, one beat at a time. <a href="/explainers.html" class="text-rose-800 hover:underline">All explainers →</a></p>
+			<div class="divide-y divide-stone-200 border-t border-b border-stone-200">
+				{explainerRegistry.map(e => (
+					<article class="py-6">
+						<p class="font-mono text-xs text-rose-800">{e.published} · {e.scenes} scenes · interactive</p>
+						<h2 class="mt-1 text-xl font-medium">
+							<a href={e.path} class="hover:text-rose-800">{e.title}</a>
+						</h2>
+						<p class="mt-2 text-stone-600 leading-relaxed">{e.description}</p>
+					</article>
+				))}
+			</div>
+		</section>
 
 			{notes.length > 0 && (
 				<section class="mt-12">

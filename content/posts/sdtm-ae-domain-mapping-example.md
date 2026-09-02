@@ -7,6 +7,7 @@ kind: tutorial
 series: clinical-sp-bootcamp
 seriesOrder: 5
 canonicalPath: /blog/sdtm-ae-domain-mapping-example.html
+explainer: /explainers/clinical-data-journey.html
 
 ---
 

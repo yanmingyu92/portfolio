@@ -4,6 +4,7 @@ import '../../styles/global.css';
 import { getCollection, render } from 'astro:content';
 import { getPublication } from '../../data/publications';
 import { seriesLines, seriesSlugify } from '../../data/bootcamp-lines';
+import { getExplainerByPath } from '../../data/explainers';
 import Newsletter from '../../components/Newsletter.astro';
 import VideoEmbed from '../../components/VideoEmbed.astro';
 
@@ -17,6 +18,7 @@ const { Content } = await render(post);
 
 const canonical = `https://jaimeyan.com/blog/${post.id}.html`;
 const related = post.data.paperRef ? getPublication(post.data.paperRef) : undefined;
+const explainer = post.data.explainer ? getExplainerByPath(post.data.explainer) : undefined;
 const words = (post.body || '').split(/\s+/).filter(Boolean).length;
 const readingTime = Math.max(1, Math.round(words / 200));
 
@@ -155,6 +157,25 @@ if (post.data.kind === 'tutorial') jsonLd.articleSection = SERIES_TITLE;
 					var m = document.getElementById('video-embed-mount');
 					var b = document.querySelector('.prose-custom blockquote');
 					if (m && b && b.parentNode) b.after(m);
+				})();
+			</script>
+		)}
+		{explainer && (
+			<div id="explainer-card-mount">
+				<a class="explainer-card" href={explainer.path}>
+					<span class="skill-card-name">Interactive walkthrough → {explainer.title}</span>
+					<span class="skill-card-desc">{explainer.scenes} animated scenes, step-by-step: play it, step through with the keyboard, or read it as a static schematic (works without JavaScript; illustrative data only).</span>
+					<span class="skill-card-download">Open in a new page — no external scripts, phone-friendly</span>
+				</a>
+			</div>
+		)}
+		{explainer && (
+			<script is:inline>
+				// Move the explainer entry card right below the TL;DR, before the video embed (runs after the video move so it lands first).
+				(function () {
+					var c = document.getElementById('explainer-card-mount');
+					var b = document.querySelector('.prose-custom blockquote');
+					if (c && b && b.parentNode) b.after(c);
 				})();
 			</script>
 		)}

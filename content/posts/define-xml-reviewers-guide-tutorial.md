@@ -7,6 +7,7 @@ kind: tutorial
 series: clinical-sp-bootcamp
 seriesOrder: 16
 canonicalPath: /blog/define-xml-reviewers-guide-tutorial.html
+explainer: /explainers/clinical-data-journey.html
 skillArtifact: /skills/define-xml-adrg-checklist/SKILL.md
 draft: true
 ---

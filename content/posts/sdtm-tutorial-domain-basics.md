@@ -8,6 +8,7 @@ series: clinical-sp-bootcamp
 seriesOrder: 4
 skillArtifact: /skills/sdtm-mapping-conventions/SKILL.md
 canonicalPath: /blog/sdtm-tutorial-domain-basics.html
+explainer: /explainers/clinical-data-journey.html
 
 ---
 

@@ -7,6 +7,8 @@ kind: tutorial
 series: clinical-sp-bootcamp
 seriesOrder: 0
 canonicalPath: /blog/clinical-sp-bootcamp-roadmap.html
+explainer: /explainers/clinical-data-journey.html
+videoId: fQjerkdRGJQ
 
 ---
 
