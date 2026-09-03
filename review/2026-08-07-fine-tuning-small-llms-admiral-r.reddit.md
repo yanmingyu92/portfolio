@@ -1,4 +1,4 @@
-# Reddit draft — Fine-Tuning LLaMA 3.1 8B for Admiral R Code: From 0.36 to 0.82
+# Reddit draft — Fine-Tuning Llama 3.1 8B for admiral R Code: From 0.36 to 0.82
 
 ## Title suggestion
 How are people automating fine-tuning? I wrote up an approach that worked for me
@@ -9,7 +9,7 @@ I've been trying to automate parts of my fine-tuning pipeline and kept running
 into the same friction: the pieces exist, but stitching them together
 reliably is where everything falls apart.
 
-Base LLaMA 3.1 8B scores 0.36 on Admiral code generation. LoRA fine-tuning plus knowledge-graph validation gets it to 0.82 — without sending data to an API.
+Base Llama 3.1 8B scores 0.36 on admiral code generation. LoRA fine-tuning plus knowledge-graph validation gets it to 0.82 — without sending data to an API.
 
 A few things that made a difference for me:
 

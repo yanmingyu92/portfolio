@@ -1,53 +1,98 @@
-# Medium import draft — What Hybrid RAG Buys You in TLF Template Generation: 1,999 Bootstrap Experiments
+# Medium upload-ready draft — Benchmarking RAG for Clinical TLF Templates: 1,999 Experiments
 
-## How to publish (Medium killed its public API, so import is the supported path)
+## Publish (paste path — recommended for this post: it has tables, which the importer mangles)
 
-1. Open the import tool: https://medium.com/p/import
-2. Paste the canonical URL: https://jaimeyan.com/blog/benchmarking-rag-clinical-tlf-templates.html
-3. Medium will fetch the post and set the canonical link back to jaimeyan.com automatically.
-4. If the import fetch fails (JS-rendered page), copy the body below into a new
-   story instead, then set the canonical link manually via
-   Story settings -> Advanced settings -> "This story was originally published elsewhere".
-5. Add tags manually (Medium allows 5): rag, llm-benchmarking, tlf-templates, clinical-trials, r-code-generation
-6. Review formatting, then Publish.
+1. New story at https://medium.com/new-story
+2. Title: Benchmarking RAG for Clinical TLF Templates: 1,999 Experiments
+3. Paste everything between the BEGIN/END markers below.
+   - Tables are monospace blocks on purpose: Medium has no native table block.
+   - Code fences, quotes and headings paste through as-is.
+4. Set the canonical link (SEO): Story settings -> Advanced settings ->
+   "This story was originally published elsewhere" -> https://jaimeyan.com/blog/benchmarking-rag-clinical-tlf-templates.html
+5. Tags (Medium allows 5): rag, llm-benchmarking, tlf-templates, clinical-trials, r-code-generation
+6. Preview, then Publish.
 
-## Post body (fallback copy-paste source)
+## Alternative: importer (fast, but no table fidelity)
 
-Canonical: https://jaimeyan.com/blog/benchmarking-rag-clinical-tlf-templates.html
+- https://medium.com/p/import with https://jaimeyan.com/blog/benchmarking-rag-clinical-tlf-templates.html — sets canonical
+  automatically, but Medium flattens HTML tables; prefer the paste path above
+  for this series.
 
 ---
 
-Every statistical programmer knows the drill: before a single line of production code is written, someone has to author the mock TLF shells — the tables, listings, and figures that will anchor the Clinical Study Report. They must conform to ICH E3 and CDISC ADaM conventions, they are tedious, and they are mostly copy-adapt-paste from precedent. It is exactly the kind of work people hand to an LLM. And the first thing you learn when you do is that naive prompting produces templates that *look* plausible but drift off-schema, invent variables, and ignore regulatory conventions.
+Canonical: https://jaimeyan.com/blog/benchmarking-rag-clinical-tlf-templates.html
 
-So I ran the experiment properly. For my PharmaSUG 2026 paper, I benchmarked **five generation methods across 1,999 instance-matched bootstrap experiments**, spanning 15 templates, five prompt-complexity levels, three LLM providers (DeepSeek, OpenAI GPT-4, Anthropic Claude), and eight therapeutic areas. This post is what I learned.
+=== BEGIN PASTE BODY ===
 
-## The five methods
+Before a single line of production code is written, someone authors the mock TLF shells — the tables, listings, and figures that anchor the Clinical Study Report. They must conform to ICH E3 and CDISC ADaM conventions, they are tedious, and they are mostly copy-adapt-paste from precedent. Exactly the kind of work people hand to an LLM. And the first thing you learn when you do: naive prompting produces templates that *look* plausible but drift off-schema, invent variables, and ignore regulatory conventions.
 
-All runs used deterministic decoding (temperature 0.1). The contestants:
+So I ran the experiment properly. For my PharmaSUG 2026 paper, I benchmarked **five generation methods across 1,999 instance-matched bootstrap experiments**, spanning 15 templates, five prompt-complexity levels, three LLM providers (DeepSeek, OpenAI GPT-4, Anthropic Claude), and eight therapeutic areas.
 
-- **LLM_DIRECT** — baseline single-turn prompting, no retrieval.
-- **LLM_RAG_VECTOR** — standard vector-store RAG.
-- **RAG_QUERY_EXPANSION** — expand the query first to improve retrieval recall.
-- **RAG_ADAPTIVE_CONTEXT** — adaptively select and compose context snippets per instance.
-- **RAG_HYBRID_RERANK** — hybrid lexical + vector retrieval, then a reranking step to prioritize context.
+> **TL;DR** — Hybrid RAG with reranking beats direct prompting on template quality (85.7 vs. 81.7, p < 0.05), but the effect size depends on the provider — and one provider went negative. An iterative LLM debugging loop then gets 70% of generated R scripts executing within 3–5 rounds, and better templates need fewer rounds.
 
-Prompts ranged from L1 ("Create a demographics table") up to L5 (exception handling, edge-case footnotes, traceability requirements). Templates were scored by five domain-expert LLM personas (clinical researcher, regulatory specialist, biostatistician, data manager, medical writer) on structure fidelity, content accuracy, completeness, format compliance, and variable coverage. To check the rubric wasn't grading its own homework, I correlated the automated scores against five human domain experts on 250 instances: average Pearson r = 0.895, Spearman ρ = 0.825.
+## The setup: five methods, one rubric
+
+All runs used deterministic decoding (temperature 0.1), and template edits were applied as JSON Patch (RFC 6902) operations to preserve schema fidelity. The five contestants:
+
+```text
+Method                |  What it does
+----------------------+-----------------------------------------------------
+LLM_DIRECT            |  Baseline single-turn prompting, no retrieval
+LLM_RAG_VECTOR        |  Standard vector-store RAG
+RAG_QUERY_EXPANSION   |  Expands the query first to improve retrieval recall
+RAG_ADAPTIVE_CONTEXT  |  Selects and composes context snippets per instance
+RAG_HYBRID_RERANK     |  Hybrid lexical + vector retrieval, then reranking
+```
+
+*Table 1: The five generation methods in the benchmark, from bare prompting to hybrid RAG with reranking.*
+
+Prompts ranged from L1 ("Create a demographics table") up to L5 (exception handling, edge-case footnotes, traceability requirements). Templates were scored by five domain-expert LLM personas — clinical researcher, regulatory specialist, biostatistician, data manager, medical writer — on structure fidelity, content accuracy, completeness, format compliance, and variable coverage. To check the rubric wasn't grading its own homework, I correlated the automated scores against five human domain experts on 250 instances: average Pearson r = 0.895, Spearman ρ = 0.825.
 
 ## What hybrid RAG buys you
 
-The headline result: **RAG_HYBRID_RERANK scored 85.7 on average vs. 81.7 for direct prompting** — a statistically significant gain (p < 0.05) on paired, instance-matched bootstrap comparisons (B = 2000, fixed seed 42). Plain vector RAG (83.0) and adaptive context (83.1) landed in between; query expansion (80.0) actually underperformed the direct baseline on average.
+The headline result: **RAG_HYBRID_RERANK scored 85.7 on average vs. 81.7 for direct prompting** — a statistically significant gain (p < 0.05) on paired, instance-matched bootstrap comparisons (B = 2000, fixed seed 42).
 
-The honest caveats, because the numbers demand them:
+```text
+Method                |  Mean quality score  |  Δ vs. direct
+----------------------+----------------------+--------------
+LLM_DIRECT            |  81.7                |  —
+RAG_QUERY_EXPANSION   |  80.0                |  −1.7
+LLM_RAG_VECTOR        |  83.0                |  +1.3
+RAG_ADAPTIVE_CONTEXT  |  83.1                |  +1.4
+RAG_HYBRID_RERANK     |  85.7                |  +4.0
+```
 
-- On DeepSeek (n = 1644, my largest dataset), the advantage was +3.5 points with Cohen's d = 0.415 — a real but medium effect.
-- On OpenAI (n = 171), the gap was +10.3 points (d = 0.723), but with p = 0.067 it missed the 0.05 threshold.
-- On Anthropic (n = 184), the method effect was *negative* (−6.0 points, d = −0.420) and not significant. Small sample, but I report it as-is.
+*Table 2: Mean quality scores across all 1,999 experiments. Query expansion underperformed even the no-retrieval baseline.*
 
-Two other findings held up across conditions. Performance **degrades with prompt complexity** — from 88.5 at L1 down to 75.6 at L5 in the DeepSeek data — though the hybrid method kept its edge at every level. And some CSR categories are simply harder: demographics was the easiest (85.2), while adverse events (74.3) and safety labs (76.8) were the most challenging. If you're scoping automation, start with demographics and efficacy, not AE tables.
+Two things worth noting. Plain vector RAG and adaptive context land in between — retrieval helps, but reranking is what separates the top method. And query expansion *hurt*: on average it scored below doing no retrieval at all.
+
+## The effect depends on the provider
+
+The headline number hides real variance. Broken down by provider, with the honest caveats the numbers demand:
+
+```text
+Provider          |  n      |  Δ (hybrid − direct)  |  Cohen's d  |  Verdict
+------------------+---------+-----------------------+-------------+---------------------------
+DeepSeek          |  1,644  |  +3.5                 |  0.415      |  Real, medium effect
+OpenAI GPT-4      |  171    |  +10.3                |  0.723      |  p = 0.067, misses 0.05
+Anthropic Claude  |  184    |  −6.0                 |  −0.420     |  Negative, not significant
+```
+
+*Table 3: Hybrid RAG's advantage over direct prompting is not uniform across providers.*
+
+The DeepSeek subset is my largest dataset and shows a genuine medium-sized gain. OpenAI shows the biggest gap but doesn't clear the significance threshold at this sample size. Anthropic went *negative* — small sample, but I report it as-is. If you're picking a stack, "RAG always helps" is not a claim this data supports.
+
+## Harder prompts, harder templates
+
+Two other findings held up across conditions.
+
+Performance **degrades with prompt complexity** — from 88.5 at L1 down to 75.6 at L5 in the DeepSeek data — though the hybrid method kept its edge at every level. Keep prompts at medium complexity (L3–L4) where you can.
+
+And some CSR categories are simply harder: demographics was the easiest (85.2), while adverse events (74.3) and safety labs (76.8) were the most challenging. If you're scoping automation, start with demographics and efficacy, not AE tables.
 
 ## From template to executable R: debugging converges
 
-A good template is only half the deliverable — someone still has to write the R code. Zero-shot code generation from the templates had a low success rate. So I built an iterative LLM-guided debugging loop:
+A good template is only half the deliverable — someone still has to write the R code. Zero-shot code generation from the templates had a low success rate, so I built an iterative LLM-guided debugging loop:
 
 ```
 round = 0
@@ -65,7 +110,11 @@ Success meant exit code 0, the required output file created, and basic shape che
 - Early-round failures were mundane — incorrect population flags, column-binding errors. Later rounds surfaced subtler, dataset-specific logic mismatches.
 - Most usefully: **higher-fidelity templates needed fewer debugging rounds**. The quality you buy upstream with hybrid RAG pays out again downstream.
 
-That last point is what makes this a pipeline argument, not just a benchmarking exercise — it directly motivates the four-agent architecture in the paper (query analysis → template generation → code generation → execution/debug).
+That last point makes this a pipeline argument, not just a benchmarking exercise. It directly motivates the four-agent architecture in the paper:
+
+Figure: [Four-agent pipeline: query analysis feeds template generation with hybrid RAG and reranking, then R code generation, then an execute-and-debug loop that patches failures back into code generation](https://jaimeyan.com/figures/benchmarking-rag-clinical-tlf-templates-pipeline.svg)
+
+*Figure 1: The four-agent pipeline — query analysis, template generation, code generation, and an execution/debug loop that iterates up to 14 rounds.*
 
 ## Limitations I'd flag before you adopt this
 
@@ -77,4 +126,14 @@ The manuscript is explicit about these, and they matter:
 - Even hybrid RAG fails on some L5 prompts where retrieved documents conflict or formatting rules are esoteric.
 - The study had no statistician co-author — a limitation the paper states plainly.
 
-My practical takeaway: use hybrid retrieval with reranking for template generation, keep prompts at medium complexity (L3–L4), and put an automated debugging loop behind validator gates. The full details — all tables, the paired bootstrap methodology, and the reproducible analysis code — are in the [full paper](/papers/pharmasug-2026-ap-211.html), presented at PharmaSUG 2026, with code at the companion GitHub repo.
+## Key takeaways
+
+- Hybrid RAG with reranking beat direct prompting on TLF template quality (85.7 vs. 81.7, p < 0.05) across 1,999 bootstrap experiments, while query expansion scored below no retrieval at all.
+- The method effect is provider-dependent: +3.5 points on DeepSeek, +10.3 (n.s.) on OpenAI, and −6.0 (n.s.) on Anthropic — "RAG always helps" is not supported.
+- Template quality degrades from L1 to L5 prompt complexity, and adverse-event and safety-lab templates are harder than demographics; scope automation accordingly.
+- An iterative debugging loop raised R-code execution success from a low zero-shot rate to 70% within 3–5 rounds, and higher-fidelity templates needed fewer rounds — upstream quality pays out downstream.
+- Execution success is not statistical correctness; keep human review behind validator gates in production.
+
+The full details — all tables, the paired bootstrap methodology, and the reproducible analysis code — are in the [full paper](https://jaimeyan.com/papers/pharmasug-2026-ap-211.html), presented at PharmaSUG 2026, with code at the companion GitHub repo.
+
+=== END PASTE BODY ===

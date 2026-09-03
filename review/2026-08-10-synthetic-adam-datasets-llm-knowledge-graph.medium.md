@@ -1,25 +1,32 @@
-# Medium import draft — Synthetic ADaM Data That Actually Holds Together: Knowledge Graphs, LLMs, and Faker Templates
+# Medium upload-ready draft — Synthetic ADaM That Survives a Join: Knowledge Graphs, LLMs, Faker
 
-## How to publish (Medium killed its public API, so import is the supported path)
+## Publish (paste path — recommended for this post: it has tables, which the importer mangles)
 
-1. Open the import tool: https://medium.com/p/import
-2. Paste the canonical URL: https://jaimeyan.com/blog/synthetic-adam-datasets-llm-knowledge-graph.html
-3. Medium will fetch the post and set the canonical link back to jaimeyan.com automatically.
-4. If the import fetch fails (JS-rendered page), copy the body below into a new
-   story instead, then set the canonical link manually via
-   Story settings -> Advanced settings -> "This story was originally published elsewhere".
-5. Add tags manually (Medium allows 5): synthetic-data, adam, knowledge-graphs, llm, statistical-programming
-6. Review formatting, then Publish.
+1. New story at https://medium.com/new-story
+2. Title: Synthetic ADaM That Survives a Join: Knowledge Graphs, LLMs, Faker
+3. Paste everything between the BEGIN/END markers below.
+   - Tables are monospace blocks on purpose: Medium has no native table block.
+   - Code fences, quotes and headings paste through as-is.
+4. Set the canonical link (SEO): Story settings -> Advanced settings ->
+   "This story was originally published elsewhere" -> https://jaimeyan.com/blog/synthetic-adam-datasets-llm-knowledge-graph.html
+5. Tags (Medium allows 5): synthetic-data, adam, knowledge-graphs, llm, statistical-programming
+6. Preview, then Publish.
 
-## Post body (fallback copy-paste source)
+## Alternative: importer (fast, but no table fidelity)
 
-Canonical: https://jaimeyan.com/blog/synthetic-adam-datasets-llm-knowledge-graph.html
+- https://medium.com/p/import with https://jaimeyan.com/blog/synthetic-adam-datasets-llm-knowledge-graph.html — sets canonical
+  automatically, but Medium flattens HTML tables; prefer the paste path above
+  for this series.
 
 ---
 
-If you've ever needed synthetic ADaM data before first patient in — to start TLF programming early, test a pipeline, or train new programmers — you know the failure mode. Point an LLM at your ADaM spec spreadsheet, ask for JSON, feed it to Faker, and you get datasets where each variable looks plausible in isolation: AGE is between 18 and 90, SEX is in {M, F, U}. Then you join ADLB to ADSL and the subject IDs don't line up, PARAMCD has no consistent relationship to AVAL and CHG, and AESTDY comes after AEENDY half the time.
+Canonical: https://jaimeyan.com/blog/synthetic-adam-datasets-llm-knowledge-graph.html
 
-In our PhUSE US Connect 2025 paper (ML12, with Chao Su), we quantified exactly this: direct JSON-schema generation scored **0.45** on our composite quality metric. The full pipeline — schemas enriched from clinical documentation knowledge graphs plus structure-aware templates — reached **0.70**. Here's what made the difference.
+=== BEGIN PASTE BODY ===
+
+If you've ever needed synthetic ADaM data before first patient in — to start TLF programming early, test a pipeline, or train new programmers — you know the failure mode. Point an LLM at your ADaM spec spreadsheet, ask for JSON, feed it to Faker, and every column looks plausible in isolation: AGE between 18 and 90, SEX in {M, F, U}. Then you join ADLB to ADSL and the subject IDs don't line up, PARAMCD has no consistent relationship to AVAL and CHG, and AESTDY lands after AEENDY half the time.
+
+> **TL;DR** — In our PhUSE US Connect 2025 paper (ML12, with Chao Su), direct JSON-schema generation of synthetic ADaM scored 0.45 on a composite quality metric. Enriching schemas from a protocol/SAP/CRF knowledge graph lifted that to 0.63, and structure-aware Faker templates reached 0.70. This post breaks down where each gain comes from — and where the approach still breaks.
 
 ## Why schema-only generation plateaus
 
@@ -32,7 +39,11 @@ The measured consequence: direct JSON generation scored 0.38 on relationship pre
 
 ## The pipeline
 
-The pipeline has four stages: convert specs to JSON, enhance the schema, generate with Faker, evaluate. The enhancement stage is where the quality comes from, and it has two prongs:
+The pipeline has four stages: convert specs to JSON, enhance the schema, generate with Faker, evaluate. The enhancement stage is where the quality comes from, and it has two prongs.
+
+Figure: [Four-stage pipeline: specs to JSON, schema enhancement with knowledge enrichment and structure optimization, ADSL-first Faker generation, evaluation](https://jaimeyan.com/figures/synthetic-adam-datasets-llm-knowledge-graph-pipeline.svg)
+
+*Figure 1: The generation pipeline. Schema enhancement — knowledge enrichment from clinical documentation plus structure optimization into ADaM data structures — sits between spec conversion and Faker generation.*
 
 1. **Knowledge enrichment.** We build a structured knowledge graph from the trial documentation (protocol, SAP, CRFs) and query it block by block against the JSON schema — pulling out variable ranges, derivation equations, and allowed values — then have the LLM insert that extracted knowledge into the schema following a predefined structure. An LLM pass additionally proposes realistic value ranges and distributions. One honest caveat from the paper: the output quality here is highly sensitive to how relevant the input documentation is to ADaM dataset creation.
 2. **Structure optimization.** Rule-based LLM prompts reorganize the flat schema into the actual ADaM structure — ADSL (one record per subject), BDS (one record per subject per parameter per visit), OCCDS (one record per subject per occurrence) — so relationships become explicit. For BDS, each PARAMCD gets its own nested block mapping to its AVAL/BASE/CHG variables instead of sitting in a sibling list.
@@ -40,7 +51,7 @@ The pipeline has four stages: convert specs to JSON, enhance the schema, generat
 Generation then uses Faker two ways: direct translation of the enhanced schema into Faker calls for simple structures, and predefined Python templates for the complex ones. The template path is deliberately **ADSL-first** — generate the subject-level dataset, then propagate subjects consistently into every downstream dataset. That's what makes cross-dataset joins work.
 
 ```python
-# Direct Faker generation (fine for ADSL — breaks down for BDS/OCCDS)
+## Direct Faker generation (fine for ADSL, breaks down for BDS/OCCDS)
 def generate_adsl(num_subjects):
     return [{
         "STUDYID": fake.pystr(max_chars=8),
@@ -50,16 +61,22 @@ def generate_adsl(num_subjects):
     } for _ in range(num_subjects)]
 ```
 
+*Listing 1: Direct schema-to-Faker translation. Adequate for one-record-per-subject ADSL; it cannot express BDS or OCCDS structure.*
+
 ## The numbers
 
 We evaluated against reference datasets from a Phase III trial: ADSL (n=500), two BDS datasets (ADVS, ADLB), and one OCCDS dataset (ADAE). The overall score is a weighted combination of data structure, subject-level, and relationship scores, with components checked via KS tests, chi-square tests, Jensen–Shannon divergence, and cross-dataset key consistency.
 
-| Metric | Direct JSON | Enhanced JSON (KG+LLM) | Template-Based |
-|---|---|---|---|
-| Data Structure | 0.52 | 0.68 | 0.75 |
-| Subject-level | 0.45 | 0.63 | 0.70 |
-| Relationship | 0.38 | 0.58 | 0.65 |
-| **Overall Quality** | **0.45** | **0.63** | **0.70** |
+```text
+Metric           |  Direct JSON  |  Enhanced JSON (KG+LLM)  |  Template-Based
+-----------------+---------------+--------------------------+----------------
+Data Structure   |  0.52         |  0.68                    |  0.75
+Subject-level    |  0.45         |  0.63                    |  0.70
+Relationship     |  0.38         |  0.58                    |  0.65
+Overall Quality  |  0.45         |  0.63                    |  0.70
+```
+
+*Table 1: Composite quality scores for the three generation strategies, evaluated against Phase III reference datasets.*
 
 Two things are worth noticing. First, knowledge enrichment alone (0.45 → 0.63) buys more than half the total gain — the documentation knowledge graph is doing real work, not decoration. Second, templates add the rest (0.63 → 0.70) by hard-coding the structural patterns and the ADSL-first generation order.
 
@@ -72,6 +89,18 @@ The paper is direct about the limits:
 - **Rare events.** Templates over- or under-represent low-frequency adverse events and uncommon demographic combinations.
 - **Rigidity.** Templates win on quality but cost maintenance overhead, and strict structural enforcement can squeeze out legitimate edge cases and novel study designs.
 
-The practical takeaway matches the pattern I keep seeing in this space: the LLM is not the generator of record. Domain knowledge extracted from your protocol, SAP, and CRFs — organized so the model can actually query it — plus deterministic templates that own the structure, is what turns plausible-looking columns into datasets that survive a join.
+The pattern here matches what I keep seeing in this space: the LLM is not the generator of record. Domain knowledge extracted from your protocol, SAP, and CRFs — organized so the model can actually query it — plus deterministic templates that own the structure, is what turns plausible-looking columns into datasets that survive a join.
 
-Full details, including the evaluation metric formalization, are in the [full paper](/papers/phuse-2025-ml12.html), presented at PhUSE US Connect 2025.
+## Key takeaways
+
+- Schema-only LLM generation of synthetic ADaM plateaus at 0.45 overall quality because a flat JSON spec carries neither domain knowledge nor ADaM structure.
+- Enriching schemas from a knowledge graph built on the protocol, SAP, and CRFs lifts overall quality to 0.63 — more than half the total measured gain.
+- Structure-aware, ADSL-first Faker templates add the rest (0.63 → 0.70) by making cross-dataset subject propagation and BDS/OCCDS structure explicit.
+- Relationship preservation is the weakest component at every level: 0.38 for direct JSON and still only 0.65 with templates.
+- Temporal event sequences in OCCDS data remain the hardest open problem, with sequence validity of only 50–65%.
+
+---
+
+Full details, including the evaluation metric formalization, are in the [full paper](https://jaimeyan.com/papers/phuse-2025-ml12.html), presented at PhUSE US Connect 2025.
+
+=== END PASTE BODY ===

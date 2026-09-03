@@ -1,4 +1,4 @@
-# Reddit draft — Why LLM Agents Fail at Regulated Programming — and How a Process DAG Fixes It
+# Reddit draft — Why LLM Agents Fail at Regulated Programming — the Process-DAG Fix
 
 ## Title suggestion
 How are people automating llm-agents? I wrote up an approach that worked for me

@@ -1,8 +1,8 @@
-# 小红书草稿 — Thin MCP, Thick Skills: A Five-Layer Architecture for Clinical Programming Agents
+# 小红书草稿 — Thin MCP, Thick Skills: Five Layers for Clinical Programming Agents
 
-## 文案(需 ≤300 字,当前约 200 字)
+## 文案(需 ≤300 字,当前约 186 字)
 
-✨ Thin MCP, Thick Skills: A Five-Layer Architecture for Clinical Programming Agents
+✨ Thin MCP, Thick Skills: Five Layers for Clinical Programming Agents
 
 ClinAgent splits clinical programming capability into five layers, keeping MC...
 
@@ -10,7 +10,7 @@ ClinAgent splits clinical programming capability into five layers, keeping MC...
 
 ## 轮播图文案大纲(5 页)
 
-1. **封面页**:标题「Thin MCP, Thick Skills: A Five-Layer Architecture for Clinical Programming Agents」+ 一句钩子(ClinAgent splits clinical programming capability into five layers, keeping MC...)
+1. **封面页**:标题「Thin MCP, Thick Skills: Five Layers for Clinical Programming Agents」+ 一句钩子(ClinAgent splits clinical programming capability into five layers, keeping MC...)
 2. **痛点页**:大家在这个场景下最常遇到的 2-3 个问题
 3. **方法页**:我的解决思路概览(对应文章核心部分)
 4. **细节页**:关键步骤或代码/工具截图占位

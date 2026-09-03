@@ -1,8 +1,8 @@
-# 小红书草稿 — Why LLM Agents Fail at Regulated Programming — and How a Process DAG Fixes It
+# 小红书草稿 — Why LLM Agents Fail at Regulated Programming — the Process-DAG Fix
 
-## 文案(需 ≤300 字,当前约 196 字)
+## 文案(需 ≤300 字,当前约 185 字)
 
-✨ Why LLM Agents Fail at Regulated Programming — and How a Process DAG Fixes It
+✨ Why LLM Agents Fail at Regulated Programming — the Process-DAG Fix
 
 Free-form agent loops break down in GxP clinical programming. Structuring the...
 
@@ -10,7 +10,7 @@ Free-form agent loops break down in GxP clinical programming. Structuring the...
 
 ## 轮播图文案大纲(5 页)
 
-1. **封面页**:标题「Why LLM Agents Fail at Regulated Programming — and How a Process DAG Fixes It」+ 一句钩子(Free-form agent loops break down in GxP clinical programming. Structuring the...)
+1. **封面页**:标题「Why LLM Agents Fail at Regulated Programming — the Process-DAG Fix」+ 一句钩子(Free-form agent loops break down in GxP clinical programming. Structuring the...)
 2. **痛点页**:大家在这个场景下最常遇到的 2-3 个问题
 3. **方法页**:我的解决思路概览(对应文章核心部分)
 4. **细节页**:关键步骤或代码/工具截图占位

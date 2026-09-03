@@ -1,4 +1,4 @@
-# Reddit draft — The Contradictions Your Validator Can't See: Graph-Constrained Validation for CDISC Oncology Data
+# Reddit draft — The Contradictions Your Validator Can't See
 
 ## Title suggestion
 How are people automating cdisc? I wrote up an approach that worked for me
@@ -9,7 +9,7 @@ I've been trying to automate parts of my cdisc pipeline and kept running
 into the same friction: the pieces exist, but stitching them together
 reliably is where everything falls apart.
 
-Rule-based SDTM validators can't express cross-domain contradictions. SHACL-SPARQL graph constraints plus a deterministic agent layer catch what they structurally miss.
+Rule-based SDTM validators structurally miss cross-domain contradictions. SHACL-SPARQL graph constraints plus a deterministic agent layer catch all 20 archetypes.
 
 A few things that made a difference for me:
 

@@ -1,4 +1,4 @@
-# Reddit draft — What Hybrid RAG Buys You in TLF Template Generation: 1,999 Bootstrap Experiments
+# Reddit draft — Benchmarking RAG for Clinical TLF Templates: 1,999 Experiments
 
 ## Title suggestion
 How are people automating rag? I wrote up an approach that worked for me
@@ -9,7 +9,7 @@ I've been trying to automate parts of my rag pipeline and kept running
 into the same friction: the pieces exist, but stitching them together
 reliably is where everything falls apart.
 
-Benchmarking five LLM generation methods for ICH E3-conformant TLF templates — hybrid RAG with reranking beats direct prompting, and iterative debugging gets R code to 70% success.
+Five LLM generation methods benchmarked across 1,999 bootstrap experiments on ICH E3-conformant TLF templates: hybrid RAG with reranking beats direct prompting.
 
 A few things that made a difference for me:
 

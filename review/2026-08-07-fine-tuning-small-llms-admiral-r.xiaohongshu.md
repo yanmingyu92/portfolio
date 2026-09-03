@@ -1,16 +1,16 @@
-# 小红书草稿 — Fine-Tuning LLaMA 3.1 8B for Admiral R Code: From 0.36 to 0.82
+# 小红书草稿 — Fine-Tuning Llama 3.1 8B for admiral R Code: From 0.36 to 0.82
 
 ## 文案(需 ≤300 字,当前约 181 字)
 
-✨ Fine-Tuning LLaMA 3.1 8B for Admiral R Code: From 0.36 to 0.82
+✨ Fine-Tuning Llama 3.1 8B for admiral R Code: From 0.36 to 0.82
 
-Base LLaMA 3.1 8B scores 0.36 on Admiral code generation. LoRA fine-tuning pl...
+Base Llama 3.1 8B scores 0.36 on admiral code generation. LoRA fine-tuning pl...
 
 完整文章在我的个人博客,链接见主页 👉 jaimeyan.com
 
 ## 轮播图文案大纲(5 页)
 
-1. **封面页**:标题「Fine-Tuning LLaMA 3.1 8B for Admiral R Code: From 0.36 to 0.82」+ 一句钩子(Base LLaMA 3.1 8B scores 0.36 on Admiral code generation. LoRA fine-tuning pl...)
+1. **封面页**:标题「Fine-Tuning Llama 3.1 8B for admiral R Code: From 0.36 to 0.82」+ 一句钩子(Base Llama 3.1 8B scores 0.36 on admiral code generation. LoRA fine-tuning pl...)
 2. **痛点页**:大家在这个场景下最常遇到的 2-3 个问题
 3. **方法页**:我的解决思路概览(对应文章核心部分)
 4. **细节页**:关键步骤或代码/工具截图占位

@@ -15,27 +15,98 @@ export const MANUAL_PLATFORMS = ['medium', 'zhihu', 'juejin', 'reddit', 'xiaohon
 const FOOTER_ZH = (url) => `\n\n---\n原文发布于 jaimeyan.com: ${url}`;
 
 // ---------------------------------------------------------------- medium ----
+// Medium has no write API and no native table block, so we generate an
+// upload-ready paste body engineered for Medium's editor:
+//   - markdown tables  -> aligned monospace blocks (survive paste intact)
+//   - videoId          -> bare https://youtu.be/<id> line (Medium auto-embeds)
+//   - relative links   -> absolute https://jaimeyan.com/... (paste needs them)
+//   - era-callout div  -> blockquote (Medium understands quotes)
+//   - images           -> linked captions (SVG unsupported; PNG/JPG absolute)
+const MEDIUM_SITE = 'https://jaimeyan.com';
+
+function mdTableToMono(lines) {
+  const rows = lines
+    .filter((l) => !/^\|[\s:|-]+\|$/.test(l.trim()))
+    .map((l) =>
+      l.trim().replace(/^\||\|$/g, '').split('|').map((c) =>
+        c.trim().replace(/\*\*([^*]+)\*\*/g, '$1').replace(/`([^`]+)`/g, '$1')));
+  if (!rows.length) return lines.join('\n');
+  const cols = Math.max(...rows.map((r) => r.length));
+  const widths = Array.from({ length: cols }, (_, i) =>
+    Math.max(...rows.map((r) => (r[i] || '').length)));
+  const fmt = (r) => r.map((c, i) => (c || '').padEnd(widths[i])).join('  |  ').trimEnd();
+  const sep = widths.map((w) => '-'.repeat(w)).join('--+--');
+  return [fmt(rows[0]), sep, ...rows.slice(1).map(fmt)].join('\n');
+}
+
+function mediumBody(post) {
+  let body = post.body;
+
+  // era-callout div -> blockquote (strip tags, keep paragraphs)
+  body = body.replace(/<div class="era-callout">([\s\S]*?)<\/div>/g, (_, inner) => {
+    const paras = [...inner.matchAll(/<p[^>]*>([\s\S]*?)<\/p>/g)]
+      .map((m) => m[1].replace(/<[^>]+>/g, '').replace(/&mdash;/g, '—').replace(/&nbsp;/g, ' ').trim())
+      .filter(Boolean);
+    return paras.map((p) => p.split('\n').map((l) => `> ${l}`).join('\n')).join('\n>\n');
+  });
+
+  // markdown tables -> aligned monospace blocks (fence them so Medium keeps layout)
+  body = body.replace(/(?:^|\n)(\|[^\n]+\|\n\|[\s:|-]+\|\n(?:\|[^\n]+\|\n?)+)/g, (m, table) => {
+    const block = mdTableToMono(table.trim().split('\n'));
+    return `\n\`\`\`text\n${block}\n\`\`\`\n`;
+  });
+
+  // relative links/images -> absolute (Medium paste resolves nothing relatively)
+  body = body.replace(/\]\(\//g, `](${MEDIUM_SITE}/`);
+  // SVG figures can't embed on Medium: turn image syntax into a linked caption
+  body = body.replace(/!\[([^\]]*)\]\(([^)]+\.svg)\)/g, 'Figure: [$1]($2)');
+
+  // companion video: bare youtu.be URL on its own line -> Medium auto-embeds
+  if (post.videoId) {
+    const embed = `\n\n**Watch the companion video walkthrough:**\n\nhttps://youtu.be/${post.videoId}\n`;
+    // insert right after the TL;DR quote block if present, else after first paragraph
+    const tldr = body.match(/(^> \*\*TL;DR\*\*[^\n]*(?:\n> [^\n]*)*)/m);
+    if (tldr) body = body.replace(tldr[0], tldr[0] + embed);
+    else body = body.replace(/^(.*\n)/, `$1${embed}`);
+  }
+  // interactive explainer cross-link
+  if (post.explainer) {
+    body += `\n\n---\n\n*Prefer the interactive version? Step through the animated walkthrough: ${MEDIUM_SITE}${post.explainer}*\n`;
+  }
+  return body.trim();
+}
+
 function mediumDraft(post) {
-  return `# Medium import draft — ${post.title}
+  const hasVideo = !!post.videoId;
+  const hasTables = /\|[^\n]+\|\n\|[\s:|-]+\|/.test(post.body);
+  return `# Medium upload-ready draft — ${post.title}
 
-## How to publish (Medium killed its public API, so import is the supported path)
+## Publish (paste path — recommended for this post${hasTables ? ': it has tables, which the importer mangles' : ''})
 
-1. Open the import tool: https://medium.com/p/import
-2. Paste the canonical URL: ${post.canonicalUrl}
-3. Medium will fetch the post and set the canonical link back to jaimeyan.com automatically.
-4. If the import fetch fails (JS-rendered page), copy the body below into a new
-   story instead, then set the canonical link manually via
-   Story settings -> Advanced settings -> "This story was originally published elsewhere".
-5. Add tags manually (Medium allows 5): ${post.tags.join(', ') || '(none)'}
-6. Review formatting, then Publish.
+1. New story at https://medium.com/new-story
+2. Title: ${post.title}
+3. Paste everything between the BEGIN/END markers below.
+   ${hasVideo ? '- The bare youtu.be line becomes an embedded player after a beat — leave it on its own line.\n   ' : ''}${hasTables ? '- Tables are monospace blocks on purpose: Medium has no native table block.\n   ' : ''}- Code fences, quotes and headings paste through as-is.
+4. Set the canonical link (SEO): Story settings -> Advanced settings ->
+   "This story was originally published elsewhere" -> ${post.canonicalUrl}
+5. Tags (Medium allows 5): ${post.tags.join(', ') || '(none)'}
+6. Preview, then Publish.
 
-## Post body (fallback copy-paste source)
+## Alternative: importer (fast, but no table fidelity)
 
-Canonical: ${post.canonicalUrl}
+- https://medium.com/p/import with ${post.canonicalUrl} — sets canonical
+  automatically, but Medium flattens HTML tables; prefer the paste path above
+  for this series.
 
 ---
 
-${post.body}
+Canonical: ${post.canonicalUrl}
+${hasVideo ? `Video: https://youtu.be/${post.videoId}\n` : ''}
+=== BEGIN PASTE BODY ===
+
+${mediumBody(post)}
+
+=== END PASTE BODY ===
 `;
 }
 

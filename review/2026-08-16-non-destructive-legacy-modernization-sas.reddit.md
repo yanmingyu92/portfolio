@@ -1,4 +1,4 @@
-# Reddit draft — Modernizing a 558-Macro SAS Library Without Touching a Line of Validated Code
+# Reddit draft — Modernizing a 558-Macro SAS Library Without Touching Validated Code
 
 ## Title suggestion
 How are people automating sas? I wrote up an approach that worked for me
@@ -9,7 +9,7 @@ I've been trying to automate parts of my sas pipeline and kept running
 into the same friction: the pieces exist, but stitching them together
 reliably is where everything falls apart.
 
-A bridge map, typed intermediate representation, and orchestrator wrap a legacy SAS TFL library unchanged — delivering AI-ready JSON on day one and 80%+ cell-level parity.
+A bridge map, typed IR, and orchestrator wrap a legacy SAS TFL library unchanged — AI-ready JSON on day one, 80%+ cell-level parity, optional 92% code cut.
 
 A few things that made a difference for me:
 

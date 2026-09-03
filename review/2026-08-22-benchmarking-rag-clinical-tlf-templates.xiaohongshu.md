@@ -1,16 +1,16 @@
-# 小红书草稿 — What Hybrid RAG Buys You in TLF Template Generation: 1,999 Bootstrap Experiments
+# 小红书草稿 — Benchmarking RAG for Clinical TLF Templates: 1,999 Experiments
 
-## 文案(需 ≤300 字,当前约 199 字)
+## 文案(需 ≤300 字,当前约 181 字)
 
-✨ What Hybrid RAG Buys You in TLF Template Generation: 1,999 Bootstrap Experiments
+✨ Benchmarking RAG for Clinical TLF Templates: 1,999 Experiments
 
-Benchmarking five LLM generation methods for ICH E3-conformant TLF templates ...
+Five LLM generation methods benchmarked across 1,999 bootstrap experiments on...
 
 完整文章在我的个人博客,链接见主页 👉 jaimeyan.com
 
 ## 轮播图文案大纲(5 页)
 
-1. **封面页**:标题「What Hybrid RAG Buys You in TLF Template Generation: 1,999 Bootstrap Experiments」+ 一句钩子(Benchmarking five LLM generation methods for ICH E3-conformant TLF templates ...)
+1. **封面页**:标题「Benchmarking RAG for Clinical TLF Templates: 1,999 Experiments」+ 一句钩子(Five LLM generation methods benchmarked across 1,999 bootstrap experiments on...)
 2. **痛点页**:大家在这个场景下最常遇到的 2-3 个问题
 3. **方法页**:我的解决思路概览(对应文章核心部分)
 4. **细节页**:关键步骤或代码/工具截图占位

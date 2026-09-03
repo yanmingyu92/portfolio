@@ -1,16 +1,16 @@
-# 小红书草稿 — Five Years of Automation Evidence in Statistical Programming — Most of It Is Low-Grade
+# 小红书草稿 — Five Years of Automation Evidence: Real Gains, Mostly Low Grades
 
-## 文案(需 ≤300 字,当前约 205 字)
+## 文案(需 ≤300 字,当前约 183 字)
 
-✨ Five Years of Automation Evidence in Statistical Programming — Most of It Is Low-Grade
+✨ Five Years of Automation Evidence: Real Gains, Mostly Low Grades
 
-A GRADE-rated review of 2020–2025 automation evidence for clinical statistica...
+A GRADE-rated review of 2020–2025 automation evidence in statistical programm...
 
 完整文章在我的个人博客,链接见主页 👉 jaimeyan.com
 
 ## 轮播图文案大纲(5 页)
 
-1. **封面页**:标题「Five Years of Automation Evidence in Statistical Programming — Most of It Is Low-Grade」+ 一句钩子(A GRADE-rated review of 2020–2025 automation evidence for clinical statistica...)
+1. **封面页**:标题「Five Years of Automation Evidence: Real Gains, Mostly Low Grades」+ 一句钩子(A GRADE-rated review of 2020–2025 automation evidence in statistical programm...)
 2. **痛点页**:大家在这个场景下最常遇到的 2-3 个问题
 3. **方法页**:我的解决思路概览(对应文章核心部分)
 4. **细节页**:关键步骤或代码/工具截图占位

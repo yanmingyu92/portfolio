@@ -1,16 +1,16 @@
-# 小红书草稿 — Modernizing a 558-Macro SAS Library Without Touching a Line of Validated Code
+# 小红书草稿 — Modernizing a 558-Macro SAS Library Without Touching Validated Code
 
-## 文案(需 ≤300 字,当前约 196 字)
+## 文案(需 ≤300 字,当前约 186 字)
 
-✨ Modernizing a 558-Macro SAS Library Without Touching a Line of Validated Code
+✨ Modernizing a 558-Macro SAS Library Without Touching Validated Code
 
-A bridge map, typed intermediate representation, and orchestrator wrap a lega...
+A bridge map, typed IR, and orchestrator wrap a legacy SAS TFL library unchan...
 
 完整文章在我的个人博客,链接见主页 👉 jaimeyan.com
 
 ## 轮播图文案大纲(5 页)
 
-1. **封面页**:标题「Modernizing a 558-Macro SAS Library Without Touching a Line of Validated Code」+ 一句钩子(A bridge map, typed intermediate representation, and orchestrator wrap a lega...)
+1. **封面页**:标题「Modernizing a 558-Macro SAS Library Without Touching Validated Code」+ 一句钩子(A bridge map, typed IR, and orchestrator wrap a legacy SAS TFL library unchan...)
 2. **痛点页**:大家在这个场景下最常遇到的 2-3 个问题
 3. **方法页**:我的解决思路概览(对应文章核心部分)
 4. **细节页**:关键步骤或代码/工具截图占位

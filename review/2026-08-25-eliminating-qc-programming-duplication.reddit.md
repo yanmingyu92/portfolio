@@ -1,4 +1,4 @@
-# Reddit draft — Double Programming Without the Duplication: AI-Generated Independent QC Code
+# Reddit draft — Double Programming Without the Duplication: AI-Generated QC Code
 
 ## Title suggestion
 How are people automating qc-programming? I wrote up an approach that worked for me
@@ -9,7 +9,7 @@ I've been trying to automate parts of my qc-programming pipeline and kept runnin
 into the same friction: the pieces exist, but stitching them together
 reliably is where everything falls apart.
 
-QC double-programming consumes 30-50% of TLF effort. AI-generated independent QC code cuts duplication while keeping operational independence intact.
+Independent QC re-programming costs 30–50% of clinical programming effort. An AI framework matched 97.1–100% of variables while keeping independence intact.
 
 A few things that made a difference for me:
 

@@ -1,4 +1,4 @@
-# Reddit draft — Thin MCP, Thick Skills: A Five-Layer Architecture for Clinical Programming Agents
+# Reddit draft — Thin MCP, Thick Skills: Five Layers for Clinical Programming Agents
 
 ## Title suggestion
 How are people automating llm-agents? I wrote up an approach that worked for me

@@ -1,4 +1,4 @@
-# Reddit draft — Synthetic ADaM Data That Actually Holds Together: Knowledge Graphs, LLMs, and Faker Templates
+# Reddit draft — Synthetic ADaM That Survives a Join: Knowledge Graphs, LLMs, Faker
 
 ## Title suggestion
 How are people automating synthetic-data? I wrote up an approach that worked for me

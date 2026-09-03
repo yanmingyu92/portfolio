@@ -1,8 +1,8 @@
-# 小红书草稿 — Synthetic ADaM Data That Actually Holds Together: Knowledge Graphs, LLMs, and Faker Templates
+# 小红书草稿 — Synthetic ADaM That Survives a Join: Knowledge Graphs, LLMs, Faker
 
-## 文案(需 ≤300 字,当前约 212 字)
+## 文案(需 ≤300 字,当前约 185 字)
 
-✨ Synthetic ADaM Data That Actually Holds Together: Knowledge Graphs, LLMs, and Faker Templates
+✨ Synthetic ADaM That Survives a Join: Knowledge Graphs, LLMs, Faker
 
 Schema-only synthetic ADaM generation plateaus at 0.45 overall quality; enric...
 
@@ -10,7 +10,7 @@ Schema-only synthetic ADaM generation plateaus at 0.45 overall quality; enric...
 
 ## 轮播图文案大纲(5 页)
 
-1. **封面页**:标题「Synthetic ADaM Data That Actually Holds Together: Knowledge Graphs, LLMs, and Faker Templates」+ 一句钩子(Schema-only synthetic ADaM generation plateaus at 0.45 overall quality; enric...)
+1. **封面页**:标题「Synthetic ADaM That Survives a Join: Knowledge Graphs, LLMs, Faker」+ 一句钩子(Schema-only synthetic ADaM generation plateaus at 0.45 overall quality; enric...)
 2. **痛点页**:大家在这个场景下最常遇到的 2-3 个问题
 3. **方法页**:我的解决思路概览(对应文章核心部分)
 4. **细节页**:关键步骤或代码/工具截图占位

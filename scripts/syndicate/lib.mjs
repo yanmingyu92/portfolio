@@ -109,7 +109,7 @@ const REQUIRED_FIELDS = ['title', 'date', 'description', 'canonicalPath'];
 
 /**
  * Load one post file: parse + validate frontmatter, derive slug/canonical URL.
- * Returns { filePath, slug, title, date, description, tags, draft, canonicalPath, canonicalUrl, body }.
+ * Returns { filePath, slug, title, date, description, tags, draft, canonicalPath, canonicalUrl, videoId, explainer, body }.
  */
 export async function loadPost(filePath, config) {
   const abs = path.isAbsolute(filePath) ? filePath : path.join(REPO_ROOT, filePath);
@@ -139,6 +139,8 @@ export async function loadPost(filePath, config) {
     draft: data.draft === true,
     canonicalPath,
     canonicalUrl,
+    videoId: data.videoId ? String(data.videoId) : null,
+    explainer: data.explainer ? String(data.explainer) : null,
     body,
   };
 }

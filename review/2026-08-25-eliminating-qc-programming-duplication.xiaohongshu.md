@@ -1,16 +1,16 @@
-# 小红书草稿 — Double Programming Without the Duplication: AI-Generated Independent QC Code
+# 小红书草稿 — Double Programming Without the Duplication: AI-Generated QC Code
 
-## 文案(需 ≤300 字,当前约 195 字)
+## 文案(需 ≤300 字,当前约 183 字)
 
-✨ Double Programming Without the Duplication: AI-Generated Independent QC Code
+✨ Double Programming Without the Duplication: AI-Generated QC Code
 
-QC double-programming consumes 30-50% of TLF effort. AI-generated independent...
+Independent QC re-programming costs 30–50% of clinical programming effort. An...
 
 完整文章在我的个人博客,链接见主页 👉 jaimeyan.com
 
 ## 轮播图文案大纲(5 页)
 
-1. **封面页**:标题「Double Programming Without the Duplication: AI-Generated Independent QC Code」+ 一句钩子(QC double-programming consumes 30-50% of TLF effort. AI-generated independent...)
+1. **封面页**:标题「Double Programming Without the Duplication: AI-Generated QC Code」+ 一句钩子(Independent QC re-programming costs 30–50% of clinical programming effort. An...)
 2. **痛点页**:大家在这个场景下最常遇到的 2-3 个问题
 3. **方法页**:我的解决思路概览(对应文章核心部分)
 4. **细节页**:关键步骤或代码/工具截图占位

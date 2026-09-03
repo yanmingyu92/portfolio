@@ -1,29 +1,42 @@
-# Medium import draft — Modernizing a 558-Macro SAS Library Without Touching a Line of Validated Code
+# Medium upload-ready draft — Modernizing a 558-Macro SAS Library Without Touching Validated Code
 
-## How to publish (Medium killed its public API, so import is the supported path)
+## Publish (paste path — recommended for this post: it has tables, which the importer mangles)
 
-1. Open the import tool: https://medium.com/p/import
-2. Paste the canonical URL: https://jaimeyan.com/blog/non-destructive-legacy-modernization-sas.html
-3. Medium will fetch the post and set the canonical link back to jaimeyan.com automatically.
-4. If the import fetch fails (JS-rendered page), copy the body below into a new
-   story instead, then set the canonical link manually via
-   Story settings -> Advanced settings -> "This story was originally published elsewhere".
-5. Add tags manually (Medium allows 5): sas, legacy-modernization, clinical-trials, llm-integration, statistical-programming
-6. Review formatting, then Publish.
+1. New story at https://medium.com/new-story
+2. Title: Modernizing a 558-Macro SAS Library Without Touching Validated Code
+3. Paste everything between the BEGIN/END markers below.
+   - Tables are monospace blocks on purpose: Medium has no native table block.
+   - Code fences, quotes and headings paste through as-is.
+4. Set the canonical link (SEO): Story settings -> Advanced settings ->
+   "This story was originally published elsewhere" -> https://jaimeyan.com/blog/non-destructive-legacy-modernization-sas.html
+5. Tags (Medium allows 5): sas, legacy-modernization, clinical-trials, llm-integration, statistical-programming
+6. Preview, then Publish.
 
-## Post body (fallback copy-paste source)
+## Alternative: importer (fast, but no table fidelity)
 
-Canonical: https://jaimeyan.com/blog/non-destructive-legacy-modernization-sas.html
+- https://medium.com/p/import with https://jaimeyan.com/blog/non-destructive-legacy-modernization-sas.html — sets canonical
+  automatically, but Medium flattens HTML tables; prefer the paste path above
+  for this series.
 
 ---
 
-Every large pharma company has one: a SAS macro library built up over 10–20 years that produces every table, figure, and listing in its regulatory submissions. Mine had 558 callable components across 400 source files — 372,698 lines of SAS 9.4 code, averaging 932 lines per file, with some files over 3,000. The macros encode validated statistical logic that regulators have reviewed for years. They also emit exactly one thing: RTF.
+Canonical: https://jaimeyan.com/blog/non-destructive-legacy-modernization-sas.html
 
-That RTF is the wall. An LLM can't reason over a p-value buried in font directives. Cloud platforms can't run monolithic macros with hard-coded parameters. And the obvious fix — rewrite in R or Python — abandons validated logic and triggers re-validation costs that usually exceed the perceived benefit. No surprise, then, that an estimated 70–80% of FDA electronic submissions still ride on SAS output no AI tool can read.
+=== BEGIN PASTE BODY ===
 
-The framework I describe in a recent preprint takes a third path: **don't modify the legacy library at all. Wrap it.**
+Every large pharma company has one: a SAS macro library built up over 10–20 years that produces every table, figure, and listing in its regulatory submissions. Mine had 558 callable components across 400 source files — 372,698 lines of SAS 9.4 code, with some files over 3,000 lines. The macros encode validated statistical logic that regulators have reviewed for years. They also emit exactly one thing: RTF.
 
-## The wrap: bridge map + IR + orchestrator
+An LLM can't reason over a p-value buried in font directives. And the obvious fix — rewrite in R or Python — abandons validated logic and triggers re-validation costs that usually exceed the perceived benefit.
+
+> **TL;DR** — A metadata layer (bridge map, typed intermediate representation, Python orchestrator) wraps the library unchanged: AI-ready JSON on day one, 11 of 14 real-study reports at ≥80% cell-level parity, and 100% parity on the public CDISCPilot01 benchmark. Consolidation is a separate opt-in track that cut SAS code 92% when exercised.
+
+## The wall: validated code, RTF-only output
+
+RTF is the wall. Cloud platforms can't run monolithic macros with hard-coded parameters. AI tools can't parse presentation markup into numbers. An estimated 70–80% of FDA electronic submissions still ride on SAS output that no AI tool can read.
+
+So the choice looks binary: keep the validated library and stay AI-blind, or rewrite and re-validate. The framework I describe in a recent preprint takes a third path: **don't modify the legacy library at all. Wrap it.**
+
+## The wrap: bridge map, typed IR, orchestrator
 
 Three artifacts make up the metadata layer:
 
@@ -31,16 +44,26 @@ Three artifacts make up the metadata layer:
 - **Intermediate Representation (IR)** — every report becomes two typed datasets. `ir_cells` holds one row per cell with the raw numeric `cell_value`, the display string, and a `cell_type` from a controlled vocabulary (INTEGER, DECIMAL, PVALUE, PERCENTAGE, TEXT, HEADER, LABEL, FOOTNOTE, EMPTY). `ir_structure` defines the row/column grid. A reconcile step traces every numeric cell back to its source statistic within a 1×10⁻¹⁰ tolerance.
 - **Python orchestrator** — 48 modules (15,855 LOC) that resolve YAML configuration, dispatch executions, and export the IR as JSON. It sits outside the regulated boundary; SAS keeps exclusive ownership of regulated computation.
 
+Figure: [Pipeline: bridge map and orchestrator wrap unchanged legacy SAS macros and export a typed IR as AI-ready JSON](https://jaimeyan.com/figures/non-destructive-legacy-modernization-sas-arch.svg)
+
+*Figure 1: Coexistence mode — metadata wraps the unchanged library, and the adapter captures output into the typed IR.*
+
 In **coexistence mode**, a bridge entry's `native_target` points at the original legacy macro plus adapter metadata. The macro runs unchanged inside its existing validation envelope; the adapter captures its output into the IR. The deployment surface an organization manipulates is metadata, not source — so the library's regulatory standing is preserved by default, and AI-ready JSON is a Day-0 deliverable, not the end state of a multi-year rewrite.
 
-## Proof it doesn't break outputs: parity validation
+## Proving the wrap doesn't break outputs
 
 Wrapping is only credible if you can show the outputs still match. The parity harness runs each report through both a legacy driver and a native driver on identical input, then compares cell by cell, behind a seven-gate workflow (structural pre-flight, bridge-map self-audit, syntax smoke test, unit tests, live parity, triage, full matrix).
 
-Two tracks:
+```text
+Validation track                              |  Reports                                                                     |  Cell-level parity result
+----------------------------------------------+------------------------------------------------------------------------------+--------------------------------------------------------------
+Real data — PROT008-SR1 (internal Phase III)  |  14 report types: AE, baseline, disposition, ECG, lab, compliance, listings  |  11/14 ≥ 80% threshold (mean 82.7%, median 89.6%, best 99.2%)
+Public benchmark — CDISC CDISCPilot01         |  5 report types                                                              |  100% — 4,764 cells, 0 mismatches
+```
 
-- **Real data (PROT008-SR1, an internal Phase III study):** 14 report types spanning AE summaries, baseline characteristics, disposition, ECG, lab, compliance, and listings. 11 of 14 cleared the pre-defined 80% cell-level parity threshold (mean 82.7%, median 89.6%, best 99.2%). Getting from 8/14 to 11/14 took 72 targeted fixes — all at the framework layer, across twelve recurring divergence categories (denominator handling, zero-fill of sparse cells, TRT01A-vs-TRTA naming, RTF Unicode fallbacks). Fix once, apply everywhere.
-- **Public benchmark (CDISC CDISCPilot01):** 5 report types, 100% cell-level parity — 4,764 cells, 0 mismatches.
+*Table 1: Parity validation results for the wrapped library on real and public data.*
+
+Getting from 8/14 to 11/14 on the real-data track took 72 targeted fixes — all at the framework layer, across twelve recurring divergence categories (denominator handling, zero-fill of sparse cells, TRT01A-vs-TRTA naming, RTF Unicode fallbacks). Fix once, apply everywhere.
 
 The three real-data reports below 80% have a documented structural ceiling, not computational errors: the legacy macros use PROC TRANSPOSE to pivot treatments into rows, a different table geometry that cell-level comparison can't reconcile without a transpose-aware alignment layer.
 
@@ -52,9 +75,9 @@ Because the IR is typed, an LLM stops parsing and starts reasoning. In proof-of-
 - **Anomaly detection:** five of five expected clinical patterns found with zero false positives — including the dose-response in application-site erythema (8.1% placebo → 41.7% low dose → 61.9% high dose) and a SOC-vs-PT consistency check done arithmetically on raw `cell_value`s.
 - **Configuration generation:** all five requirements from a natural-language SAP excerpt (Kaplan-Meier, Cox, log-rank, censoring, time variables) mapped to structurally valid YAML.
 
-Critically, the table inputs came from legacy macros running *unchanged* in coexistence mode — this AI surface is what you get on day one, before any consolidation.
+The table inputs came from legacy macros running *unchanged* in coexistence mode — this AI surface is what you get on day one, before any consolidation.
 
-## Where you can go further (optionally)
+## Optional consolidation: the measured upper bound
 
 Consolidation is a separate, opt-in track riding the same bridge map: flip an entry's `native_target` to a parameterized core macro. Exercising it across the whole library collapsed 558 components to 158 SAS files and cut SAS code 92% (28,340 vs. 372,698 LOC), with 147 YAML files covering 39 report types. I report that as a measured upper bound on the optional pathway, not a precondition — you can consolidate aggressively, conservatively, or never.
 
@@ -62,4 +85,13 @@ Consolidation is a separate, opt-in track riding the same bridge map: flip an en
 
 The methodology was validated on one library at one organization. Only 19 of 365 bridge entries have full end-to-end parity (the rest passed unit-level gate checks). The LLM experiments used a single model with no controlled IR-vs-RTF comparison. And the framework is Part 11-compatible by design but has not undergone formal IQ/OQ/PQ qualification — coexistence mode reduces that burden, it doesn't eliminate it.
 
-Still, the core claim held up: you don't have to choose between keeping a validated SAS library and making it AI-readable. Wrap it, prove parity cell by cell, and modernize at your own pace. Details are in the [full paper](/papers/legacy-modernization-framework.html) (arXiv preprint, May 2026).
+## Key takeaways
+
+- You can modernize a validated SAS library without modifying it: wrap it in a metadata layer and keep SAS inside the regulated boundary.
+- Parity must be proven cell by cell — 11 of 14 real-study reports cleared the 80% threshold, and the public benchmark hit 100% across 4,764 cells.
+- A typed IR turns RTF-bound tables into LLM input on day one: exact-match cell extraction, zero-false-positive anomaly detection, and SAP-to-YAML config generation all ran on coexistence output.
+- Consolidation is optional and rides the same bridge map; exercised fully, it collapsed 558 components to 158 files and cut SAS code 92%.
+
+Still, the core claim held up: you don't have to choose between keeping a validated SAS library and making it AI-readable. Wrap it, prove parity cell by cell, and modernize at your own pace. Details are in the [full paper](https://jaimeyan.com/papers/legacy-modernization-framework.html) (arXiv preprint, May 2026).
+
+=== END PASTE BODY ===

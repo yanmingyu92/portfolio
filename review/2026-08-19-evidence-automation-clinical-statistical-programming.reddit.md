@@ -1,4 +1,4 @@
-# Reddit draft — Five Years of Automation Evidence in Statistical Programming — Most of It Is Low-Grade
+# Reddit draft — Five Years of Automation Evidence: Real Gains, Mostly Low Grades
 
 ## Title suggestion
 How are people automating statistical-programming? I wrote up an approach that worked for me
@@ -9,7 +9,7 @@ I've been trying to automate parts of my statistical-programming pipeline and ke
 into the same friction: the pieces exist, but stitching them together
 reliably is where everything falls apart.
 
-A GRADE-rated review of 2020–2025 automation evidence for clinical statistical programming: real gains, but predominantly Low to Very Low quality evidence.
+A GRADE-rated review of 2020–2025 automation evidence in statistical programming: real gains, mostly Low to Very Low quality evidence.
 
 A few things that made a difference for me:
 

@@ -1,29 +1,42 @@
-# Medium import draft — Thin MCP, Thick Skills: A Five-Layer Architecture for Clinical Programming Agents
+# Medium upload-ready draft — Thin MCP, Thick Skills: Five Layers for Clinical Programming Agents
 
-## How to publish (Medium killed its public API, so import is the supported path)
+## Publish (paste path — recommended for this post: it has tables, which the importer mangles)
 
-1. Open the import tool: https://medium.com/p/import
-2. Paste the canonical URL: https://jaimeyan.com/blog/five-layer-architecture-clinical-agents.html
-3. Medium will fetch the post and set the canonical link back to jaimeyan.com automatically.
-4. If the import fetch fails (JS-rendered page), copy the body below into a new
-   story instead, then set the canonical link manually via
-   Story settings -> Advanced settings -> "This story was originally published elsewhere".
-5. Add tags manually (Medium allows 5): llm-agents, mcp, clinical-trials, statistical-programming, agent-architecture
-6. Review formatting, then Publish.
+1. New story at https://medium.com/new-story
+2. Title: Thin MCP, Thick Skills: Five Layers for Clinical Programming Agents
+3. Paste everything between the BEGIN/END markers below.
+   - Tables are monospace blocks on purpose: Medium has no native table block.
+   - Code fences, quotes and headings paste through as-is.
+4. Set the canonical link (SEO): Story settings -> Advanced settings ->
+   "This story was originally published elsewhere" -> https://jaimeyan.com/blog/five-layer-architecture-clinical-agents.html
+5. Tags (Medium allows 5): llm-agents, mcp, clinical-trials, statistical-programming, agent-architecture
+6. Preview, then Publish.
 
-## Post body (fallback copy-paste source)
+## Alternative: importer (fast, but no table fidelity)
 
-Canonical: https://jaimeyan.com/blog/five-layer-architecture-clinical-agents.html
+- https://medium.com/p/import with https://jaimeyan.com/blog/five-layer-architecture-clinical-agents.html — sets canonical
+  automatically, but Medium flattens HTML tables; prefer the paste path above
+  for this series.
 
 ---
 
-Ask your favorite AI coding agent — Claude Code, Cursor, Augment, Cline — to review the SAS log from an ADSL derivation. It will happily try. Now ask it to read the SAS7BDAT dataset itself, parse the ADaM specification Excel, or tell a real `ERROR:` apart from a harmless "Unable to copy SASUSER" warning. It can't — not because the model can't reason, but because none of the domain tools exist.
+Canonical: https://jaimeyan.com/blog/five-layer-architecture-clinical-agents.html
+
+=== BEGIN PASTE BODY ===
+
+Ask your favorite AI coding agent — Claude Code, Cursor, Cline, Augment Code — to review the SAS log from an ADSL derivation. It will happily try. Now ask it to read the SAS7BDAT dataset itself, parse the ADaM specification Excel, or tell a real `ERROR:` apart from a harmless "Unable to copy SASUSER" warning. It can't — not because the model can't reason, but because none of the domain tools exist.
 
 That gap — tooling, not reasoning — is what the ClinAgent architecture in my medRxiv preprint is built to close. The design rule is one sentence: **thin MCP, thick skills**.
 
+> **TL;DR** — ClinAgent is a five-layer stack that gives any MCP-compatible agent clinical programming capability: stateless MCP tools for data access, thick and testable skills for domain logic, and an infrastructure layer for the GxP compliance trail. Validated on a production Phase 2 study, all nine skills passed functional testing.
+
 ## The five layers
 
-ClinAgent is not an agent. It's a skill-and-tool layer that any MCP-compatible agent can invoke, organized as five layers:
+ClinAgent is not an agent. It is a skill-and-tool layer that any MCP-compatible agent can invoke, organized as five layers:
+
+Figure: [The five-layer ClinAgent architecture: agent on top, then A2UI, skill router, thick skills, thin MCP tools, and compliance infrastructure](https://jaimeyan.com/figures/five-layer-architecture-clinical-agents-layers.svg)
+
+*Figure 1: The ClinAgent stack. The agent reasons; the layers below supply domain expertise, deterministic rules, and the compliance trail.*
 
 1. **A2UI (results rendering)** — validation dashboards, log tables, RTF viewers: deterministic presentation of results for human review.
 2. **Skill router** — maps incoming tool calls to the right skill and validates inputs before anything executes.
@@ -31,7 +44,7 @@ ClinAgent is not an agent. It's a skill-and-tool layer that any MCP-compatible a
 4. **MCP tools (thin)** — stateless I/O only: read a SAS dataset, parse an Excel spec, read a log file. They don't know what ADSL is or which variables matter.
 5. **Infrastructure** — AuditLogger (every tool invocation with timestamps, inputs, outputs), DataMasker (PHI/PII stripped before data reaches agent context), AccessControl, and context minimization.
 
-The agent does the reasoning. ClinAgent supplies the domain expertise and the compliance trail.
+The agent does the reasoning. ClinAgent supplies the domain expertise and the compliance trail. Swap the agent — whichever one your organization approved — and the skill layer keeps working unchanged.
 
 ## Why thick skills beat fat prompts
 
@@ -55,20 +68,39 @@ Extensibility falls out of the same choice. Adding a new capability (the preprin
 
 ## What the validation showed
 
-I validated all nine skills on artifacts from a production Phase 2 cardiovascular study: expert-written SAS programs, reviewed logs, and synthetic Faker-generated datasets matching the study structure (11 ADaM domains, 93,239 observations — no patient data). The evaluation targets tool correctness, not LLM reasoning, which is agent-dependent and out of scope.
+I validated all nine skills on artifacts from a production Phase 2 cardiovascular study: expert-written SAS programs, reviewed logs, and synthetic Faker-generated datasets matching the study structure (11 ADaM domains, 93,239 observations — no patient data). The evaluation targets tool correctness, not LLM reasoning, which is agent-dependent and out of scope. All nine skills passed functional validation.
 
-- **9/9 skills passed** functional validation.
-- **Log analysis (SK-005):** 1 error and 7 warnings across 10 logs, detected with 100% precision and zero false positives — against 13,595 clean NOTE lines.
-- **Data validation (SK-006):** all 56/56 ADSL variables matched the specification.
-- **Spec generation (the prompt-based component):** 72.1% derivation accuracy overall (95% Wilson CI [67.1%, 76.7%]), above 96% on simple domains like ADMH, ADEX, and ADCM.
-- **TLF code generation (SK-007):** 12 of 16 programs generated; 4 skipped because the specs lacked macro names — a data-quality issue, not a skill failure.
+```text
+Skill                   |  Task                                          |  Result
+------------------------+------------------------------------------------+-----------------------------------------------------------------------------------------
+SK-005 log analysis     |  Classify errors/warnings in 10 reviewed logs  |  1 error, 7 warnings; 100% precision, zero false positives over 13,595 clean NOTE lines
+SK-006 data validation  |  Check ADSL against its specification          |  56/56 variables matched
+Spec generation         |  Derive ADaM specs (prompt-based component)    |  72.1% derivation accuracy (95% Wilson CI [67.1%, 76.7%]); above 96% on ADMH, ADEX, ADCM
+SK-007 TLF generation   |  Generate TLF programs from specs              |  12/16 generated; 4 skipped because specs lacked macro names
+```
 
-The most interesting result is the failure mode. Derivation accuracy correlates strongly and negatively with the proportion of study-specific derived variables (Spearman ρ = −0.867, p = 0.003): ADSL hit 54.3% and ADBASE — almost entirely custom baseline flags — hit 0.0%. Of the 115 missing variables, 58.3% were study-specific derivations that no generic prompt can know about. That's exactly the knowledge that belongs in a thick, organization-specific skill, not in a fatter generic prompt.
+*Table 1: Functional validation on the Phase 2 study artifacts. The four skipped TLFs were a data-quality issue in the input specs, not a skill failure.*
+
+The most interesting result is the failure mode. Derivation accuracy correlates strongly and negatively with the proportion of study-specific derived variables (Spearman ρ = −0.867, p = 0.003): ADSL hit 54.3% and ADBASE — almost entirely custom baseline flags — hit 0.0%. Of the 115 missing variables, 58.3% were study-specific derivations that no generic prompt can know about. That is exactly the knowledge that belongs in a thick, organization-specific skill, not in a fatter generic prompt.
 
 ## Honest limitations
 
 The preprint is explicit about what this does *not* show. It's a single Phase 2 study; the log-detection result rests on exactly one real error (Wilson CI [20.7%, 100.0%]), so "100% precision" is a point estimate, not proof. End-to-end productivity gains were not measured — a controlled timing study is future work — and generative accuracy depends on well-structured input specs, as the four skipped TLFs demonstrate.
 
-The architectural claim survives these caveats, though: put deterministic, testable domain logic in skills; keep data access thin and stateless; let the user's agent — whichever one their organization approved — do the reasoning.
+The architectural claim survives these caveats, though: put deterministic, testable domain logic in skills; keep data access thin and stateless; let the user's agent do the reasoning.
 
-Full details are in the [full paper](/papers/clinagent-five-layer.html) (medRxiv preprint; the peer-reviewed version appears in *Biology Methods and Protocols*).
+## Key takeaways
+
+- Put deterministic domain rules — log patterns, spec checks — in testable skill-side JSON, never in prompts or compiled into MCP servers.
+- Keep MCP tools thin and stateless: they read data, they never interpret it.
+- The agent is interchangeable; the skill layer is what carries clinical expertise, so invest there.
+- Generative accuracy collapses on study-specific derivations (ADBASE scored 0.0%) — that knowledge must be encoded per organization, not expected from a generic prompt.
+- Single-study results are point estimates, not proof; end-to-end productivity gains remain unmeasured future work.
+
+The [full paper](https://jaimeyan.com/papers/clinagent-five-layer.html) has the complete skill inventory, rule schemas, and per-domain accuracy breakdown (medRxiv preprint; the peer-reviewed version appears in *Biology Methods and Protocols*).
+
+---
+
+*Prefer the interactive version? Step through the animated walkthrough: https://jaimeyan.com/explainers/five-layer-agent-architecture.html*
+
+=== END PASTE BODY ===
