@@ -1,0 +1,757 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thin MCP, Thick Skills — Interactive Walkthrough — Jaime Yan</title>
+<meta name="description" content="Interactive walkthrough of ClinAgent's five-layer architecture for clinical programming agents: why domain logic lives in testable skill-side JSON, how one tool call travels the stack, and what the validation proved.">
+<link rel="canonical" href="https://jaimeyan.com/explainers/five-layer-agent-architecture.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231c1917'/%3E%3Cpath d='M8 10l8 7 8-7' stroke='%23fafaf9' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":["TechArticle","LearningResource"],
+"headline":"Thin MCP, Thick Skills — Interactive Walkthrough",
+"description":"An interactive, step-by-step walkthrough of ClinAgent's five-layer architecture: thin stateless MCP tools, thick testable skills, and the compliance infrastructure underneath — including the failure mode the validation exposed.",
+"datePublished":"2026-09-02","dateModified":"2026-09-02",
+"url":"https://jaimeyan.com/explainers/five-layer-agent-architecture.html",
+"inLanguage":"en","learningResourceType":"interactive explainer","interactivityType":"active",
+"educationalUse":["explanation","self study"],
+"teaches":["thin MCP / thick skills separation","five-layer agent architecture for clinical programming","deterministic rule engines versus LLM interpretation","validating tool correctness rather than LLM reasoning","the study-specific derivation failure mode"],
+"author":{"@type":"Person","name":"Jaime Yan","url":"https://jaimeyan.com","jobTitle":"Associate Director, Statistical Programming",
+"sameAs":["https://github.com/yanmingyu92","https://www.linkedin.com/in/jaime-y-66312a133/","https://scholar.google.com/citations?user=vo1hv04AAAAJ","https://orcid.org/0009-0007-1786-7259"]},
+"isBasedOn":["https://jaimeyan.com/blog/five-layer-architecture-clinical-agents.html","https://www.medrxiv.org/content/10.64898/2026.01.09.26343542v1"]}
+</script>
+<style>
+/* ---- Design language: stone/rose (site palette, system-font fallbacks; S1) ---- */
+:root{
+  --ink:#1c1917; --ink-2:#44403c; --ink-3:#57534e;
+  --rose:#9f1239; --rose-soft:#e7d4db; --rose-bg:#fdf7f8;
+  --line:#d6d3d1; --line-2:#e7e5e4;
+  --paper:#fafaf9; --panel:#f5f5f4;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.6;font-size:16px}
+a{color:var(--rose)}
+.wrap{max-width:60rem;margin:0 auto;padding:0 1.25rem}
+
+/* ---- Masthead ---- */
+.mast{background:var(--ink);color:#fafaf9;padding:2.25rem 0 1.9rem}
+.mast .kicker{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:#d6d3d1;margin:0 0 .5rem}
+.mast .kicker a{color:#d6d3d1;text-decoration:none}
+.mast .kicker a:hover{color:#fff}
+.mast h1{font-family:var(--serif);font-weight:600;font-size:clamp(1.6rem,4vw,2.4rem);line-height:1.15;margin:0 0 .6rem;letter-spacing:-.01em}
+.mast .lede{max-width:44rem;color:#d6d3d1;margin:0;font-size:.95rem}
+.honest-banner{margin:1.25rem 0 0;padding:.55rem .85rem;border:1px solid #57534e;border-radius:.5rem;font-family:var(--mono);font-size:.72rem;color:#d6d3d1;display:inline-block}
+.honest-banner b{color:#fafaf9;font-weight:600}
+
+/* ---- Player bar ---- */
+.player{position:sticky;top:0;z-index:40;background:var(--paper);border-bottom:1px solid var(--line);backdrop-filter:none}
+.player-inner{max-width:60rem;margin:0 auto;padding:.5rem 1.25rem;display:flex;align-items:center;gap:.6rem;flex-wrap:nowrap;overflow-x:auto}
+.pbtn{font-family:var(--mono);font-size:.78rem;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:.4rem;padding:.32rem .6rem;cursor:pointer;white-space:nowrap}
+.pbtn:hover{border-color:var(--rose);color:var(--rose)}
+.pbtn[disabled]{opacity:.45;cursor:default}
+.pbtn.speed{min-width:3.2rem;text-align:center}
+.pmeta{font-family:var(--mono);font-size:.74rem;color:var(--ink-3);white-space:nowrap;margin-left:auto}
+.pdots{display:flex;gap:.3rem;align-items:center}
+.pdot{width:.45rem;height:.45rem;border-radius:50%;background:var(--line);border:0;padding:0;cursor:pointer}
+.pdot.done{background:var(--rose-soft)}
+.pdot.now{background:var(--rose)}
+.kbd-hint{font-family:var(--mono);font-size:.68rem;color:var(--ink-3);padding:.4rem 1.25rem .5rem;max-width:60rem;margin:0 auto}
+.kbd-hint kbd{border:1px solid var(--line);border-bottom-width:2px;border-radius:.25rem;padding:0 .3rem;background:var(--panel);font-family:var(--mono)}
+html:not(.js) .player,html.static .player{display:none}
+.static-note{display:none;font-family:var(--mono);font-size:.72rem;color:var(--ink-3);padding:.55rem 1.25rem;border-bottom:1px solid var(--line)}
+html.static .static-note{display:block}
+
+/* ---- Scenes ---- */
+main{padding-bottom:4rem}
+.scene{padding:2.5rem 0 1.75rem;border-bottom:1px solid var(--line-2)}
+.scene.inview{animation:none}
+.scene-head{display:flex;align-items:baseline;gap:.75rem;flex-wrap:wrap;margin-bottom:.25rem}
+.scene-no{font-family:var(--mono);font-size:.72rem;color:var(--rose);letter-spacing:.1em}
+.scene h2{font-family:var(--serif);font-weight:600;font-size:1.35rem;margin:.1rem 0 .4rem;letter-spacing:-.01em}
+.scene-sub{color:var(--ink-2);font-size:.92rem;max-width:46rem;margin:0 0 1rem}
+
+/* stage + figure: fixed viewBox, beats only ever toggle opacity/transform (S7) */
+.stage{border:1px solid var(--line);border-radius:.6rem;background:#fff;padding:.75rem;margin:0 0 .9rem;overflow-x:auto}
+.stage svg{display:block;width:100%;height:auto;min-width:min(100%,340px)}
+text{font-family:var(--sans)}
+.t-mono{font-family:var(--mono)}
+
+/* beat reveal: visible by default (no-JS final state, S6); JS dims future beats */
+[data-beat]{transition:opacity .45s ease,transform .45s ease}
+html.js svg [data-beat]{opacity:0;transform:translateY(6px)}
+html.js svg [data-beat].on{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  [data-beat]{transition:none!important}
+  html.js svg [data-beat]{opacity:1;transform:none}   /* S5: full final state */
+}
+
+/* caption list: all sentences live in the DOM (readable no-JS); player highlights current */
+.caption{margin:0 0 .9rem}
+.beats{list-style:none;margin:0;padding:0;counter-reset:bt}
+.beats li{position:relative;padding:.3rem 0 .3rem 2rem;font-size:.9rem;color:var(--ink-3);border-left:2px solid var(--line-2);margin-left:.9rem}
+.beats li::before{counter-increment:bt;content:counter(bt);position:absolute;left:-.95rem;top:.42rem;width:1.85rem;height:1.85rem;line-height:1.85rem;text-align:center;border-radius:50%;background:var(--panel);border:1px solid var(--line);font-family:var(--mono);font-size:.66rem;color:var(--ink-3)}
+html.js .beats li{opacity:.45}
+html.js .beats li.done{opacity:.75;color:var(--ink-2)}
+html.js .beats li.now{opacity:1;color:var(--ink);border-left-color:var(--rose)}
+html.js .beats li.now::before{background:var(--rose);border-color:var(--rose);color:#fff}
+
+/* legend + honest label + sources (S8) */
+.scene-notes{display:flex;flex-direction:column;gap:.45rem;font-size:.78rem;color:var(--ink-3)}
+.legend{display:flex;flex-wrap:wrap;gap:.35rem 1.1rem;margin:0;padding:0;list-style:none;font-family:var(--mono);font-size:.7rem}
+.legend .chip{display:inline-block;width:.8rem;height:.8rem;border-radius:.2rem;vertical-align:-.1rem;margin-right:.3rem;border:1px solid rgba(0,0,0,.12)}
+.honest{font-family:var(--mono);font-size:.68rem;color:var(--ink-3)}
+.honest b{font-weight:600;color:var(--ink-2)}
+.src{font-size:.74rem}
+.src a{white-space:nowrap}
+
+/* ---- Footer ---- */
+.foot{padding:2rem 0 3rem;color:var(--ink-3);font-size:.8rem}
+.foot p{margin:.25rem 0}
+@media (max-width:480px){
+  .pmeta{display:none}
+  .scene{padding:1.9rem 0 1.4rem}
+}
+</style>
+</head>
+<body>
+<script>document.documentElement.classList.add('js');</script>
+<header class="mast">
+  <div class="wrap">
+    <p class="kicker"><a href="https://jaimeyan.com/explainers.html">jaimeyan.com</a> / interactive explainer</p>
+    <h1>Thin MCP, Thick Skills: Five Layers for Clinical Programming Agents</h1>
+    <p class="lede">AI coding agents reason well but can't read a SAS7BDAT, parse an ADaM spec, or tell a real ERROR from a harmless warning. ClinAgent's answer is a five-layer stack &mdash; thin stateless tools, thick testable skills &mdash; validated on a production study's artifacts. Seven scenes, failure mode included.</p>
+    <p class="honest-banner"><b>Honest label:</b> teaching schematic &mdash; measured numbers are cited to the ClinAgent preprint (medRxiv 2026) by figure and table; single-study results are point estimates, and the walkthrough says so where it uses them.</p>
+  </div>
+</header>
+
+<div class="player" id="player" role="region" aria-label="Explainer player">
+  <div class="player-inner">
+    <button class="pbtn" id="btn-play" aria-label="Play or pause">Play</button>
+    <button class="pbtn" id="btn-prev" aria-label="Previous beat">&#8630; Prev</button>
+    <button class="pbtn" id="btn-next" aria-label="Next beat">Next &#8631;</button>
+    <button class="pbtn" id="btn-reset" aria-label="Reset scene">Reset</button>
+    <button class="pbtn speed" id="btn-speed" aria-label="Playback speed">1x</button>
+    <span class="pdots" id="pdots" aria-label="Scenes"></span>
+    <span class="pmeta" id="pmeta">scene &mdash; beat 0/0</span>
+  </div>
+  <p class="kbd-hint"><kbd>Space</kbd> play/pause &nbsp;<kbd>&rarr;</kbd> next beat &nbsp;<kbd>&larr;</kbd> previous beat &nbsp;<kbd>R</kbd> reset</p>
+  <p class="static-note">Static mode: animation disabled (reduced motion or no JavaScript) &mdash; every scene is shown in its complete final state.</p>
+</div>
+
+<main class="wrap" id="scenes">
+
+<!-- ============================================================ SCENE 1 -->
+<section class="scene" data-title="Smart agent, empty hands" id="s1">
+  <div class="scene-head"><span class="scene-no">SCENE 1 / 7</span></div>
+  <h2>Smart agent, empty hands</h2>
+  <p class="scene-sub">The agent can reason about clinical programming &mdash; it just can't touch the artifacts.</p>
+  <figure class="stage">
+    <svg viewBox="0 0 660 290" role="img" aria-label="An agent box on the left faces three locked artifacts: a SAS7BDAT dataset, an ADaM specification spreadsheet, and a SAS log whose real ERROR line and harmless Unable-to-copy-SASUSER warning look alike. Banner: the gap is in the tools, not the reasoning.">
+      <g data-beat="1">
+        <rect x="15" y="70" width="190" height="110" rx="10" fill="#1c1917"/>
+        <text x="110" y="112" text-anchor="middle" font-size="12" fill="#fafaf9" font-weight="600">Any MCP-compatible</text>
+        <text x="110" y="130" text-anchor="middle" font-size="12" fill="#fafaf9" font-weight="600">agent</text>
+        <text x="110" y="200" text-anchor="middle" font-size="9.5" fill="#57534e">Claude Code &#183; Cursor</text>
+        <text x="110" y="216" text-anchor="middle" font-size="9.5" fill="#57534e">Cline &#183; Augment Code</text>
+      </g>
+      <g data-beat="2">
+        <rect x="235" y="70" width="131" height="90" rx="8" fill="#fff" stroke="#d6d3d1"/>
+        <rect x="235" y="70" width="131" height="22" fill="#f5f5f4"/>
+        <text x="243" y="85" font-size="9.5" fill="#44403c" font-weight="600">SAS dataset</text>
+        <text x="243" y="118" font-size="9.5" fill="#1c1917" class="t-mono">dataset.sas7bdat</text>
+        <text x="243" y="140" font-size="9" fill="#57534e">binary, proprietary</text>
+        <rect x="382" y="70" width="131" height="90" rx="8" fill="#fff" stroke="#d6d3d1"/>
+        <rect x="382" y="70" width="131" height="22" fill="#f5f5f4"/>
+        <text x="390" y="85" font-size="9.5" fill="#44403c" font-weight="600">ADaM spec</text>
+        <text x="390" y="118" font-size="9.5" fill="#1c1917" class="t-mono">adam_spec.xlsx</text>
+        <text x="390" y="140" font-size="9" fill="#57534e">multi-sheet Excel</text>
+        <rect x="529" y="70" width="131" height="90" rx="8" fill="#fff" stroke="#d6d3d1"/>
+        <rect x="529" y="70" width="131" height="22" fill="#f5f5f4"/>
+        <text x="537" y="85" font-size="9.5" fill="#44403c" font-weight="600">SAS log</text>
+        <text x="537" y="118" font-size="9.5" fill="#1c1917" class="t-mono">adsl.log</text>
+        <text x="537" y="140" font-size="9" fill="#57534e">real vs harmless</text>
+      </g>
+      <g data-beat="3">
+        <rect x="235" y="180" width="425" height="64" rx="8" fill="#f5f5f4" stroke="#d6d3d1"/>
+        <text x="247" y="204" font-size="9.5" fill="#9f1239" class="t-mono">ERROR: File WORK.ADSL not found.</text>
+        <text x="247" y="228" font-size="9.5" fill="#57534e" class="t-mono">WARNING: Unable to copy SASUSER</text>
+        <text x="648" y="204" text-anchor="end" font-size="9.5" fill="#9f1239" font-weight="700">real</text>
+        <text x="648" y="228" text-anchor="end" font-size="9.5" fill="#57534e">harmless</text>
+      </g>
+      <g data-beat="4">
+        <text x="352" y="100" text-anchor="end" font-size="14" fill="#9f1239" font-weight="700">&#10007;</text>
+        <text x="499" y="100" text-anchor="end" font-size="14" fill="#9f1239" font-weight="700">&#10007;</text>
+        <text x="646" y="100" text-anchor="end" font-size="14" fill="#9f1239" font-weight="700">&#10007;</text>
+      </g>
+      <g data-beat="5">
+        <rect x="15" y="256" width="630" height="26" rx="6" fill="#1c1917"/>
+        <text x="330" y="273" text-anchor="middle" font-size="11" fill="#fafaf9">the gap is in the tools, not the reasoning &#8212; thin MCP, thick skills</text>
+      </g>
+    </svg>
+  </figure>
+  <div class="caption">
+    <ol class="beats">
+      <li data-beat="1">Ask a coding agent to review a SAS log and it does fine.</li>
+      <li data-beat="2" data-dur="2400">Ask it to read a SAS7BDAT dataset or parse an ADaM spec spreadsheet &mdash; it can't open the files.</li>
+      <li data-beat="3" data-dur="2600">And it can't reliably tell a real ERROR from a harmless &ldquo;Unable to copy SASUSER&rdquo; warning.</li>
+      <li data-beat="4" data-dur="2200">The gap is in the tools, not the reasoning.</li>
+      <li data-beat="5" data-dur="2400">ClinAgent's answer in one line: thin MCP, thick skills.</li>
+    </ol>
+  </div>
+  <div class="scene-notes">
+    <ul class="legend" aria-label="Legend">
+      <li><span class="chip" style="background:#1c1917"></span>the agent (your choice)</li>
+      <li><span class="chip" style="background:#fff"></span>artifact the agent can't touch directly</li>
+      <li><span class="chip" style="background:#9f1239"></span>the tool gap</li>
+    </ul>
+    <p class="honest"><b>Teaching schematic &mdash; not measured.</b> Tool gap summarized from the post's opening; the log lines are illustrative.</p>
+    <p class="src">Source: <a href="https://jaimeyan.com/blog/five-layer-architecture-clinical-agents.html">Thin MCP, Thick Skills</a> (introduction).</p>
+  </div>
+</section>
+
+<!-- ============================================================ SCENE 2 -->
+<section class="scene" data-title="The five layers" id="s2">
+  <div class="scene-head"><span class="scene-no">SCENE 2 / 7</span></div>
+  <h2>Five layers, each with one job</h2>
+  <p class="scene-sub">The stack under any MCP-compatible agent &mdash; the design bet is where the thickness sits.</p>
+  <figure class="stage">
+    <svg viewBox="0 0 660 370" role="img" aria-label="Five horizontal layers under a swappable agent pill: 1 A2UI results rendering, 2 skill router, 3 skills marked THICK, 4 MCP tools marked THIN, 5 infrastructure compliance. Bottom banner: swap the agent, the skill layer keeps working.">
+      <defs>
+        <marker id="arr-s2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#57534e"/></marker>
+      </defs>
+      <g data-beat="1">
+        <rect x="160" y="14" width="340" height="34" rx="17" fill="#1c1917"/>
+        <text x="330" y="36" text-anchor="middle" font-size="11.5" fill="#fafaf9">any MCP-compatible agent &#8212; swappable</text>
+        <path d="M330 50 V 64" stroke="#57534e" stroke-width="1.6" marker-start="url(#arr-s2)" marker-end="url(#arr-s2)"/>
+        <rect x="60" y="70" width="540" height="44" rx="8" fill="#f5f5f4" stroke="#d6d3d1"/>
+        <text x="78" y="88" font-size="11.5" fill="#1c1917" font-weight="600">1 &#183; A2UI &#8212; results rendering</text>
+        <text x="78" y="104" font-size="9.5" fill="#57534e">dashboards &#183; log tables &#183; RTF viewers &#8212; deterministic output for human review</text>
+      </g>
+      <g data-beat="2">
+        <rect x="60" y="124" width="540" height="44" rx="8" fill="#f5f5f4" stroke="#d6d3d1"/>
+        <text x="78" y="142" font-size="11.5" fill="#1c1917" font-weight="600">2 &#183; Skill router</text>
+        <text x="78" y="158" font-size="9.5" fill="#57534e">routes each tool call to the right skill &#183; validates inputs first</text>
+      </g>
+      <g data-beat="3">
+        <rect x="60" y="178" width="540" height="44" rx="8" fill="#fdf7f8" stroke="#9f1239" stroke-width="2"/>
+        <text x="78" y="196" font-size="11.5" fill="#9f1239" font-weight="600">3 &#183; Skills &#8212; domain expertise</text>
+        <text x="78" y="212" font-size="9.5" fill="#44403c">SK-001&ndash;SK-009: prompt templates &#183; few-shot examples &#183; rule engines &#183; tool bindings</text>
+        <text x="585" y="196" text-anchor="end" font-size="9" fill="#9f1239" class="t-mono" font-weight="700">THICK</text>
+      </g>
+      <g data-beat="4">
+        <rect x="60" y="232" width="540" height="44" rx="8" fill="#fdf7f8" stroke="#9f1239" stroke-width="2"/>
+        <text x="78" y="250" font-size="11.5" fill="#9f1239" font-weight="600">4 &#183; MCP tools &#8212; data access</text>
+        <text x="78" y="266" font-size="9.5" fill="#44403c">stateless I/O only: read SAS7BDAT &#183; parse spec Excel &#183; read logs</text>
+        <text x="585" y="250" text-anchor="end" font-size="9" fill="#9f1239" class="t-mono" font-weight="700">THIN</text>
+      </g>
+      <g data-beat="5">
+        <rect x="60" y="286" width="540" height="44" rx="8" fill="#f5f5f4" stroke="#d6d3d1"/>
+        <text x="78" y="304" font-size="11.5" fill="#1c1917" font-weight="600">5 &#183; Infrastructure &#8212; compliance</text>
+        <text x="78" y="320" font-size="9.5" fill="#57534e">AuditLogger &#183; DataMasker &#183; AccessControl &#183; context minimization</text>
+      </g>
+      <g data-beat="6">
+        <rect x="60" y="340" width="540" height="24" rx="6" fill="#1c1917"/>
+        <text x="330" y="356" text-anchor="middle" font-size="10.5" fill="#fafaf9">swap the agent &#8212; the skill layer keeps working</text>
+      </g>
+    </svg>
+  </figure>
+  <div class="caption">
+    <ol class="beats">
+      <li data-beat="1" data-dur="2600">Layer 1 renders results: dashboards, log tables, RTF viewers &mdash; deterministic output for human review.</li>
+      <li data-beat="2">Layer 2 routes each tool call to the right skill and validates inputs first.</li>
+      <li data-beat="3" data-dur="2800">Layer 3 is thick: nine skill packages, SK-001 to SK-009, each bundling prompts, examples, and rule engines.</li>
+      <li data-beat="4" data-dur="2600">Layer 4 is thin: stateless I/O only &mdash; read a dataset, parse a spec, read a log. It never interprets.</li>
+      <li data-beat="5" data-dur="2400">Layer 5 is compliance: audit logging, PHI masking, access control, context minimization.</li>
+      <li data-beat="6" data-dur="3000">The agent reasons; the stack supplies domain expertise and the compliance trail. Swap the agent &mdash; the skills still work.</li>
+    </ol>
+  </div>
+  <div class="scene-notes">
+    <ul class="legend" aria-label="Legend">
+      <li><span class="chip" style="background:#fdf7f8;border-color:#9f1239"></span>the design bet: thick skills, thin tools</li>
+      <li><span class="chip" style="background:#f5f5f4"></span>supporting layers</li>
+    </ul>
+    <p class="honest"><b>Teaching schematic &mdash; not measured.</b> Layer structure follows the post's Figure 1 and the preprint's Figure 1.</p>
+    <p class="src">Sources: <a href="https://jaimeyan.com/blog/five-layer-architecture-clinical-agents.html">the post</a> (the five layers) &middot; <a href="https://www.medrxiv.org/content/10.64898/2026.01.09.26343542v1">ClinAgent preprint</a>, Fig 1.</p>
+  </div>
+</section>
+
+<!-- ============================================================ SCENE 3 -->
+<section class="scene" data-title="One call through the stack" id="s3">
+  <div class="scene-head"><span class="scene-no">SCENE 3 / 7</span></div>
+  <h2>Anatomy of a single tool call</h2>
+  <p class="scene-sub">&ldquo;Classify the findings in this SAS log&rdquo; &mdash; deterministic classification first, stochastic interpretation last.</p>
+  <figure class="stage">
+    <svg viewBox="0 0 660 370" role="img" aria-label="A tool call flows down the stack: the router picks skill SK-005 and validates input; a thin MCP tool reads the log bytes without interpreting; a deterministic rule engine tags each line, flagging a real ERROR, a WARNING, and ignoring the known false positive Unable to copy SASUSER; only then does the LLM write the human-readable explanation; the infrastructure layer records an audit entry.">
+      <defs>
+        <marker id="arr-s3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#57534e"/></marker>
+      </defs>
+      <g data-beat="1">
+        <rect x="180" y="14" width="300" height="32" rx="16" fill="#f5f5f4" stroke="#d6d3d1"/>
+        <text x="330" y="35" text-anchor="middle" font-size="10.5" fill="#1c1917" class="t-mono">&ldquo;classify the ADSL log&rdquo;</text>
+      </g>
+      <g data-beat="2">
+        <path d="M330 46 V 60" stroke="#57534e" stroke-width="1.4" marker-end="url(#arr-s3)"/>
+        <rect x="230" y="64" width="200" height="34" rx="6" fill="#fff" stroke="#d6d3d1"/>
+        <text x="330" y="85" text-anchor="middle" font-size="10" fill="#1c1917">router &#8594; SK-005 log reviewer</text>
+        <text x="444" y="85" font-size="9.5" fill="#57534e">inputs validated first</text>
+      </g>
+      <g data-beat="3">
+        <path d="M330 98 V 112" stroke="#57534e" stroke-width="1.4" marker-end="url(#arr-s3)"/>
+        <rect x="230" y="116" width="200" height="34" rx="6" fill="#fff" stroke="#d6d3d1"/>
+        <text x="330" y="137" text-anchor="middle" font-size="10" fill="#1c1917" class="t-mono">MCP tool: read_log()</text>
+        <text x="444" y="137" font-size="9.5" fill="#57534e">stateless bytes in &#8212; no opinion</text>
+      </g>
+      <g data-beat="4">
+        <path d="M330 150 V 162" stroke="#57534e" stroke-width="1.4" marker-end="url(#arr-s3)"/>
+        <rect x="120" y="166" width="420" height="90" rx="8" fill="#fdf7f8" stroke="#9f1239"/>
+        <text x="134" y="188" font-size="10" fill="#9f1239" class="t-mono" font-weight="700">rule_engine.json &#8212; deterministic</text>
+        <text x="134" y="211" font-size="9.5" fill="#9f1239" class="t-mono">ERROR: File WORK.ADSL not found.</text>
+        <text x="134" y="229" font-size="9.5" fill="#b45309" class="t-mono">WARNING: AGE may be uninitialized.</text>
+        <text x="134" y="247" font-size="9.5" fill="#57534e" class="t-mono">NOTE: Unable to copy SASUSER</text>
+        <text x="528" y="247" text-anchor="end" font-size="9" fill="#57534e">false positive &#8212; ignored</text>
+      </g>
+      <g data-beat="5">
+        <path d="M330 256 V 268" stroke="#57534e" stroke-width="1.4" marker-end="url(#arr-s3)"/>
+        <rect x="230" y="272" width="200" height="42" rx="6" fill="#fff" stroke="#57534e" stroke-dasharray="5 3"/>
+        <text x="330" y="290" text-anchor="middle" font-size="9.5" fill="#1c1917">LLM writes the explanation</text>
+        <text x="330" y="305" text-anchor="middle" font-size="9" fill="#57534e">of what the rules already decided</text>
+        <text x="444" y="294" font-size="9.5" fill="#57534e">stochastic &#8212; allowed here</text>
+      </g>
+      <g data-beat="6">
+        <path d="M330 314 V 324" stroke="#57534e" stroke-width="1.4" marker-end="url(#arr-s3)"/>
+        <rect x="120" y="328" width="420" height="30" rx="6" fill="#1c1917"/>
+        <text x="330" y="347" text-anchor="middle" font-size="9.5" fill="#fafaf9" class="t-mono">AuditLogger: timestamp + inputs + outputs recorded</text>
+      </g>
+    </svg>
+  </figure>
+  <div class="caption">
+    <ol class="beats">
+      <li data-beat="1">A call arrives: classify the findings in this SAS log.</li>
+      <li data-beat="2">The router picks skill SK-005 and checks the input first.</li>
+      <li data-beat="3" data-dur="2400">A thin MCP tool reads the log bytes. It does not know what an ERROR means.</li>
+      <li data-beat="4" data-dur="3000">A deterministic rule engine tags every line &mdash; errors, warnings, and known false positives like &ldquo;Unable to copy SASUSER&rdquo;.</li>
+      <li data-beat="5" data-dur="2800">Only then does the LLM write the human-readable interpretation of what the rules already decided.</li>
+      <li data-beat="6" data-dur="2200">The infrastructure layer logs the whole call &mdash; timestamped inputs and outputs.</li>
+    </ol>
+  </div>
+  <div class="scene-notes">
+    <ul class="legend" aria-label="Legend">
+      <li><span class="chip" style="background:#fdf7f8;border-color:#9f1239"></span>deterministic decision</li>
+      <li><span class="chip" style="background:#fff;border-color:#57534e"></span>stochastic interpretation</li>
+      <li><span class="chip" style="background:#1c1917"></span>compliance trail</li>
+    </ul>
+    <p class="honest"><b>Teaching schematic &mdash; not measured.</b> The rule patterns are quoted from the post's rule_engine example; the flow follows the preprint's Figure 2.</p>
+    <p class="src">Sources: <a href="https://jaimeyan.com/blog/five-layer-architecture-clinical-agents.html">the post</a> (why thick skills beat fat prompts) &middot; <a href="https://www.medrxiv.org/content/10.64898/2026.01.09.26343542v1">ClinAgent preprint</a>, Fig 2.</p>
+  </div>
+</section>
+
+<!-- ============================================================ SCENE 4 -->
+<section class="scene" data-title="Why thick skills win" id="s4">
+  <div class="scene-head"><span class="scene-no">SCENE 4 / 7</span></div>
+  <h2>Four reasons the rules live in JSON, not in a prompt</h2>
+  <p class="scene-sub">The alternative is one fat prompt. It loses on all four axes that matter in a regulated shop.</p>
+  <figure class="stage">
+    <svg viewBox="0 0 660 310" role="img" aria-label="Two by two cards: Testability, rules in JSON unit-test with plain fixtures and no LLM in the loop; Evolvability, a new warning pattern is one line in warning_patterns.json with no redeploy; Transparency, a senior statistical programmer can read and sign off the rule file; Determinism, the rule engine classifies and the LLM only writes the reading. Bottom banner: a new capability is a new skill JSON, MCP tools carry over unchanged.">
+      <g data-beat="1">
+        <rect x="60" y="16" width="540" height="30" rx="6" fill="#f5f5f4" stroke="#d6d3d1"/>
+        <text x="330" y="36" text-anchor="middle" font-size="11.5" fill="#1c1917" font-weight="600">why not just write a bigger prompt?</text>
+      </g>
+      <g data-beat="2">
+        <rect x="60" y="60" width="255" height="95" rx="8" fill="#fdf7f8" stroke="#9f1239"/>
+        <text x="76" y="86" font-size="11.5" fill="#9f1239" font-weight="600">Testability</text>
+        <text x="76" y="110" font-size="9.5" fill="#44403c">rules in JSON unit-test with plain</text>
+        <text x="76" y="126" font-size="9.5" fill="#44403c">fixtures &mdash; no LLM in the loop</text>
+      </g>
+      <g data-beat="3">
+        <rect x="345" y="60" width="255" height="95" rx="8" fill="#fdf7f8" stroke="#9f1239"/>
+        <text x="361" y="86" font-size="11.5" fill="#9f1239" font-weight="600">Evolvability</text>
+        <text x="361" y="110" font-size="9.5" fill="#44403c">a new warning pattern = one line in</text>
+        <text x="361" y="126" font-size="9.5" fill="#44403c">warning_patterns.json &mdash; no redeploy</text>
+      </g>
+      <g data-beat="4">
+        <rect x="60" y="165" width="255" height="95" rx="8" fill="#fdf7f8" stroke="#9f1239"/>
+        <text x="76" y="191" font-size="11.5" fill="#9f1239" font-weight="600">Transparency</text>
+        <text x="76" y="215" font-size="9.5" fill="#44403c">a senior statistical programmer can</text>
+        <text x="76" y="231" font-size="9.5" fill="#44403c">read and sign off the rule file</text>
+      </g>
+      <g data-beat="5">
+        <rect x="345" y="165" width="255" height="95" rx="8" fill="#fdf7f8" stroke="#9f1239"/>
+        <text x="361" y="191" font-size="11.5" fill="#9f1239" font-weight="600">Determinism</text>
+        <text x="361" y="215" font-size="9.5" fill="#44403c">the rule engine classifies; the LLM</text>
+        <text x="361" y="231" font-size="9.5" fill="#44403c">only writes the human-readable reading</text>
+      </g>
+      <g data-beat="6">
+        <rect x="60" y="272" width="540" height="26" rx="6" fill="#1c1917"/>
+        <text x="330" y="289" text-anchor="middle" font-size="10.5" fill="#fafaf9">a new capability is a new skill JSON &#8212; MCP tools carry over unchanged</text>
+      </g>
+    </svg>
+  </figure>
+  <div class="caption">
+    <ol class="beats">
+      <li data-beat="1">Why not just write a bigger prompt? Four reasons.</li>
+      <li data-beat="2" data-dur="2600">Testability: rules in a skill are unit-tested with plain fixtures &mdash; no LLM in the loop.</li>
+      <li data-beat="3" data-dur="2600">Evolvability: a new warning pattern is one line in a JSON file. No code change, no redeploy.</li>
+      <li data-beat="4" data-dur="3000">Transparency: a senior statistical programmer can read and sign off a JSON rule file. Under GxP, reviewability is the validation story.</li>
+      <li data-beat="5" data-dur="2400">Determinism where it matters: the rule engine classifies; the LLM only explains.</li>
+      <li data-beat="6" data-dur="2600">Adding a capability is mostly configuration &mdash; a new skill JSON; the MCP tools carry over unchanged.</li>
+    </ol>
+  </div>
+  <div class="scene-notes">
+    <ul class="legend" aria-label="Legend">
+      <li><span class="chip" style="background:#fdf7f8;border-color:#9f1239"></span>an axis where skill-side JSON wins</li>
+    </ul>
+    <p class="honest"><b>Teaching schematic &mdash; not measured.</b> Argument structure from the post; no measured data in this scene.</p>
+    <p class="src">Source: <a href="https://jaimeyan.com/blog/five-layer-architecture-clinical-agents.html">the post</a> (why thick skills beat fat prompts).</p>
+  </div>
+</section>
+
+<!-- ============================================================ SCENE 5 -->
+<section class="scene" data-title="The validation bench" id="s5">
+  <div class="scene-head"><span class="scene-no">SCENE 5 / 7</span></div>
+  <h2>Nine skills, one production study</h2>
+  <p class="scene-sub">The validation target: artifacts of one real study &mdash; with synthetic data standing in for patients.</p>
+  <figure class="stage">
+    <svg viewBox="0 0 660 350" role="img" aria-label="Dataset strip: STUDY-A, production Phase 2 cardiovascular artifacts, 11 ADaM domains, 93,239 synthetic observations from Faker, no patient data. Four result cards: SK-005 log analysis caught 1 error and 7 warnings across 10 logs with 100 percent precision and zero false alarms across 13,595 clean NOTE lines; SK-006 matched all 56 ADSL variables; specification generation scored 72.1 percent derivation accuracy, above 96 on simple domains; SK-007 generated 12 of 16 TLF programs with 4 skips due to missing macro names in the spec. Bottom note: the bench measures tool correctness, not LLM reasoning.">
+      <g data-beat="1">
+        <rect x="30" y="14" width="600" height="40" rx="8" fill="#f5f5f4" stroke="#d6d3d1"/>
+        <text x="330" y="32" text-anchor="middle" font-size="10.5" fill="#1c1917" font-weight="600">STUDY-A &#8212; production Phase 2 cardiovascular artifacts</text>
+        <text x="330" y="48" text-anchor="middle" font-size="9.5" fill="#57534e">11 ADaM domains &#183; 93,239 synthetic observations (Faker) &#183; no patient data</text>
+      </g>
+      <g data-beat="2">
+        <rect x="30" y="70" width="285" height="110" rx="8" fill="#fff" stroke="#d6d3d1"/>
+        <rect x="30" y="70" width="285" height="24" fill="#1c1917"/>
+        <text x="40" y="86" font-size="10" fill="#fafaf9" class="t-mono">SK-005 &#183; log analysis</text>
+        <text x="40" y="116" font-size="9.5" fill="#44403c">10 logs: 1 error + 7 warnings caught</text>
+        <text x="40" y="136" font-size="9.5" fill="#9f1239" font-weight="600">100% precision</text>
+        <text x="40" y="156" font-size="9.5" fill="#44403c">13,595 clean NOTE lines, 0 false alarms</text>
+      </g>
+      <g data-beat="3">
+        <rect x="345" y="70" width="285" height="110" rx="8" fill="#fff" stroke="#d6d3d1"/>
+        <rect x="345" y="70" width="285" height="24" fill="#1c1917"/>
+        <text x="355" y="86" font-size="10" fill="#fafaf9" class="t-mono">SK-006 &#183; data validation</text>
+        <text x="355" y="116" font-size="9.5" fill="#9f1239" font-weight="600">56 / 56 ADSL variables matched</text>
+        <text x="355" y="136" font-size="9.5" fill="#44403c">deterministic comparison against</text>
+        <text x="355" y="156" font-size="9.5" fill="#44403c">the specification</text>
+      </g>
+      <g data-beat="4">
+        <rect x="30" y="190" width="285" height="110" rx="8" fill="#fff" stroke="#d6d3d1"/>
+        <rect x="30" y="190" width="285" height="24" fill="#1c1917"/>
+        <text x="40" y="206" font-size="10" fill="#fafaf9" class="t-mono">spec generation &#183; prompt-based</text>
+        <text x="40" y="236" font-size="9.5" fill="#9f1239" font-weight="600">72.1% derivation accuracy</text>
+        <text x="40" y="256" font-size="9.5" fill="#44403c">95% Wilson CI [67.1, 76.7]</text>
+        <text x="40" y="276" font-size="9.5" fill="#44403c">&gt;96% on ADMH / ADEX / ADCM</text>
+      </g>
+      <g data-beat="5">
+        <rect x="345" y="190" width="285" height="110" rx="8" fill="#fff" stroke="#d6d3d1"/>
+        <rect x="345" y="190" width="285" height="24" fill="#1c1917"/>
+        <text x="355" y="206" font-size="10" fill="#fafaf9" class="t-mono">SK-007 &#183; TLF coder</text>
+        <text x="355" y="236" font-size="9.5" fill="#9f1239" font-weight="600">12 / 16 TLF programs generated</text>
+        <text x="355" y="256" font-size="9.5" fill="#44403c">4 skipped: spec lacked macro names &#8212;</text>
+        <text x="355" y="276" font-size="9.5" fill="#44403c">an input-quality gap, not a skill failure</text>
+      </g>
+      <g data-beat="6">
+        <rect x="30" y="312" width="600" height="26" rx="6" fill="#1c1917"/>
+        <text x="330" y="329" text-anchor="middle" font-size="10.5" fill="#fafaf9">the bench measures tool correctness, not LLM reasoning &#8212; by design</text>
+      </g>
+    </svg>
+  </figure>
+  <div class="caption">
+    <ol class="beats">
+      <li data-beat="1" data-dur="2600">The validation target: artifacts of STUDY-A, a production Phase 2 cardiovascular study &mdash; eleven ADaM domains, 93,239 synthetic observations, no patient data.</li>
+      <li data-beat="2" data-dur="3000">SK-005 log analysis: every real error and warning caught in ten logs, zero false alarms across 13,595 clean NOTE lines.</li>
+      <li data-beat="3" data-dur="2200">SK-006 data validation: all 56 ADSL variables matched.</li>
+      <li data-beat="4" data-dur="2600">Prompt-based spec generation scored 72.1% derivation accuracy &mdash; above 96% on the simple domains.</li>
+      <li data-beat="5" data-dur="3000">SK-007 generated 12 of 16 TLFs; the four skips were missing macro names in the spec &mdash; an input-quality gap, not a skill failure.</li>
+      <li data-beat="6" data-dur="2400">The benchmark measures tool correctness, not LLM reasoning &mdash; deliberately.</li>
+    </ol>
+  </div>
+  <div class="scene-notes">
+    <ul class="legend" aria-label="Legend">
+      <li><span class="chip" style="background:#1c1917"></span>skill under test</li>
+      <li><span class="chip" style="background:#9f1239"></span>measured headline number</li>
+    </ul>
+    <p class="honest"><b>Measured results</b> &mdash; preprint §5.4 and Tables 8&ndash;13 (STUDY-A, SK-005/006/007, spec accuracy); layout is schematic.</p>
+    <p class="src">Sources: <a href="https://jaimeyan.com/blog/five-layer-architecture-clinical-agents.html">the post</a> (what the validation showed) &middot; <a href="https://www.medrxiv.org/content/10.64898/2026.01.09.26343542v1">ClinAgent preprint</a>, Tables 8&ndash;13.</p>
+  </div>
+</section>
+
+<!-- ============================================================ SCENE 6 -->
+<section class="scene" data-title="Where it breaks" id="s6">
+  <div class="scene-head"><span class="scene-no">SCENE 6 / 7</span></div>
+  <h2>Where it breaks &mdash; and why that's the point</h2>
+  <p class="scene-sub">Derivation accuracy collapses exactly where a study invents its own variables.</p>
+  <figure class="stage">
+    <svg viewBox="0 0 660 300" role="img" aria-label="Scatter plot of derivation accuracy against percentage of study-specific variables: simple domains cluster above 96 percent at the top left; ADSL sits at 54.3 percent; ADBASE at 0.0 percent at the far right; a dashed rose trend line descends. Sidebar: Spearman rho equals minus 0.867, p equals 0.003; of 115 missing variables, 58.3 percent were study-specific derivations. Banner: study-specific knowledge belongs in thick, organization-specific skills.">
+      <g data-beat="1">
+        <line x1="60" y1="20" x2="60" y2="240" stroke="#a8a29e" stroke-width="1.5"/>
+        <line x1="60" y1="240" x2="400" y2="240" stroke="#a8a29e" stroke-width="1.5"/>
+        <text x="60" y="14" font-size="9.5" fill="#57534e">derivation accuracy</text>
+        <text x="400" y="260" text-anchor="end" font-size="9.5" fill="#57534e">% study-specific variables</text>
+        <circle cx="95" cy="52" r="5" fill="#a8a29e"/>
+        <circle cx="112" cy="44" r="5" fill="#a8a29e"/>
+        <circle cx="128" cy="50" r="5" fill="#a8a29e"/>
+        <text x="112" y="32" text-anchor="middle" font-size="9.5" fill="#44403c">simple domains &gt;96%</text>
+      </g>
+      <g data-beat="2">
+        <circle cx="230" cy="130" r="6" fill="#9f1239"/>
+        <text x="230" y="112" text-anchor="middle" font-size="9.5" fill="#9f1239" font-weight="700">ADSL 54.3%</text>
+      </g>
+      <g data-beat="3">
+        <circle cx="370" cy="232" r="6" fill="#9f1239"/>
+        <text x="384" y="234" text-anchor="start" font-size="9.5" fill="#9f1239" font-weight="700">ADBASE 0.0%</text>
+      </g>
+      <g data-beat="4">
+        <line x1="80" y1="55" x2="382" y2="225" stroke="#9f1239" stroke-width="2" stroke-dasharray="6 4"/>
+        <rect x="430" y="20" width="215" height="120" rx="8" fill="#f5f5f4" stroke="#d6d3d1"/>
+        <text x="442" y="46" font-size="9.5" fill="#1c1917" font-weight="700">Spearman &#961; = -0.867</text>
+        <text x="442" y="66" font-size="9.5" fill="#44403c">p = 0.003</text>
+        <text x="442" y="96" font-size="9.5" fill="#44403c">115 missing variables:</text>
+        <text x="442" y="116" font-size="9.5" fill="#44403c">58.3% study-specific</text>
+      </g>
+      <g data-beat="5">
+        <rect x="60" y="268" width="585" height="26" rx="6" fill="#1c1917"/>
+        <text x="352" y="285" text-anchor="middle" font-size="10.5" fill="#fafaf9">study-specific knowledge belongs in thick, org-specific skills &#8212; not a fatter prompt</text>
+      </g>
+    </svg>
+  </figure>
+  <div class="caption">
+    <ol class="beats">
+      <li data-beat="1" data-dur="2400">The simple, standardized domains sit at the top &mdash; above 96% derivation accuracy.</li>
+      <li data-beat="2" data-dur="2400">ADSL, with its many study-specific derivations, drops to 54.3%.</li>
+      <li data-beat="3" data-dur="2400">ADBASE &mdash; almost entirely custom baseline flags &mdash; scores 0.0%.</li>
+      <li data-beat="4" data-dur="3000">The correlation is Spearman &#961; = &minus;0.867 (p = 0.003); of 115 missing variables, 58.3% were study-specific derivations.</li>
+      <li data-beat="5" data-dur="3000">That knowledge cannot live in a generic prompt. It belongs in thick, organization-specific skills.</li>
+    </ol>
+  </div>
+  <div class="scene-notes">
+    <ul class="legend" aria-label="Legend">
+      <li><span class="chip" style="background:#a8a29e"></span>standardized domain</li>
+      <li><span class="chip" style="background:#9f1239"></span>study-specific-heavy domain</li>
+    </ul>
+    <p class="honest"><b>Measured statistics</b> &mdash; preprint §6.8.3, Table 18 and Fig 7 (&#961;, p); §6.8.4 / Table 19 (58.3%). Axis positions are schematic; point labels are exact.</p>
+    <p class="src">Sources: <a href="https://jaimeyan.com/blog/five-layer-architecture-clinical-agents.html">the post</a> (the failure-mode paragraph) &middot; <a href="https://www.medrxiv.org/content/10.64898/2026.01.09.26343542v1">ClinAgent preprint</a>, §6.8.</p>
+  </div>
+</section>
+
+<!-- ============================================================ SCENE 7 -->
+<section class="scene" data-title="Honest limits" id="s7">
+  <div class="scene-head"><span class="scene-no">SCENE 7 / 7</span></div>
+  <h2>What this did not prove</h2>
+  <p class="scene-sub">The limits are part of the result &mdash; and the architectural claim survives them.</p>
+  <figure class="stage">
+    <svg viewBox="0 0 660 300" role="img" aria-label="Left card, Not proven: one Phase 2 study; one real error with Wilson interval 20.7 to 100 percent; productivity gain unmeasured; depends on well-formed specs. Right card, Within those limits: rules live in testable skill JSON; MCP tools stay thin and stateless; the agent is interchangeable. Banner: thin MCP, thick skills, swappable agent.">
+      <g data-beat="1">
+        <rect x="30" y="30" width="290" height="215" rx="10" fill="#fff" stroke="#d6d3d1"/>
+        <rect x="30" y="30" width="290" height="28" fill="#1c1917"/>
+        <text x="44" y="48" font-size="11" fill="#fafaf9" font-weight="600">Not proven</text>
+        <text x="44" y="90" font-size="10" fill="#9f1239" font-weight="700">&#10007;</text>
+        <text x="62" y="90" font-size="9.5" fill="#44403c">one Phase 2 study &mdash; the whole</text>
+        <text x="62" y="106" font-size="9.5" fill="#44403c">evidence base</text>
+      </g>
+      <g data-beat="2">
+        <text x="44" y="140" font-size="10" fill="#9f1239" font-weight="700">&#10007;</text>
+        <text x="62" y="140" font-size="9.5" fill="#44403c">one real error behind &ldquo;100%&rdquo;:</text>
+        <text x="62" y="156" font-size="9.5" fill="#44403c">Wilson CI [20.7%, 100.0%]</text>
+      </g>
+      <g data-beat="3">
+        <text x="44" y="190" font-size="10" fill="#9f1239" font-weight="700">&#10007;</text>
+        <text x="62" y="190" font-size="9.5" fill="#44403c">productivity gain unmeasured</text>
+        <text x="44" y="224" font-size="10" fill="#9f1239" font-weight="700">&#10007;</text>
+        <text x="62" y="224" font-size="9.5" fill="#44403c">needs well-formed input specs</text>
+        <text x="62" y="240" font-size="9.5" fill="#57534e">(the 4 skipped TLFs prove it)</text>
+      </g>
+      <g data-beat="4">
+        <rect x="350" y="30" width="290" height="215" rx="10" fill="#fdf7f8" stroke="#9f1239"/>
+        <rect x="350" y="30" width="290" height="28" fill="#9f1239"/>
+        <text x="364" y="48" font-size="11" fill="#fafaf9" font-weight="600">Within those limits</text>
+        <text x="364" y="90" font-size="10" fill="#15803d" font-weight="700">&#10003;</text>
+        <text x="382" y="90" font-size="9.5" fill="#44403c">rules live in testable skill JSON</text>
+        <text x="364" y="124" font-size="10" fill="#15803d" font-weight="700">&#10003;</text>
+        <text x="382" y="124" font-size="9.5" fill="#44403c">MCP tools stay thin + stateless</text>
+        <text x="364" y="158" font-size="10" fill="#15803d" font-weight="700">&#10003;</text>
+        <text x="382" y="158" font-size="9.5" fill="#44403c">invest in the skill layer:</text>
+        <text x="382" y="174" font-size="9.5" fill="#44403c">the agent is interchangeable</text>
+      </g>
+      <g data-beat="5">
+        <rect x="30" y="260" width="610" height="28" rx="6" fill="#1c1917"/>
+        <text x="335" y="278" text-anchor="middle" font-size="10.5" fill="#fafaf9">thin MCP &#183; thick skills &#183; swappable agent &#8212; the post and preprint carry the full argument</text>
+      </g>
+    </svg>
+  </figure>
+  <div class="caption">
+    <ol class="beats">
+      <li data-beat="1" data-dur="2400">One Phase 2 study. That's the whole evidence base.</li>
+      <li data-beat="2" data-dur="2800">The log benchmark rests on a single real error &mdash; the Wilson interval runs from 20.7% to 100%.</li>
+      <li data-beat="3" data-dur="2800">End-to-end productivity was never measured, and generation accuracy assumes well-structured input specs &mdash; the four skipped TLFs are the proof.</li>
+      <li data-beat="4" data-dur="2800">Within those limits: rules belong in testable skill JSON, MCP tools stay thin, and the agent is interchangeable.</li>
+      <li data-beat="5" data-dur="3000">Thin MCP, thick skills, swappable agent &mdash; the post and the preprint carry the full argument, limitations included.</li>
+    </ol>
+  </div>
+  <div class="scene-notes">
+    <ul class="legend" aria-label="Legend">
+      <li><span class="chip" style="background:#fff"></span>limitation (quoted from the post)</li>
+      <li><span class="chip" style="background:#fdf7f8;border-color:#9f1239"></span>claim that survives the limits</li>
+    </ul>
+    <p class="honest"><b>Limitations quoted from the post</b>; the Wilson interval [20.7%, 100.0%] is from the preprint's Table 15.</p>
+    <p class="src">Sources: <a href="https://jaimeyan.com/blog/five-layer-architecture-clinical-agents.html">the post</a> (honest limitations) &middot; <a href="https://www.medrxiv.org/content/10.64898/2026.01.09.26343542v1">ClinAgent preprint</a>, Table 15 &middot; <a href="https://jaimeyan.com/papers/clinagent-methodology.html">journal version</a>.</p>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Built as a self-contained teaching page: no external scripts, styles, or images. Keyboard: <span class="t-mono">Space / &rarr; / &larr; / R</span>; reduced motion and no-JavaScript both degrade to the complete final state.</p>
+    <p><a href="https://jaimeyan.com/explainers.html">All explainers</a> &middot; <a href="https://jaimeyan.com/blog/five-layer-architecture-clinical-agents.html">Source post</a> &middot; <a href="https://jaimeyan.com/papers/clinagent-five-layer.html">ClinAgent paper page</a> &middot; <a href="https://jaimeyan.com/">jaimeyan.com</a></p>
+    <p>&copy; 2026 Jaime Yan &middot; CC BY 4.0 &middot; cite as: Yan, J., &ldquo;Thin MCP, Thick Skills &mdash; Interactive Walkthrough&rdquo;, jaimeyan.com/explainers/five-layer-agent-architecture.html (2026-09-02).</p>
+  </div>
+</footer>
+
+<script>
+/* ============================================================ ENGINE (vanilla, ~zero deps)
+   Contract documented in the file header. Reduced-motion exits to static mode. */
+(function () {
+  'use strict';
+  var html = document.documentElement;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    html.classList.add('static');
+    return;
+  }
+
+  var DEFAULT_DUR = 1600;
+  var scenes = Array.prototype.slice.call(document.querySelectorAll('.scene')).map(function (el, i) {
+    var beats = {};
+    Array.prototype.forEach.call(el.querySelectorAll('svg [data-beat]'), function (g) {
+      var n = +g.getAttribute('data-beat');
+      (beats[n] = beats[n] || []).push(g);
+    });
+    var caps = {};
+    var list = Array.prototype.slice.call(el.querySelectorAll('.beats li'));
+    list.forEach(function (li) { caps[+li.getAttribute('data-beat')] = li; });
+    var max = list.length;
+    return {
+      el: el, i: i, beats: beats, caps: caps, list: list, max: max,
+      k: 0, timer: null,
+      title: el.getAttribute('data-title') || ('Scene ' + (i + 1))
+    };
+  });
+
+  var playing = false, speed = 1, current = 0;
+  var $ = function (id) { return document.getElementById(id); };
+  var btnPlay = $('btn-play'), btnPrev = $('btn-prev'), btnNext = $('btn-next'),
+      btnReset = $('btn-reset'), btnSpeed = $('btn-speed'),
+      pmeta = $('pmeta'), pdots = $('pdots');
+
+  scenes.forEach(function (s) { s.el.id = s.el.id || ('scene-' + (s.i + 1)); });
+  var dots = scenes.map(function (s) {
+    var d = document.createElement('button');
+    d.className = 'pdot'; d.setAttribute('aria-label', 'Go to ' + s.title);
+    d.addEventListener('click', function () { go(s.i, true); });
+    pdots.appendChild(d); return d;
+  });
+
+  function render(s) {
+    for (var n = 1; n <= s.max; n++) {
+      var on = n <= s.k;
+      (s.beats[n] || []).forEach(function (g) { g.classList.toggle('on', on); });
+      var li = s.caps[n];
+      if (li) {
+        li.classList.toggle('now', n === s.k);
+        li.classList.toggle('done', n < s.k);
+      }
+    }
+    pmeta.textContent = 'S' + (s.i + 1) + ' ' + s.title + ' \u2014 beat ' + s.k + '/' + s.max;
+    dots.forEach(function (d, j) {
+      d.classList.toggle('now', j === s.i);
+      d.classList.toggle('done', j < s.i || (j === s.i && s.k >= scenes[j].max));
+    });
+    btnPrev.disabled = s.i === 0 && s.k === 0;
+    btnNext.disabled = s.i === scenes.length - 1 && s.k >= s.max;
+  }
+
+  function stopTimer(s) { if (s && s.timer) { clearTimeout(s.timer); s.timer = null; } }
+  function setPlay(v) {
+    playing = v;
+    btnPlay.textContent = playing ? 'Pause' : 'Play';
+    if (!playing) scenes.forEach(stopTimer);
+    else tick();
+  }
+  function dur(s) {
+    var li = s.caps[s.k];
+    var d = li && li.getAttribute('data-dur');
+    return (d ? +d : DEFAULT_DUR) / speed;
+  }
+  function tick() {
+    var s = scenes[current];
+    stopTimer(s);
+    if (!playing) return;
+    if (s.k >= s.max) { // scene complete -> next scene
+      if (current < scenes.length - 1) { go(current + 1, true); }
+      else setPlay(false);
+      return;
+    }
+    s.timer = setTimeout(function () {
+      step(1); tick();
+    }, dur(s));
+  }
+  function step(d) {
+    var s = scenes[current];
+    var k = s.k + d;
+    if (k < 0) { if (current > 0) go(current - 1, false, scenes[current - 1].max); return; }
+    if (k > s.max) { if (current < scenes.length - 1) { go(current + 1, true); return; } k = s.max; }
+    s.k = k; render(s);
+  }
+  function go(i, fromStart, atBeat) {
+    var s = scenes[i];
+    stopTimer(scenes[current]);
+    current = i;
+    s.k = Math.max(0, Math.min(s.max, atBeat !== undefined ? atBeat : (fromStart ? 0 : s.max)));
+    render(s);
+    if (playing) tick();
+    if (i !== current || true) s.el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  btnPlay.addEventListener('click', function () { setPlay(!playing); });
+  btnNext.addEventListener('click', function () { step(1); if (playing) tick(); });
+  btnPrev.addEventListener('click', function () { step(-1); if (playing) tick(); });
+  btnReset.addEventListener('click', function () { setPlay(false); go(current, true); });
+  btnSpeed.addEventListener('click', function () {
+    speed = speed === 1 ? 1.5 : speed === 1.5 ? 2 : 1;
+    btnSpeed.textContent = speed + 'x';
+    if (playing) tick();
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.target.closest && e.target.closest('a,button,input,textarea,select')) return;
+    if (e.code === 'Space') { e.preventDefault(); setPlay(!playing); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); step(1); if (playing) tick(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); step(-1); if (playing) tick(); }
+    else if (e.key === 'r' || e.key === 'R') { setPlay(false); go(current, true); }
+  });
+
+  // Scroll-sync: bind the player to the scene crossing the viewport top.
+  var spy = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) {
+      if (en.isIntersecting) {
+        var idx = scenes.findIndex(function (s) { return s.el === en.target; });
+        if (idx >= 0 && idx !== current) {
+          stopTimer(scenes[current]);
+          current = idx; render(scenes[current]);
+          if (playing) tick();
+        }
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  scenes.forEach(function (s) { spy.observe(s.el); });
+
+  // Initial state: scene 1 at beat 0 (all hidden until play/step).
+  render(scenes[0]);
+})();
+</script>
+</body>
+</html>

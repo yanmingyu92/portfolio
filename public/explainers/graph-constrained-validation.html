@@ -1,0 +1,830 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Contradictions Your Validator Can't See — Interactive Walkthrough — Jaime Yan</title>
+<meta name="description" content="Interactive walkthrough: why domain-scoped SDTM validators structurally miss cross-domain RECIST contradictions, and how SHACL graph constraints plus a deterministic agent layer catch them.">
+<link rel="canonical" href="https://jaimeyan.com/explainers/graph-constrained-validation.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231c1917'/%3E%3Cpath d='M8 10l8 7 8-7' stroke='%23fafaf9' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":["TechArticle","LearningResource"],
+"headline":"The Contradictions Your Validator Can't See — Interactive Walkthrough",
+"description":"An interactive, step-by-step walkthrough of why domain-scoped rule engines structurally miss cross-domain RECIST contradictions, and how graph constraints plus a deterministic agent layer catch them.",
+"datePublished":"2026-09-02","dateModified":"2026-09-02",
+"url":"https://jaimeyan.com/explainers/graph-constrained-validation.html",
+"inLanguage":"en","learningResourceType":"interactive explainer","interactivityType":"active",
+"educationalUse":["explanation","self study"],
+"teaches":["expressiveness limits of domain-scoped validation rules","RDF knowledge graphs over SDTM domains","SHACL shape libraries and SHACL-SPARQL","RECIST 1.1 cross-domain response logic","deterministic agent layers in regulated validation"],
+"author":{"@type":"Person","name":"Jaime Yan","url":"https://jaimeyan.com","jobTitle":"Associate Director, Statistical Programming",
+"sameAs":["https://github.com/yanmingyu92","https://www.linkedin.com/in/jaime-y-66312a133/","https://scholar.google.com/citations?user=vo1hv04AAAAJ","https://orcid.org/0009-0007-1786-7259"]},
+"isBasedOn":["https://jaimeyan.com/blog/graph-constrained-validation-cdisc-oncology.html","https://doi.org/10.1371/journal.pone.0350376"]}
+</script>
+<style>
+/* ---- Design language: stone/rose (site palette, system-font fallbacks; S1) ---- */
+:root{
+  --ink:#1c1917; --ink-2:#44403c; --ink-3:#57534e;
+  --rose:#9f1239; --rose-soft:#e7d4db; --rose-bg:#fdf7f8;
+  --line:#d6d3d1; --line-2:#e7e5e4;
+  --paper:#fafaf9; --panel:#f5f5f4;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.6;font-size:16px}
+a{color:var(--rose)}
+.wrap{max-width:60rem;margin:0 auto;padding:0 1.25rem}
+
+/* ---- Masthead ---- */
+.mast{background:var(--ink);color:#fafaf9;padding:2.25rem 0 1.9rem}
+.mast .kicker{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:#d6d3d1;margin:0 0 .5rem}
+.mast .kicker a{color:#d6d3d1;text-decoration:none}
+.mast .kicker a:hover{color:#fff}
+.mast h1{font-family:var(--serif);font-weight:600;font-size:clamp(1.6rem,4vw,2.4rem);line-height:1.15;margin:0 0 .6rem;letter-spacing:-.01em}
+.mast .lede{max-width:44rem;color:#d6d3d1;margin:0;font-size:.95rem}
+.honest-banner{margin:1.25rem 0 0;padding:.55rem .85rem;border:1px solid #57534e;border-radius:.5rem;font-family:var(--mono);font-size:.72rem;color:#d6d3d1;display:inline-block}
+.honest-banner b{color:#fafaf9;font-weight:600}
+
+/* ---- Player bar ---- */
+.player{position:sticky;top:0;z-index:40;background:var(--paper);border-bottom:1px solid var(--line);backdrop-filter:none}
+.player-inner{max-width:60rem;margin:0 auto;padding:.5rem 1.25rem;display:flex;align-items:center;gap:.6rem;flex-wrap:nowrap;overflow-x:auto}
+.pbtn{font-family:var(--mono);font-size:.78rem;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:.4rem;padding:.32rem .6rem;cursor:pointer;white-space:nowrap}
+.pbtn:hover{border-color:var(--rose);color:var(--rose)}
+.pbtn[disabled]{opacity:.45;cursor:default}
+.pbtn.speed{min-width:3.2rem;text-align:center}
+.pmeta{font-family:var(--mono);font-size:.74rem;color:var(--ink-3);white-space:nowrap;margin-left:auto}
+.pdots{display:flex;gap:.3rem;align-items:center}
+.pdot{width:.45rem;height:.45rem;border-radius:50%;background:var(--line);border:0;padding:0;cursor:pointer}
+.pdot.done{background:var(--rose-soft)}
+.pdot.now{background:var(--rose)}
+.kbd-hint{font-family:var(--mono);font-size:.68rem;color:var(--ink-3);padding:.4rem 1.25rem .5rem;max-width:60rem;margin:0 auto}
+.kbd-hint kbd{border:1px solid var(--line);border-bottom-width:2px;border-radius:.25rem;padding:0 .3rem;background:var(--panel);font-family:var(--mono)}
+html:not(.js) .player,html.static .player{display:none}
+.static-note{display:none;font-family:var(--mono);font-size:.72rem;color:var(--ink-3);padding:.55rem 1.25rem;border-bottom:1px solid var(--line)}
+html.static .static-note{display:block}
+
+/* ---- Scenes ---- */
+main{padding-bottom:4rem}
+.scene{padding:2.5rem 0 1.75rem;border-bottom:1px solid var(--line-2)}
+.scene.inview{animation:none}
+.scene-head{display:flex;align-items:baseline;gap:.75rem;flex-wrap:wrap;margin-bottom:.25rem}
+.scene-no{font-family:var(--mono);font-size:.72rem;color:var(--rose);letter-spacing:.1em}
+.scene h2{font-family:var(--serif);font-weight:600;font-size:1.35rem;margin:.1rem 0 .4rem;letter-spacing:-.01em}
+.scene-sub{color:var(--ink-2);font-size:.92rem;max-width:46rem;margin:0 0 1rem}
+
+/* stage + figure: fixed viewBox, beats only ever toggle opacity/transform (S7) */
+.stage{border:1px solid var(--line);border-radius:.6rem;background:#fff;padding:.75rem;margin:0 0 .9rem;overflow-x:auto}
+.stage svg{display:block;width:100%;height:auto;min-width:min(100%,340px)}
+text{font-family:var(--sans)}
+.t-mono{font-family:var(--mono)}
+
+/* beat reveal: visible by default (no-JS final state, S6); JS dims future beats */
+[data-beat]{transition:opacity .45s ease,transform .45s ease}
+html.js svg [data-beat]{opacity:0;transform:translateY(6px)}
+html.js svg [data-beat].on{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  [data-beat]{transition:none!important}
+  html.js svg [data-beat]{opacity:1;transform:none}   /* S5: full final state */
+}
+
+/* caption list: all sentences live in the DOM (readable no-JS); player highlights current */
+.caption{margin:0 0 .9rem}
+.beats{list-style:none;margin:0;padding:0;counter-reset:bt}
+.beats li{position:relative;padding:.3rem 0 .3rem 2rem;font-size:.9rem;color:var(--ink-3);border-left:2px solid var(--line-2);margin-left:.9rem}
+.beats li::before{counter-increment:bt;content:counter(bt);position:absolute;left:-.95rem;top:.42rem;width:1.85rem;height:1.85rem;line-height:1.85rem;text-align:center;border-radius:50%;background:var(--panel);border:1px solid var(--line);font-family:var(--mono);font-size:.66rem;color:var(--ink-3)}
+html.js .beats li{opacity:.45}
+html.js .beats li.done{opacity:.75;color:var(--ink-2)}
+html.js .beats li.now{opacity:1;color:var(--ink);border-left-color:var(--rose)}
+html.js .beats li.now::before{background:var(--rose);border-color:var(--rose);color:#fff}
+
+/* legend + honest label + sources (S8) */
+.scene-notes{display:flex;flex-direction:column;gap:.45rem;font-size:.78rem;color:var(--ink-3)}
+.legend{display:flex;flex-wrap:wrap;gap:.35rem 1.1rem;margin:0;padding:0;list-style:none;font-family:var(--mono);font-size:.7rem}
+.legend .chip{display:inline-block;width:.8rem;height:.8rem;border-radius:.2rem;vertical-align:-.1rem;margin-right:.3rem;border:1px solid rgba(0,0,0,.12)}
+.honest{font-family:var(--mono);font-size:.68rem;color:var(--ink-3)}
+.honest b{font-weight:600;color:var(--ink-2)}
+.src{font-size:.74rem}
+.src a{white-space:nowrap}
+
+/* ---- Footer ---- */
+.foot{padding:2rem 0 3rem;color:var(--ink-3);font-size:.8rem}
+.foot p{margin:.25rem 0}
+@media (max-width:480px){
+  .pmeta{display:none}
+  .scene{padding:1.9rem 0 1.4rem}
+}
+</style>
+</head>
+<body>
+<script>document.documentElement.classList.add('js');</script>
+<header class="mast">
+  <div class="wrap">
+    <p class="kicker"><a href="https://jaimeyan.com/explainers.html">jaimeyan.com</a> / interactive explainer</p>
+    <h1>The Contradictions Your Validator Can't See</h1>
+    <p class="lede">A rule engine that reads one dataset at a time structurally cannot catch a contradiction that only exists across datasets. Seven scenes: one impossible response, the graph that exposes it, the shapes that patrol it, and the scoreboard &mdash; with the fine print.</p>
+    <p class="honest-banner"><b>Honest label:</b> teaching schematic &mdash; records are fictional (Study XYZ, Subject 001) &mdash; measured numbers are cited to the CAVE-Onc paper (PLOS One, 2026) by figure and table.</p>
+  </div>
+</header>
+
+<div class="player" id="player" role="region" aria-label="Explainer player">
+  <div class="player-inner">
+    <button class="pbtn" id="btn-play" aria-label="Play or pause">Play</button>
+    <button class="pbtn" id="btn-prev" aria-label="Previous beat">&#8630; Prev</button>
+    <button class="pbtn" id="btn-next" aria-label="Next beat">Next &#8631;</button>
+    <button class="pbtn" id="btn-reset" aria-label="Reset scene">Reset</button>
+    <button class="pbtn speed" id="btn-speed" aria-label="Playback speed">1x</button>
+    <span class="pdots" id="pdots" aria-label="Scenes"></span>
+    <span class="pmeta" id="pmeta">scene &mdash; beat 0/0</span>
+  </div>
+  <p class="kbd-hint"><kbd>Space</kbd> play/pause &nbsp;<kbd>&rarr;</kbd> next beat &nbsp;<kbd>&larr;</kbd> previous beat &nbsp;<kbd>R</kbd> reset</p>
+  <p class="static-note">Static mode: animation disabled (reduced motion or no JavaScript) &mdash; every scene is shown in its complete final state.</p>
+</div>
+
+<main class="wrap" id="scenes">
+
+<!-- ============================================================ SCENE 1 -->
+<section class="scene" data-title="The impossible response" id="s1">
+  <div class="scene-head"><span class="scene-no">SCENE 1 / 7</span></div>
+  <h2>A response that cannot be true</h2>
+  <p class="scene-sub">One fictional subject, three domain records &mdash; and a combination RECIST 1.1 does not allow.</p>
+  <figure class="stage">
+    <svg viewBox="0 0 660 300" role="img" aria-label="Three domain record cards for Subject 001 of fictional Study XYZ: TR shows target lesions shrank 24 percent, a PR-range change; TU shows non-target lesions stable and no new lesions; RS records overall response CR, highlighted as impossible. Both industry validators are shown reporting the data clean.">
+      <defs>
+        <marker id="arr-s1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#9f1239"/></marker>
+      </defs>
+      <g data-beat="1">
+        <rect x="15" y="42" width="200" height="118" rx="8" fill="#fff" stroke="#d6d3d1"/>
+        <rect x="15" y="42" width="200" height="26" fill="#1c1917"/>
+        <text x="25" y="59" font-size="10.5" fill="#fafaf9" class="t-mono">TR &#8212; target lesions</text>
+        <text x="25" y="92" font-size="10.5" fill="#44403c" class="t-mono">Subject 001</text>
+        <text x="25" y="114" font-size="10.5" fill="#44403c" class="t-mono">SLD change: -24%</text>
+        <text x="25" y="138" font-size="10.5" fill="#9f1239" class="t-mono" font-weight="700">PR-range shrinkage</text>
+      </g>
+      <g data-beat="2">
+        <rect x="230" y="42" width="200" height="118" rx="8" fill="#fff" stroke="#d6d3d1"/>
+        <rect x="230" y="42" width="200" height="26" fill="#1c1917"/>
+        <text x="240" y="59" font-size="10.5" fill="#fafaf9" class="t-mono">TU &#8212; non-target / new</text>
+        <text x="240" y="92" font-size="10.5" fill="#44403c" class="t-mono">Subject 001</text>
+        <text x="240" y="114" font-size="10.5" fill="#44403c" class="t-mono">non-target: SD</text>
+        <text x="240" y="138" font-size="10.5" fill="#44403c" class="t-mono">new lesions: none</text>
+      </g>
+      <g data-beat="3">
+        <rect x="445" y="42" width="200" height="118" rx="8" fill="#fdf7f8" stroke="#9f1239" stroke-width="1.8"/>
+        <rect x="445" y="42" width="200" height="26" fill="#1c1917"/>
+        <text x="455" y="59" font-size="10.5" fill="#fafaf9" class="t-mono">RS &#8212; overall response</text>
+        <text x="455" y="92" font-size="10.5" fill="#44403c" class="t-mono">Subject 001</text>
+        <text x="455" y="114" font-size="10.5" fill="#44403c" class="t-mono">RSORRES:</text>
+        <text x="455" y="146" font-size="20" fill="#9f1239" class="t-mono" font-weight="700">CR</text>
+      </g>
+      <g data-beat="4">
+        <path d="M215 95 C 270 88, 380 88, 441 95" stroke="#9f1239" stroke-width="1.6" stroke-dasharray="5 4" fill="none" marker-end="url(#arr-s1)"/>
+        <path d="M215 140 C 280 160, 380 160, 441 140" stroke="#9f1239" stroke-width="1.6" stroke-dasharray="5 4" fill="none" marker-end="url(#arr-s1)"/>
+        <rect x="185" y="190" width="290" height="34" rx="6" fill="#fdf7f8" stroke="#9f1239"/>
+        <text x="330" y="212" text-anchor="middle" font-size="12" fill="#9f1239" font-weight="600">clinically impossible under RECIST 1.1</text>
+      </g>
+      <g data-beat="5">
+        <rect x="115" y="248" width="190" height="30" rx="6" fill="#f5f5f4" stroke="#d6d3d1"/>
+        <text x="210" y="268" text-anchor="middle" font-size="10.5" fill="#44403c" class="t-mono">CORE: clean &#10003;</text>
+        <rect x="355" y="248" width="190" height="30" rx="6" fill="#f5f5f4" stroke="#d6d3d1"/>
+        <text x="450" y="268" text-anchor="middle" font-size="10.5" fill="#44403c" class="t-mono">Pinnacle 21: clean &#10003;</text>
+      </g>
+    </svg>
+  </figure>
+  <div class="caption">
+    <ol class="beats">
+      <li data-beat="1">Meet Subject 001 in fictional Study XYZ: target lesions shrank 24% &mdash; a PR-level change.</li>
+      <li data-beat="2">Non-target lesions are stable, and no new lesions appeared.</li>
+      <li data-beat="3">Yet the overall response record says CR &mdash; complete response.</li>
+      <li data-beat="4" data-dur="2400">Under RECIST 1.1 this combination is clinically impossible.</li>
+      <li data-beat="5" data-dur="2400">Both industry validators reviewed this data &mdash; and reported it clean.</li>
+    </ol>
+  </div>
+  <div class="scene-notes">
+    <ul class="legend" aria-label="Legend">
+      <li><span class="chip" style="background:#fff"></span>domain record</li>
+      <li><span class="chip" style="background:#fdf7f8;border-color:#9f1239"></span>the impossible combination</li>
+      <li><span class="chip" style="background:#f5f5f4"></span>validator verdict</li>
+    </ul>
+    <p class="honest"><b>Teaching schematic &mdash; not measured.</b> Fictional records (Study XYZ, Subject 001); the scenario follows the RECIST 1.1 example in the post and the paper's introduction.</p>
+    <p class="src">Sources: <a href="https://jaimeyan.com/blog/graph-constrained-validation-cdisc-oncology.html">The Contradictions Your Validator Can't See</a> &middot; <a href="https://doi.org/10.1371/journal.pone.0350376">CAVE-Onc, PLOS One 2026</a> (introduction).</p>
+  </div>
+</section>
+
+<!-- ============================================================ SCENE 2 -->
+<section class="scene" data-title="One domain at a time" id="s2">
+  <div class="scene-head"><span class="scene-no">SCENE 2 / 7</span></div>
+  <h2>One domain at a time</h2>
+  <p class="scene-sub">A domain-scoped rule is a filter over the rows of a single table &mdash; so every domain passes, and the join stays unchecked.</p>
+  <figure class="stage">
+    <svg viewBox="0 0 660 300" role="img" aria-label="A rule engine evaluates the TR, TU and RS tables one at a time, each stamped PASS. Dashed arcs below the tables mark the cross-domain joins as unchecked. Banner: an expressiveness boundary, not a coverage gap.">
+      <defs>
+        <marker id="arr-s2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#57534e"/></marker>
+      </defs>
+      <g data-beat="1">
+        <rect x="180" y="14" width="300" height="40" rx="8" fill="#1c1917"/>
+        <text x="330" y="38" text-anchor="middle" font-size="12" fill="#fafaf9">rule engine &#8212; one domain at a time</text>
+        <rect x="15" y="100" width="200" height="80" rx="8" fill="#fff" stroke="#d6d3d1"/>
+        <rect x="15" y="100" width="200" height="22" fill="#44403c"/>
+        <text x="25" y="115" font-size="10.5" fill="#fafaf9" class="t-mono">TR</text>
+        <line x1="30" y1="140" x2="200" y2="140" stroke="#e7e5e4" stroke-width="6"/>
+        <line x1="30" y1="156" x2="200" y2="156" stroke="#e7e5e4" stroke-width="6"/>
+        <line x1="30" y1="172" x2="160" y2="172" stroke="#e7e5e4" stroke-width="6"/>
+        <path d="M260 54 V 94" stroke="#57534e" stroke-width="1.5" marker-end="url(#arr-s2)"/>
+      </g>
+      <g data-beat="2">
+        <rect x="230" y="100" width="200" height="80" rx="8" fill="#fff" stroke="#d6d3d1"/>
+        <rect x="230" y="100" width="200" height="22" fill="#44403c"/>
+        <text x="240" y="115" font-size="10.5" fill="#fafaf9" class="t-mono">TU</text>
+        <line x1="245" y1="140" x2="415" y2="140" stroke="#e7e5e4" stroke-width="6"/>
+        <line x1="245" y1="156" x2="415" y2="156" stroke="#e7e5e4" stroke-width="6"/>
+        <line x1="245" y1="172" x2="375" y2="172" stroke="#e7e5e4" stroke-width="6"/>
+        <rect x="445" y="100" width="200" height="80" rx="8" fill="#fff" stroke="#d6d3d1"/>
+        <rect x="445" y="100" width="200" height="22" fill="#44403c"/>
+        <text x="455" y="115" font-size="10.5" fill="#fafaf9" class="t-mono">RS</text>
+        <line x1="460" y1="140" x2="630" y2="140" stroke="#e7e5e4" stroke-width="6"/>
+        <line x1="460" y1="156" x2="630" y2="156" stroke="#e7e5e4" stroke-width="6"/>
+        <line x1="460" y1="172" x2="590" y2="172" stroke="#e7e5e4" stroke-width="6"/>
+        <text x="330" y="216" text-anchor="middle" font-size="10.5" fill="#57534e">every rule = a filter over the rows of one table</text>
+      </g>
+      <g data-beat="3">
+        <text x="115" y="94" text-anchor="middle" font-size="11" fill="#15803d" font-weight="700" class="t-mono">PASS &#10003;</text>
+        <text x="330" y="94" text-anchor="middle" font-size="11" fill="#15803d" font-weight="700" class="t-mono">PASS &#10003;</text>
+        <text x="545" y="94" text-anchor="middle" font-size="11" fill="#15803d" font-weight="700" class="t-mono">PASS &#10003;</text>
+      </g>
+      <g data-beat="4">
+        <path d="M115 180 C 180 238, 270 238, 330 182" stroke="#9f1239" stroke-width="1.6" stroke-dasharray="5 4" fill="none"/>
+        <path d="M330 182 C 390 238, 480 238, 545 180" stroke="#9f1239" stroke-width="1.6" stroke-dasharray="5 4" fill="none"/>
+        <text x="330" y="248" text-anchor="middle" font-size="11" fill="#9f1239" font-weight="600">cross-domain joins: no rule looks here</text>
+      </g>
+      <g data-beat="5">
+        <rect x="60" y="266" width="540" height="26" rx="6" fill="#1c1917"/>
+        <text x="330" y="283" text-anchor="middle" font-size="11" fill="#fafaf9">an expressiveness boundary &#8212; not a coverage gap you patch with more rules</text>
+      </g>
+    </svg>
+  </figure>
+  <div class="caption">
+    <ol class="beats">
+      <li data-beat="1">A rule engine like CORE sees one domain as one table &mdash; a DataFrame.</li>
+      <li data-beat="2">Every check is a filter over the rows of that single table.</li>
+      <li data-beat="3">TR passes its checks. TU passes. RS passes.</li>
+      <li data-beat="4" data-dur="2600">The contradiction only exists across the tables &mdash; in the join nobody evaluates.</li>
+      <li data-beat="5" data-dur="2800">This is an expressiveness boundary, not a coverage gap you can patch with more rules.</li>
+    </ol>
+  </div>
+  <div class="scene-notes">
+    <ul class="legend" aria-label="Legend">
+      <li><span class="chip" style="background:#fff"></span>domain table</li>
+      <li><span class="chip" style="background:#15803d"></span>domain-local rules pass</li>
+      <li><span class="chip" style="background:#9f1239"></span>cross-domain join, unchecked</li>
+    </ul>
+    <p class="honest"><b>Teaching schematic &mdash; not measured.</b> Validator behavior simplified for teaching; the post carries the formal argument.</p>
+    <p class="src">Source: <a href="https://jaimeyan.com/blog/graph-constrained-validation-cdisc-oncology.html">The Contradictions Your Validator Can't See</a> (section: why domain-scoped rules can't express this).</p>
+  </div>
+</section>
+
+<!-- ============================================================ SCENE 3 -->
+<section class="scene" data-title="The 122-rule divide" id="s3">
+  <div class="scene-head"><span class="scene-no">SCENE 3 / 7</span></div>
+  <h2>Two-thirds port. The dangerous third doesn't.</h2>
+  <p class="scene-sub">Measured on the real CORE oncology rule set: what a SHACL porting pipeline could and could not carry over.</p>
+  <figure class="stage">
+    <svg viewBox="0 0 660 280" role="img" aria-label="Segmented bar of 122 oncology CORE rules: 85 (69.7 percent) port to SHACL losslessly, 31 cannot because they join across domains, 6 more need row-set uniqueness. Banner: the dangerous contradictions live in the unportable third.">
+      <g data-beat="1">
+        <text x="30" y="40" font-size="12" fill="#1c1917" font-weight="600">122 oncology CORE rules</text>
+        <rect x="30" y="60" width="600" height="44" rx="6" fill="#e7e5e4"/>
+      </g>
+      <g data-beat="2">
+        <rect x="30" y="60" width="418" height="44" fill="#a8a29e"/>
+        <text x="239" y="135" text-anchor="middle" font-size="11" fill="#44403c">85 port to SHACL losslessly (69.7%)</text>
+      </g>
+      <g data-beat="3">
+        <rect x="448" y="60" width="152" height="44" fill="#9f1239"/>
+        <text x="524" y="165" text-anchor="middle" font-size="11" fill="#9f1239">31 join across domains</text>
+      </g>
+      <g data-beat="4">
+        <rect x="600" y="60" width="30" height="44" fill="#881337"/>
+        <text x="655" y="195" text-anchor="end" font-size="11" fill="#881337">6 row-set uniqueness</text>
+      </g>
+      <g data-beat="5">
+        <rect x="30" y="225" width="600" height="34" rx="6" fill="#fdf7f8" stroke="#9f1239"/>
+        <text x="330" y="247" text-anchor="middle" font-size="11.5" fill="#9f1239" font-weight="600">the dangerous contradictions live in the unportable third</text>
+      </g>
+    </svg>
+  </figure>
+  <div class="caption">
+    <ol class="beats">
+      <li data-beat="1">CDISC CORE ships 122 oncology rules.</li>
+      <li data-beat="2" data-dur="2200">85 of them &mdash; 69.7% &mdash; port to SHACL shapes with zero loss.</li>
+      <li data-beat="3">31 cannot be ported: they join across domains.</li>
+      <li data-beat="4">6 more need row-set uniqueness that a single-record shape can't state.</li>
+      <li data-beat="5" data-dur="2600">The dangerous contradictions live exactly in that unportable third.</li>
+    </ol>
+  </div>
+  <div class="scene-notes">
+    <ul class="legend" aria-label="Legend">
+      <li><span class="chip" style="background:#a8a29e"></span>ports losslessly (85)</li>
+      <li><span class="chip" style="background:#9f1239"></span>cross-domain joins (31)</li>
+      <li><span class="chip" style="background:#881337"></span>row-set uniqueness (6)</li>
+    </ul>
+    <p class="honest"><b>Measured, not schematic.</b> Counts from the paper's SHACL shape-porting pipeline (85/122 = 69.7%; 31 cross-domain joins + 6 row-set uniqueness); bar proportions drawn to scale.</p>
+    <p class="src">Sources: <a href="https://jaimeyan.com/blog/graph-constrained-validation-cdisc-oncology.html">the post</a> &middot; <a href="https://doi.org/10.1371/journal.pone.0350376">CAVE-Onc, PLOS One 2026</a> (porting statistics).</p>
+  </div>
+</section>
+
+<!-- ============================================================ SCENE 4 -->
+<section class="scene" data-title="XPT in, graph out" id="s4">
+  <div class="scene-head"><span class="scene-no">SCENE 4 / 7</span></div>
+  <h2>Turn the submission into one graph</h2>
+  <p class="scene-sub">Nine oncology domains leave their XPT silos; RELREC relationships become real edges, and SUPP-- qualifiers become plain properties.</p>
+  <figure class="stage">
+    <svg viewBox="0 0 660 310" role="img" aria-label="Nine XPT domain chips on the left; an arrow into a knowledge-graph panel where a Subject 001 node connects to DM, TR, TU and RS record nodes through rose RELREC edges. SUPPDM qualifiers unfold onto the DM node as properties.">
+      <defs>
+        <marker id="arr-s4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#9f1239"/></marker>
+        <marker id="arr-s4b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#57534e"/></marker>
+      </defs>
+      <g data-beat="1">
+        <rect x="15" y="40" width="68" height="26" rx="6" fill="#f5f5f4" stroke="#d6d3d1"/><text x="49" y="57" text-anchor="middle" font-size="9.5" fill="#1c1917" class="t-mono">DM</text>
+        <rect x="90" y="40" width="68" height="26" rx="6" fill="#f5f5f4" stroke="#d6d3d1"/><text x="124" y="57" text-anchor="middle" font-size="9.5" fill="#1c1917" class="t-mono">EX</text>
+        <rect x="165" y="40" width="68" height="26" rx="6" fill="#f5f5f4" stroke="#d6d3d1"/><text x="199" y="57" text-anchor="middle" font-size="9.5" fill="#1c1917" class="t-mono">AE</text>
+        <rect x="15" y="76" width="68" height="26" rx="6" fill="#f5f5f4" stroke="#d6d3d1"/><text x="49" y="93" text-anchor="middle" font-size="9.5" fill="#1c1917" class="t-mono">LB</text>
+        <rect x="90" y="76" width="68" height="26" rx="6" fill="#f5f5f4" stroke="#d6d3d1"/><text x="124" y="93" text-anchor="middle" font-size="9.5" fill="#1c1917" class="t-mono">TR</text>
+        <rect x="165" y="76" width="68" height="26" rx="6" fill="#f5f5f4" stroke="#d6d3d1"/><text x="199" y="93" text-anchor="middle" font-size="9.5" fill="#1c1917" class="t-mono">TU</text>
+        <rect x="15" y="112" width="68" height="26" rx="6" fill="#f5f5f4" stroke="#d6d3d1"/><text x="49" y="129" text-anchor="middle" font-size="9.5" fill="#1c1917" class="t-mono">RS</text>
+        <rect x="90" y="112" width="68" height="26" rx="6" fill="#f5f5f4" stroke="#d6d3d1"/><text x="124" y="129" text-anchor="middle" font-size="9.5" fill="#1c1917" class="t-mono">SUPPDM</text>
+        <rect x="165" y="112" width="68" height="26" rx="6" fill="#f5f5f4" stroke="#d6d3d1"/><text x="199" y="129" text-anchor="middle" font-size="9.5" fill="#1c1917" class="t-mono">RELREC</text>
+        <text x="15" y="162" font-size="10" fill="#57534e">9 oncology SDTM domains, as XPT files</text>
+      </g>
+      <g data-beat="2">
+        <path d="M245 90 H283" stroke="#9f1239" stroke-width="2.5" marker-end="url(#arr-s4)"/>
+        <text x="264" y="76" text-anchor="middle" font-size="10" fill="#9f1239" class="t-mono">XPT &#8594; RDF</text>
+        <rect x="290" y="20" width="355" height="270" rx="10" fill="#fff" stroke="#e7e5e4"/>
+      </g>
+      <g data-beat="3">
+        <circle cx="467" cy="155" r="34" fill="#f5f5f4" stroke="#d6d3d1"/>
+        <text x="467" y="159" text-anchor="middle" font-size="10" fill="#1c1917" class="t-mono">SUBJ 001</text>
+        <circle cx="360" cy="70" r="24" fill="#fff" stroke="#a8a29e"/>
+        <text x="360" y="74" text-anchor="middle" font-size="10" fill="#1c1917" class="t-mono">DM</text>
+        <circle cx="575" cy="70" r="24" fill="#fff" stroke="#a8a29e"/>
+        <text x="575" y="74" text-anchor="middle" font-size="10" fill="#1c1917" class="t-mono">TR</text>
+        <text x="575" y="108" text-anchor="middle" font-size="9" fill="#57534e" class="t-mono">SLD -24%</text>
+        <circle cx="350" cy="240" r="24" fill="#fff" stroke="#a8a29e"/>
+        <text x="350" y="244" text-anchor="middle" font-size="10" fill="#1c1917" class="t-mono">TU</text>
+        <text x="350" y="278" text-anchor="middle" font-size="9" fill="#57534e" class="t-mono">SD &#183; no new</text>
+        <circle cx="585" cy="240" r="24" fill="#fdf7f8" stroke="#9f1239"/>
+        <text x="585" y="244" text-anchor="middle" font-size="10" fill="#9f1239" class="t-mono" font-weight="700">RS</text>
+        <text x="585" y="278" text-anchor="middle" font-size="9" fill="#9f1239" class="t-mono" font-weight="700">CR</text>
+      </g>
+      <g data-beat="4">
+        <path d="M438 132 L381 91" stroke="#9f1239" stroke-width="1.8" fill="none" marker-end="url(#arr-s4)"/>
+        <path d="M496 132 L554 91" stroke="#9f1239" stroke-width="1.8" fill="none" marker-end="url(#arr-s4)"/>
+        <path d="M442 181 L373 222" stroke="#9f1239" stroke-width="1.8" fill="none" marker-end="url(#arr-s4)"/>
+        <path d="M492 181 L562 222" stroke="#9f1239" stroke-width="1.8" fill="none" marker-end="url(#arr-s4)"/>
+        <text x="467" y="60" text-anchor="middle" font-size="9.5" fill="#9f1239">RELREC keys, now explicit</text>
+      </g>
+      <g data-beat="5">
+        <path d="M158 125 C 220 100, 280 90, 336 88" stroke="#57534e" stroke-width="1.4" stroke-dasharray="4 3" fill="none" marker-end="url(#arr-s4b)"/>
+        <text x="15" y="215" font-size="10" fill="#57534e">SUPPDM QNAM/QVAL unfold onto</text>
+        <text x="15" y="230" font-size="10" fill="#57534e">the parent record as properties</text>
+      </g>
+    </svg>
+  </figure>
+  <div class="caption">
+    <ol class="beats">
+      <li data-beat="1">Nine oncology SDTM domains leave their XPT silos.</li>
+      <li data-beat="2">Each becomes nodes and edges in a single RDF knowledge graph.</li>
+      <li data-beat="3" data-dur="2200">Subject 001's records are now nodes you can walk between.</li>
+      <li data-beat="4" data-dur="2600">RELREC foreign keys survive as real edges &mdash; the joins validators couldn't see are now explicit.</li>
+      <li data-beat="5" data-dur="2400">SUPP-- qualifiers unfold onto their parent record as plain properties.</li>
+    </ol>
+  </div>
+  <div class="scene-notes">
+    <ul class="legend" aria-label="Legend">
+      <li><span class="chip" style="background:#f5f5f4"></span>XPT domain</li>
+      <li><span class="chip" style="background:#fff;border-color:#a8a29e"></span>record node</li>
+      <li><span class="chip" style="background:#9f1239"></span>RELREC edge</li>
+    </ul>
+    <p class="honest"><b>Teaching schematic &mdash; not measured.</b> Graph reduced to Subject 001's records; the nine-domain count and mapping approach follow the paper's Figure 1.</p>
+    <p class="src">Sources: <a href="https://jaimeyan.com/blog/graph-constrained-validation-cdisc-oncology.html">the post</a> (the two-layer fix) &middot; <a href="https://doi.org/10.1371/journal.pone.0350376">CAVE-Onc</a>, Fig 1.</p>
+  </div>
+</section>
+
+<!-- ============================================================ SCENE 5 -->
+<section class="scene" data-title="SHACL shapes" id="s5">
+  <div class="scene-head"><span class="scene-no">SCENE 5 / 7</span></div>
+  <h2>Shapes patrol the graph</h2>
+  <p class="scene-sub">Layer 1 is a library of 111 SHACL shapes; each one is a graph pattern that either matches cleanly or raises a traced flag.</p>
+  <figure class="stage">
+    <svg viewBox="0 0 660 300" role="img" aria-label="Left: the Subject 001 graph with TR, TU and RS nodes circled by a dashed rose SHACL shape; a flag banner reads: CR contradicts TR/TU evidence. Right: shape library panel, 111 shapes decomposed as 85 ported CORE rules, 8 RECIST derivations, 18 archetype SHACL-SPARQL; below, an append-only Merkle chain of trace records.">
+      <defs>
+        <marker id="arr-s5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#57534e"/></marker>
+      </defs>
+      <g data-beat="1">
+        <circle cx="170" cy="140" r="30" fill="#f5f5f4" stroke="#d6d3d1"/>
+        <text x="170" y="144" text-anchor="middle" font-size="9.5" fill="#1c1917" class="t-mono">SUBJ 001</text>
+        <circle cx="70" cy="70" r="22" fill="#fff" stroke="#a8a29e"/>
+        <text x="70" y="74" text-anchor="middle" font-size="9.5" fill="#1c1917" class="t-mono">TR</text>
+        <circle cx="270" cy="70" r="22" fill="#fff" stroke="#a8a29e"/>
+        <text x="270" y="74" text-anchor="middle" font-size="9.5" fill="#1c1917" class="t-mono">TU</text>
+        <circle cx="170" cy="215" r="22" fill="#fdf7f8" stroke="#9f1239"/>
+        <text x="170" y="219" text-anchor="middle" font-size="9.5" fill="#9f1239" class="t-mono" font-weight="700">RS</text>
+        <path d="M144 120 L91 89" stroke="#d6d3d1" stroke-width="1.5"/>
+        <path d="M196 120 L249 89" stroke="#d6d3d1" stroke-width="1.5"/>
+        <path d="M170 170 V 192" stroke="#d6d3d1" stroke-width="1.5"/>
+        <rect x="400" y="20" width="245" height="150" rx="10" fill="#f5f5f4" stroke="#d6d3d1"/>
+        <text x="412" y="44" font-size="11" fill="#1c1917" font-weight="600">SHACL shape library</text>
+        <text x="412" y="82" font-size="24" fill="#9f1239" class="t-mono" font-weight="700">111</text>
+      </g>
+      <g data-beat="2">
+        <text x="412" y="110" font-size="10" fill="#44403c" class="t-mono">85 &#183; ported CORE rules</text>
+        <text x="412" y="130" font-size="10" fill="#44403c" class="t-mono">8 &#183; RECIST derivations</text>
+        <text x="412" y="150" font-size="10" fill="#44403c" class="t-mono">18 &#183; archetype SHACL-SPARQL</text>
+      </g>
+      <g data-beat="3">
+        <ellipse cx="170" cy="142" rx="135" ry="118" fill="none" stroke="#9f1239" stroke-width="1.8" stroke-dasharray="7 5"/>
+        <text x="15" y="24" font-size="10" fill="#9f1239" font-weight="600">one shape = one graph pattern</text>
+      </g>
+      <g data-beat="4">
+        <rect x="15" y="255" width="355" height="32" rx="6" fill="#fdf7f8" stroke="#9f1239"/>
+        <text x="192" y="276" text-anchor="middle" font-size="10.5" fill="#9f1239" font-weight="600">flag: CR contradicts TR/TU evidence</text>
+      </g>
+      <g data-beat="5">
+        <rect x="400" y="200" width="70" height="30" rx="5" fill="#fff" stroke="#a8a29e"/>
+        <text x="435" y="219" text-anchor="middle" font-size="9" fill="#44403c" class="t-mono">trace a</text>
+        <rect x="487" y="200" width="70" height="30" rx="5" fill="#fff" stroke="#a8a29e"/>
+        <text x="522" y="219" text-anchor="middle" font-size="9" fill="#44403c" class="t-mono">trace b</text>
+        <rect x="574" y="200" width="70" height="30" rx="5" fill="#fff" stroke="#a8a29e"/>
+        <text x="609" y="219" text-anchor="middle" font-size="9" fill="#44403c" class="t-mono">trace c</text>
+        <path d="M470 215 H483" stroke="#57534e" stroke-width="1.4" marker-end="url(#arr-s5)"/>
+        <path d="M557 215 H570" stroke="#57534e" stroke-width="1.4" marker-end="url(#arr-s5)"/>
+        <text x="400" y="262" font-size="9.5" fill="#57534e">every firing lands in an append-only</text>
+        <text x="400" y="277" font-size="9.5" fill="#57534e">Merkle-chained audit store</text>
+      </g>
+    </svg>
+  </figure>
+  <div class="caption">
+    <ol class="beats">
+      <li data-beat="1">Layer 1 is a library of 111 SHACL shapes.</li>
+      <li data-beat="2">85 are the ported CORE rules from Scene 3; 8 encode RECIST derivations; 18 are archetype-specific SHACL-SPARQL.</li>
+      <li data-beat="3" data-dur="2400">A shape matches the pattern from Scene 1 across TR, TU and RS &mdash; and fires.</li>
+      <li data-beat="4" data-dur="2200">The flag says what a validator never could: the response contradicts the lesion evidence.</li>
+      <li data-beat="5" data-dur="2400">Every firing writes a trace to an append-only Merkle audit chain &mdash; the 21 CFR Part 11 foundation.</li>
+    </ol>
+  </div>
+  <div class="scene-notes">
+    <ul class="legend" aria-label="Legend">
+      <li><span class="chip" style="background:#fff;border-color:#a8a29e"></span>record node</li>
+      <li><span class="chip" style="background:#fdf7f8;border-color:#9f1239"></span>shape match / flag</li>
+      <li><span class="chip" style="background:#f5f5f4"></span>shape library / audit store</li>
+    </ul>
+    <p class="honest"><b>Library composition measured</b> (111 = 85 + 8 + 18, paper architecture section); the graph and flag layout are schematic.</p>
+    <p class="src">Sources: <a href="https://jaimeyan.com/blog/graph-constrained-validation-cdisc-oncology.html">the post</a> (the two-layer fix) &middot; <a href="https://doi.org/10.1371/journal.pone.0350376">CAVE-Onc</a>, Fig 1.</p>
+  </div>
+</section>
+
+<!-- ============================================================ SCENE 6 -->
+<section class="scene" data-title="The deterministic agent" id="s6">
+  <div class="scene-head"><span class="scene-no">SCENE 6 / 7</span></div>
+  <h2>The rule that can't be one rule</h2>
+  <p class="scene-sub">Archetype A19 &mdash; the RECIST Table 7 matrix &mdash; is where a single SPARQL rule collapses, and a deterministic state machine takes over.</p>
+  <figure class="stage">
+    <svg viewBox="0 0 660 330" role="img" aria-label="Left panel: a gray pyramid labelled SPARQL-only attempt, 34 nested IFs, maximum nesting 34, zero testable units. Right panel: the CaveAgent state machine, five stacked steps query TR, query RS, query TU, Table 7 lookup, compare and trace, annotated flat 34-row dictionary, 22 testable blocks, maximum nesting 7. Bottom banner: zero API cost per subject, fully deterministic, exactly replayable.">
+      <defs>
+        <marker id="arr-s6" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#57534e"/></marker>
+      </defs>
+      <g data-beat="1">
+        <rect x="15" y="20" width="300" height="270" rx="10" fill="#f5f5f4" stroke="#d6d3d1"/>
+        <text x="165" y="46" text-anchor="middle" font-size="11" fill="#1c1917" font-weight="600">SPARQL-only attempt</text>
+        <path d="M165 80 L85 220 L245 220 Z" fill="#e7e5e4" stroke="#a8a29e"/>
+      </g>
+      <g data-beat="2">
+        <text x="165" y="140" text-anchor="middle" font-size="10.5" fill="#44403c" class="t-mono">34 nested IFs</text>
+        <text x="165" y="163" text-anchor="middle" font-size="10.5" fill="#44403c" class="t-mono">max nesting 34</text>
+      </g>
+      <g data-beat="3">
+        <text x="165" y="186" text-anchor="middle" font-size="10.5" fill="#9f1239" class="t-mono" font-weight="700">0 testable units</text>
+        <text x="165" y="248" text-anchor="middle" font-size="9.5" fill="#57534e">SHACL-SPARQL forbids lookup tables,</text>
+        <text x="165" y="263" text-anchor="middle" font-size="9.5" fill="#57534e">so 34 matrix rows become one expression</text>
+      </g>
+      <g data-beat="4">
+        <rect x="345" y="20" width="300" height="270" rx="10" fill="#fdf7f8" stroke="#9f1239"/>
+        <text x="495" y="46" text-anchor="middle" font-size="11" fill="#9f1239" font-weight="600">CaveAgent &#8212; deterministic state machine</text>
+        <rect x="375" y="70" width="130" height="30" rx="6" fill="#fff" stroke="#a8a29e"/>
+        <text x="440" y="89" text-anchor="middle" font-size="9.5" fill="#1c1917" class="t-mono">query TR (SLD)</text>
+        <path d="M440 100 V 111" stroke="#57534e" stroke-width="1.4" marker-end="url(#arr-s6)"/>
+        <rect x="375" y="115" width="130" height="30" rx="6" fill="#fff" stroke="#a8a29e"/>
+        <text x="440" y="134" text-anchor="middle" font-size="9.5" fill="#1c1917" class="t-mono">query RS (resp.)</text>
+        <path d="M440 145 V 156" stroke="#57534e" stroke-width="1.4" marker-end="url(#arr-s6)"/>
+        <rect x="375" y="160" width="130" height="30" rx="6" fill="#fff" stroke="#a8a29e"/>
+        <text x="440" y="179" text-anchor="middle" font-size="9.5" fill="#1c1917" class="t-mono">query TU (new)</text>
+        <path d="M440 190 V 201" stroke="#57534e" stroke-width="1.4" marker-end="url(#arr-s6)"/>
+      </g>
+      <g data-beat="5">
+        <rect x="375" y="205" width="130" height="30" rx="6" fill="#fff" stroke="#9f1239"/>
+        <text x="440" y="224" text-anchor="middle" font-size="9.5" fill="#9f1239" class="t-mono" font-weight="700">Table 7 lookup</text>
+        <path d="M440 235 V 246" stroke="#57534e" stroke-width="1.4" marker-end="url(#arr-s6)"/>
+        <rect x="375" y="250" width="130" height="30" rx="6" fill="#1c1917"/>
+        <text x="440" y="269" text-anchor="middle" font-size="9.5" fill="#fafaf9" class="t-mono">compare &#8594; trace</text>
+        <text x="520" y="85" font-size="9.5" fill="#44403c">flat dictionary, 34 rows</text>
+        <text x="520" y="130" font-size="9.5" fill="#44403c">22 unit-testable blocks</text>
+        <text x="520" y="175" font-size="9.5" fill="#44403c">max nesting 7</text>
+      </g>
+      <g data-beat="6">
+        <rect x="15" y="298" width="630" height="26" rx="6" fill="#1c1917"/>
+        <text x="330" y="315" text-anchor="middle" font-size="10.5" fill="#fafaf9">$0.000 API cost per subject &#183; fully deterministic &#183; exactly replayable for inspectors</text>
+      </g>
+    </svg>
+  </figure>
+  <div class="caption">
+    <ol class="beats">
+      <li data-beat="1" data-dur="2200">One archetype &mdash; A19, the RECIST Table 7 matrix &mdash; defeats a single SPARQL rule.</li>
+      <li data-beat="2">SHACL-SPARQL forbids lookup tables: 34 matrix rows become 34 nested IFs.</li>
+      <li data-beat="3">Zero independently testable pieces &mdash; unmaintainable by construction.</li>
+      <li data-beat="4" data-dur="2800">The agent layer instead runs a deterministic state machine: three typed queries against the graph.</li>
+      <li data-beat="5" data-dur="2600">Then a flat 34-row dictionary lookup and one comparison &mdash; 22 unit-testable blocks, maximum nesting 7, not 34.</li>
+      <li data-beat="6" data-dur="2600">No LLM call on this path: $0.000 per subject, exactly replayable for an inspector.</li>
+    </ol>
+  </div>
+  <div class="scene-notes">
+    <ul class="legend" aria-label="Legend">
+      <li><span class="chip" style="background:#e7e5e4"></span>SPARQL-only attempt</li>
+      <li><span class="chip" style="background:#fdf7f8;border-color:#9f1239"></span>deterministic agent (CaveAgent)</li>
+    </ul>
+    <p class="honest"><b>Complexity numbers measured</b> (34 nested IFs vs. 22 testable blocks, max nesting 7; $0.000/subject &mdash; paper, Discussion / L3 cost); the diagrams are simplified.</p>
+    <p class="src">Sources: <a href="https://jaimeyan.com/blog/graph-constrained-validation-cdisc-oncology.html">the post</a> (why the agent layer earns its place) &middot; <a href="https://doi.org/10.1371/journal.pone.0350376">CAVE-Onc</a>, Discussion.</p>
+  </div>
+</section>
+
+<!-- ============================================================ SCENE 7 -->
+<section class="scene" data-title="Scoreboard + fine print" id="s7">
+  <div class="scene-head"><span class="scene-no">SCENE 7 / 7</span></div>
+  <h2>What the evaluation showed &mdash; and what it didn't</h2>
+  <p class="scene-sub">Twenty expert-reviewed contradiction archetypes, injected into clean data; each cell is one archetype.</p>
+  <figure class="stage">
+    <svg viewBox="0 0 660 330" role="img" aria-label="Detection matrix: CAVE detects all 20 archetypes (A19 flagged as the one needing the agent layer), CORE detects 8 of 20, the Pinnacle 21 FDA engine 6 of 20. Side notes: on the ten cross-domain RECIST archetypes the industry engines detect zero versus ten (McNemar p equals 0.002); on clean data the flag sets barely overlap, Jaccard 0.004, so the approach augments validators. Fine print: with frozen shapes, 3 of 5 held-out archetypes caught; construction validation on a synthetic corpus.">
+      <g data-beat="1">
+        <text x="330" y="36" text-anchor="middle" font-size="12" fill="#1c1917" font-weight="600">20 injected contradiction archetypes &#8212; expert-reviewed</text>
+      </g>
+      <g data-beat="2">
+        <text x="30" y="84" font-size="10" fill="#1c1917" class="t-mono" font-weight="600">CAVE (L1+L3)</text>
+        
+        <rect x="170" y="70" width="14" height="16" rx="2" fill="#9f1239"/>
+        <rect x="187" y="70" width="14" height="16" rx="2" fill="#9f1239"/>
+        <rect x="204" y="70" width="14" height="16" rx="2" fill="#9f1239"/>
+        <rect x="221" y="70" width="14" height="16" rx="2" fill="#9f1239"/>
+        <rect x="238" y="70" width="14" height="16" rx="2" fill="#9f1239"/>
+        <rect x="255" y="70" width="14" height="16" rx="2" fill="#9f1239"/>
+        <rect x="272" y="70" width="14" height="16" rx="2" fill="#9f1239"/>
+        <rect x="289" y="70" width="14" height="16" rx="2" fill="#9f1239"/>
+        <rect x="306" y="70" width="14" height="16" rx="2" fill="#9f1239"/>
+        <rect x="323" y="70" width="14" height="16" rx="2" fill="#9f1239"/>
+        <rect x="340" y="70" width="14" height="16" rx="2" fill="#9f1239"/>
+        <rect x="357" y="70" width="14" height="16" rx="2" fill="#9f1239"/>
+        <rect x="374" y="70" width="14" height="16" rx="2" fill="#9f1239"/>
+        <rect x="391" y="70" width="14" height="16" rx="2" fill="#9f1239"/>
+        <rect x="408" y="70" width="14" height="16" rx="2" fill="#9f1239"/>
+        <rect x="425" y="70" width="14" height="16" rx="2" fill="#9f1239"/>
+        <rect x="442" y="70" width="14" height="16" rx="2" fill="#9f1239"/>
+        <rect x="459" y="70" width="14" height="16" rx="2" fill="#9f1239"/>
+        <rect x="476" y="70" width="14" height="16" rx="2" fill="#9f1239"/>
+        <rect x="493" y="70" width="14" height="16" rx="2" fill="#9f1239" stroke="#1c1917" stroke-width="1.4" stroke-dasharray="3 2"/>
+        <text x="520" y="84" font-size="11" fill="#9f1239" class="t-mono" font-weight="700">20/20</text>
+        <text x="494" y="62" text-anchor="middle" font-size="8.5" fill="#57534e" class="t-mono">A19&#8594;L3</text>
+      </g>
+      <g data-beat="3">
+        <text x="30" y="124" font-size="10" fill="#1c1917" class="t-mono">CORE v0.15</text>
+        
+        <rect x="170" y="110" width="14" height="16" rx="2" fill="#9f1239"/>
+        <rect x="187" y="110" width="14" height="16" rx="2" fill="#9f1239"/>
+        <rect x="204" y="110" width="14" height="16" rx="2" fill="#9f1239"/>
+        <rect x="221" y="110" width="14" height="16" rx="2" fill="#9f1239"/>
+        <rect x="238" y="110" width="14" height="16" rx="2" fill="#9f1239"/>
+        <rect x="255" y="110" width="14" height="16" rx="2" fill="#9f1239"/>
+        <rect x="272" y="110" width="14" height="16" rx="2" fill="#9f1239"/>
+        <rect x="289" y="110" width="14" height="16" rx="2" fill="#9f1239"/>
+        <rect x="306" y="110" width="14" height="16" rx="2" fill="#e7e5e4"/>
+        <rect x="323" y="110" width="14" height="16" rx="2" fill="#e7e5e4"/>
+        <rect x="340" y="110" width="14" height="16" rx="2" fill="#e7e5e4"/>
+        <rect x="357" y="110" width="14" height="16" rx="2" fill="#e7e5e4"/>
+        <rect x="374" y="110" width="14" height="16" rx="2" fill="#e7e5e4"/>
+        <rect x="391" y="110" width="14" height="16" rx="2" fill="#e7e5e4"/>
+        <rect x="408" y="110" width="14" height="16" rx="2" fill="#e7e5e4"/>
+        <rect x="425" y="110" width="14" height="16" rx="2" fill="#e7e5e4"/>
+        <rect x="442" y="110" width="14" height="16" rx="2" fill="#e7e5e4"/>
+        <rect x="459" y="110" width="14" height="16" rx="2" fill="#e7e5e4"/>
+        <rect x="476" y="110" width="14" height="16" rx="2" fill="#e7e5e4"/>
+        <rect x="493" y="110" width="14" height="16" rx="2" fill="#e7e5e4"/>
+        <text x="520" y="124" font-size="11" fill="#44403c" class="t-mono" font-weight="700">8/20</text>
+      </g>
+      <g data-beat="4">
+        <text x="30" y="164" font-size="10" fill="#1c1917" class="t-mono">P21 (FDA)</text>
+        
+        <rect x="170" y="150" width="14" height="16" rx="2" fill="#9f1239"/>
+        <rect x="187" y="150" width="14" height="16" rx="2" fill="#9f1239"/>
+        <rect x="204" y="150" width="14" height="16" rx="2" fill="#9f1239"/>
+        <rect x="221" y="150" width="14" height="16" rx="2" fill="#9f1239"/>
+        <rect x="238" y="150" width="14" height="16" rx="2" fill="#9f1239"/>
+        <rect x="255" y="150" width="14" height="16" rx="2" fill="#9f1239"/>
+        <rect x="272" y="150" width="14" height="16" rx="2" fill="#e7e5e4"/>
+        <rect x="289" y="150" width="14" height="16" rx="2" fill="#e7e5e4"/>
+        <rect x="306" y="150" width="14" height="16" rx="2" fill="#e7e5e4"/>
+        <rect x="323" y="150" width="14" height="16" rx="2" fill="#e7e5e4"/>
+        <rect x="340" y="150" width="14" height="16" rx="2" fill="#e7e5e4"/>
+        <rect x="357" y="150" width="14" height="16" rx="2" fill="#e7e5e4"/>
+        <rect x="374" y="150" width="14" height="16" rx="2" fill="#e7e5e4"/>
+        <rect x="391" y="150" width="14" height="16" rx="2" fill="#e7e5e4"/>
+        <rect x="408" y="150" width="14" height="16" rx="2" fill="#e7e5e4"/>
+        <rect x="425" y="150" width="14" height="16" rx="2" fill="#e7e5e4"/>
+        <rect x="442" y="150" width="14" height="16" rx="2" fill="#e7e5e4"/>
+        <rect x="459" y="150" width="14" height="16" rx="2" fill="#e7e5e4"/>
+        <rect x="476" y="150" width="14" height="16" rx="2" fill="#e7e5e4"/>
+        <rect x="493" y="150" width="14" height="16" rx="2" fill="#e7e5e4"/>
+        <text x="520" y="164" font-size="11" fill="#44403c" class="t-mono" font-weight="700">6/20</text>
+        <text x="330" y="205" text-anchor="middle" font-size="10.5" fill="#44403c">cross-domain RECIST subset: engines 0/10 &#183; CAVE 10/10 (McNemar p = 0.002)</text>
+      </g>
+      <g data-beat="5">
+        <text x="330" y="232" text-anchor="middle" font-size="10.5" fill="#44403c">clean data: flag sets barely overlap &#8212; Jaccard 0.004 &#8594; augment, not replace</text>
+      </g>
+      <g data-beat="6">
+        <rect x="30" y="252" width="600" height="56" rx="8" fill="#f5f5f4" stroke="#d6d3d1"/>
+        <text x="330" y="274" text-anchor="middle" font-size="10" fill="#44403c">fine print &#8212; held-out check (shape library frozen): 3/5 caught</text>
+        <text x="330" y="293" text-anchor="middle" font-size="10" fill="#57534e">construction validation &#183; synthetic corpus &#183; one L3 archetype &#8212; claims scoped accordingly</text>
+      </g>
+    </svg>
+  </figure>
+  <div class="caption">
+    <ol class="beats">
+      <li data-beat="1" data-dur="2200">Twenty expert-reviewed contradiction archetypes were injected into otherwise clean data.</li>
+      <li data-beat="2" data-dur="2400">CAVE caught all 20 &mdash; nineteen by the shape layer, A19 by the deterministic agent.</li>
+      <li data-beat="3" data-dur="2200">CORE caught 8 &mdash; the ones seeded from its own rule corpus.</li>
+      <li data-beat="4" data-dur="2600">Pinnacle 21's FDA engine caught 6; on the ten cross-domain RECIST archetypes, both industry engines caught zero.</li>
+      <li data-beat="5" data-dur="3000">On clean data the flag sets barely overlap &mdash; Jaccard 0.004: this augments validators, it doesn't replace them.</li>
+      <li data-beat="6" data-dur="3000">Honest fine print: with the shape library frozen, 3 of 5 held-out archetypes were caught &mdash; construction validation on a synthetic corpus.</li>
+    </ol>
+  </div>
+  <div class="scene-notes">
+    <ul class="legend" aria-label="Legend">
+      <li><span class="chip" style="background:#9f1239"></span>archetype detected</li>
+      <li><span class="chip" style="background:#e7e5e4"></span>missed</li>
+      <li><span class="chip" style="background:#fff;border-color:#1c1917"></span>needed the agent layer (A19)</li>
+    </ul>
+    <p class="honest"><b>Measured results</b> &mdash; detection counts: paper Table 3; cross-domain subset and p-value: Table 3 / Results; Jaccard 0.004: Table 2; held-out 3/5: Table 4. Cell grid is a schematic echo of Fig 2, not the figure itself.</p>
+    <p class="src">Sources: <a href="https://jaimeyan.com/blog/graph-constrained-validation-cdisc-oncology.html">the post</a> (evaluation; warnings) &middot; <a href="https://doi.org/10.1371/journal.pone.0350376">CAVE-Onc</a>, Tables 2&ndash;4, Fig 2.</p>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Built as a self-contained teaching page: no external scripts, styles, or images. Keyboard: <span class="t-mono">Space / &rarr; / &larr; / R</span>; reduced motion and no-JavaScript both degrade to the complete final state.</p>
+    <p><a href="https://jaimeyan.com/explainers.html">All explainers</a> &middot; <a href="https://jaimeyan.com/blog/graph-constrained-validation-cdisc-oncology.html">Source post</a> &middot; <a href="https://jaimeyan.com/papers/cave-onc.html">CAVE-Onc paper page</a> &middot; <a href="https://jaimeyan.com/">jaimeyan.com</a></p>
+    <p>&copy; 2026 Jaime Yan &middot; CC BY 4.0 &middot; cite as: Yan, J., &ldquo;The Contradictions Your Validator Can't See &mdash; Interactive Walkthrough&rdquo;, jaimeyan.com/explainers/graph-constrained-validation.html (2026-09-02).</p>
+  </div>
+</footer>
+
+<script>
+/* ============================================================ ENGINE (vanilla, ~zero deps)
+   Contract documented in the file header. Reduced-motion exits to static mode. */
+(function () {
+  'use strict';
+  var html = document.documentElement;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    html.classList.add('static');
+    return;
+  }
+
+  var DEFAULT_DUR = 1600;
+  var scenes = Array.prototype.slice.call(document.querySelectorAll('.scene')).map(function (el, i) {
+    var beats = {};
+    Array.prototype.forEach.call(el.querySelectorAll('svg [data-beat]'), function (g) {
+      var n = +g.getAttribute('data-beat');
+      (beats[n] = beats[n] || []).push(g);
+    });
+    var caps = {};
+    var list = Array.prototype.slice.call(el.querySelectorAll('.beats li'));
+    list.forEach(function (li) { caps[+li.getAttribute('data-beat')] = li; });
+    var max = list.length;
+    return {
+      el: el, i: i, beats: beats, caps: caps, list: list, max: max,
+      k: 0, timer: null,
+      title: el.getAttribute('data-title') || ('Scene ' + (i + 1))
+    };
+  });
+
+  var playing = false, speed = 1, current = 0;
+  var $ = function (id) { return document.getElementById(id); };
+  var btnPlay = $('btn-play'), btnPrev = $('btn-prev'), btnNext = $('btn-next'),
+      btnReset = $('btn-reset'), btnSpeed = $('btn-speed'),
+      pmeta = $('pmeta'), pdots = $('pdots');
+
+  scenes.forEach(function (s) { s.el.id = s.el.id || ('scene-' + (s.i + 1)); });
+  var dots = scenes.map(function (s) {
+    var d = document.createElement('button');
+    d.className = 'pdot'; d.setAttribute('aria-label', 'Go to ' + s.title);
+    d.addEventListener('click', function () { go(s.i, true); });
+    pdots.appendChild(d); return d;
+  });
+
+  function render(s) {
+    for (var n = 1; n <= s.max; n++) {
+      var on = n <= s.k;
+      (s.beats[n] || []).forEach(function (g) { g.classList.toggle('on', on); });
+      var li = s.caps[n];
+      if (li) {
+        li.classList.toggle('now', n === s.k);
+        li.classList.toggle('done', n < s.k);
+      }
+    }
+    pmeta.textContent = 'S' + (s.i + 1) + ' ' + s.title + ' \u2014 beat ' + s.k + '/' + s.max;
+    dots.forEach(function (d, j) {
+      d.classList.toggle('now', j === s.i);
+      d.classList.toggle('done', j < s.i || (j === s.i && s.k >= scenes[j].max));
+    });
+    btnPrev.disabled = s.i === 0 && s.k === 0;
+    btnNext.disabled = s.i === scenes.length - 1 && s.k >= s.max;
+  }
+
+  function stopTimer(s) { if (s && s.timer) { clearTimeout(s.timer); s.timer = null; } }
+  function setPlay(v) {
+    playing = v;
+    btnPlay.textContent = playing ? 'Pause' : 'Play';
+    if (!playing) scenes.forEach(stopTimer);
+    else tick();
+  }
+  function dur(s) {
+    var li = s.caps[s.k];
+    var d = li && li.getAttribute('data-dur');
+    return (d ? +d : DEFAULT_DUR) / speed;
+  }
+  function tick() {
+    var s = scenes[current];
+    stopTimer(s);
+    if (!playing) return;
+    if (s.k >= s.max) { // scene complete -> next scene
+      if (current < scenes.length - 1) { go(current + 1, true); }
+      else setPlay(false);
+      return;
+    }
+    s.timer = setTimeout(function () {
+      step(1); tick();
+    }, dur(s));
+  }
+  function step(d) {
+    var s = scenes[current];
+    var k = s.k + d;
+    if (k < 0) { if (current > 0) go(current - 1, false, scenes[current - 1].max); return; }
+    if (k > s.max) { if (current < scenes.length - 1) { go(current + 1, true); return; } k = s.max; }
+    s.k = k; render(s);
+  }
+  function go(i, fromStart, atBeat) {
+    var s = scenes[i];
+    stopTimer(scenes[current]);
+    current = i;
+    s.k = Math.max(0, Math.min(s.max, atBeat !== undefined ? atBeat : (fromStart ? 0 : s.max)));
+    render(s);
+    if (playing) tick();
+    if (i !== current || true) s.el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  btnPlay.addEventListener('click', function () { setPlay(!playing); });
+  btnNext.addEventListener('click', function () { step(1); if (playing) tick(); });
+  btnPrev.addEventListener('click', function () { step(-1); if (playing) tick(); });
+  btnReset.addEventListener('click', function () { setPlay(false); go(current, true); });
+  btnSpeed.addEventListener('click', function () {
+    speed = speed === 1 ? 1.5 : speed === 1.5 ? 2 : 1;
+    btnSpeed.textContent = speed + 'x';
+    if (playing) tick();
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.target.closest && e.target.closest('a,button,input,textarea,select')) return;
+    if (e.code === 'Space') { e.preventDefault(); setPlay(!playing); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); step(1); if (playing) tick(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); step(-1); if (playing) tick(); }
+    else if (e.key === 'r' || e.key === 'R') { setPlay(false); go(current, true); }
+  });
+
+  // Scroll-sync: bind the player to the scene crossing the viewport top.
+  var spy = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) {
+      if (en.isIntersecting) {
+        var idx = scenes.findIndex(function (s) { return s.el === en.target; });
+        if (idx >= 0 && idx !== current) {
+          stopTimer(scenes[current]);
+          current = idx; render(scenes[current]);
+          if (playing) tick();
+        }
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  scenes.forEach(function (s) { spy.observe(s.el); });
+
+  // Initial state: scene 1 at beat 0 (all hidden until play/step).
+  render(scenes[0]);
+})();
+</script>
+</body>
+</html>

@@ -6,6 +6,7 @@ tags: ["cdisc", "sdtm", "shacl", "recist", "clinical-data-validation"]
 kind: deep-dive
 canonicalPath: /blog/graph-constrained-validation-cdisc-oncology.html
 paperRef: cave-onc
+explainer: /explainers/graph-constrained-validation.html
 ---
 
 A subject's Response (RS) domain records an overall response of Complete Response. Their target lesions shrank enough for Partial Response, non-target disease is Stable Disease, and no new lesions appeared. Under RECIST 1.1, that recorded response is clinically impossible given the inputs that were supposed to produce it. Run the dataset through the CDISC CORE engine or the Pinnacle 21 FDA engine and it comes back clean — not because the rules are badly written, but because no rule in either engine can say it.

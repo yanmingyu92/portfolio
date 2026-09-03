@@ -33,6 +33,26 @@ export const explainers: Explainer[] = [
 			'define-xml-reviewers-guide-tutorial',
 		],
 	},
+	{
+		slug: 'graph-constrained-validation',
+		title: "The Contradictions Your Validator Can't See",
+		description:
+			'Why domain-scoped SDTM validators structurally miss cross-domain RECIST contradictions — seven scenes from one impossible response to the graph, the SHACL shapes, the deterministic agent, and the 20/20 scoreboard with its fine print.',
+		path: '/explainers/graph-constrained-validation.html',
+		published: '2026-09-02',
+		scenes: 7,
+		sourcePosts: ['graph-constrained-validation-cdisc-oncology'],
+	},
+	{
+		slug: 'five-layer-agent-architecture',
+		title: 'Thin MCP, Thick Skills: Five Layers for Clinical Programming Agents',
+		description:
+			"ClinAgent's five-layer stack — thin stateless MCP tools, thick testable skills, compliance infrastructure — traced through one tool call, the STUDY-A validation bench, and the study-specific failure mode. Seven scenes.",
+		path: '/explainers/five-layer-agent-architecture.html',
+		published: '2026-09-02',
+		scenes: 7,
+		sourcePosts: ['five-layer-architecture-clinical-agents'],
+	},
 ];
 
 export function getExplainerByPath(path: string): Explainer | undefined {

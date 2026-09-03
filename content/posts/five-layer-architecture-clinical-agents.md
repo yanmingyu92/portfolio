@@ -6,6 +6,7 @@ tags: ["llm-agents", "mcp", "clinical-trials", "statistical-programming", "agent
 kind: deep-dive
 canonicalPath: /blog/five-layer-architecture-clinical-agents.html
 paperRef: clinagent-five-layer
+explainer: /explainers/five-layer-agent-architecture.html
 ---
 
 Ask your favorite AI coding agent — Claude Code, Cursor, Cline, Augment Code — to review the SAS log from an ADSL derivation. It will happily try. Now ask it to read the SAS7BDAT dataset itself, parse the ADaM specification Excel, or tell a real `ERROR:` apart from a harmless "Unable to copy SASUSER" warning. It can't — not because the model can't reason, but because none of the domain tools exist.
