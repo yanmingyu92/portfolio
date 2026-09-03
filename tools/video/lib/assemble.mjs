@@ -53,7 +53,7 @@ export async function assembleVideo({ timeline, ttsMap, script, outDir, outMp4 }
   // ---- video frame playlist ----
   const vlist = path.join(outDir, 'frames-list.txt');
   const lines = [];
-  timeline.slides.forEach((sl) => {
+  timeline.slides.forEach((sl, si) => {
     sl.framePngs.forEach((png, k) => {
       let d = sl.frames[k].dur;
       if (k === 0) d += sl.leadPad;
@@ -61,9 +61,14 @@ export async function assembleVideo({ timeline, ttsMap, script, outDir, outMp4 }
       lines.push(`file '${toFileUrl(png)}'`);
       lines.push(`duration ${d.toFixed(3)}`);
     });
-    // concat demuxer quirk: repeat last file so its duration applies
+    // concat demuxer quirk: repeat last file so its duration applies.
+    // Mid-stream repeats need an explicit tiny duration: a bare file line
+    // makes the demuxer emit a NOPTS packet whose rescale the fps filter
+    // turns into a dup-fill explosion ("Cannot allocate memory"). The final
+    // slide keeps the bare terminator (no packets follow it).
     const last = sl.framePngs[sl.framePngs.length - 1];
     lines.push(`file '${toFileUrl(last)}'`);
+    if (si < timeline.slides.length - 1) lines.push('duration 0.033');
   });
   fs.writeFileSync(vlist, lines.join('\n') + '\n', 'utf8');
 

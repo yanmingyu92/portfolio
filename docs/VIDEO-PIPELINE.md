@@ -131,6 +131,7 @@ Re-running an unchanged build completes in ~1s and rewrites nothing.
 | Symptom | Fix |
 |---|---|
 | edge-tts 403 / "NoAudioReceived" | transient service blocks: retry the build (cache resumes). Keep `edge-tts` current (`uv sync`). |
+| ffmpeg "Cannot allocate memory" in `fps` filter, dies mid/late encode | fixed in `assemble.mjs` (2026-09-02): mid-stream last-frame repeat lines now carry an explicit tiny duration — a bare `file` line made the concat demuxer emit a NOPTS packet that `fps` gap-filled until OOM. If it recurs, check `work/frames-list.txt` for bare repeats. |
 | Chrome not found | `set VIDEO_CHROME=C:\path\to\chrome.exe` |
 | First build slow | uv creates the TTS venv once; later builds are fast |
 | YouTube `quotaExceeded` | default 10k units/day ≈ 6 uploads; wait or request quota increase |
