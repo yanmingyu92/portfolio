@@ -1,6 +1,8 @@
 # Explainer Pipeline — Blog Post → Interactive Walkthrough → /explainers/
 
-> Status: pilot live (`clinical-data-journey`, 2026-09-01). Pipeline pieces:
+> Status: 3 live (`clinical-data-journey` pilot 2026-09-01; `graph-constrained-validation`
+> and `five-layer-agent-architecture`, 2026-09-02 — scene specs in
+> `docs/explainer-specs/2026-09-02-graph-validation-and-five-layer.md`). Pipeline pieces:
 > `templates/explainer-template.html` (engine + page spec), `tools/explainer-audit.mjs`
 > (Playwright auditor, deps isolated in `tools/explainer/`), registry in
 > `src/data/explainers.ts`. The site build never depends on any of it — explainers
@@ -91,7 +93,10 @@ npm run explainer:audit -- public/explainers/<slug>.html
 Checks: size ≤ 300 KB (A) · external requests vs whitelist (B) · overflow at
 375/1280 (C) · JS/console errors (D) · reduced-motion full final state + hidden
 player (E) · no-JS full final state + readable captions (F) · beat reveal causes
-no body-height change (G) · keyboard handlers present (H) · beats-per-scene
+no body-height change (G) · keyboard handlers present (H) · SVG text sanity at
+final state: no `<text>` escapes its svg's painted box (I), no two `<text>` in
+one svg overlap by >35% of the smaller box — identical-text/identical-position
+overprint (the red redraw-highlight pattern) is exempt (J) · beats-per-scene
 guidance 5–10 (warn). Exit 1 on any failure; wire into CI later if the fleet
 grows. Deps live in `tools/explainer/` (playwright-core; browsers from the shared
 ms-playwright cache) — the site build is never touched.
@@ -105,8 +110,8 @@ comparable free resource. Planned fleet:
 | # | Topic | Sources | Status |
 |---|---|---|---|
 | 1 | From Raw Data to TLF: the clinical data journey | Parts 2/3/4/5/6 (+7/17/16) | **live** — pilot |
-| 2 | Graph-constrained validation (what rule engines can't see) | graph-constrained-validation post + paper | planned |
-| 3 | The five-layer clinical agent architecture | five-layer-architecture post + paper | planned |
+| 2 | Graph-constrained validation (what rule engines can't see) | graph-constrained-validation post + paper | **live** — 2026-09-02 |
+| 3 | The five-layer clinical agent architecture | five-layer-architecture post + paper | **live** — 2026-09-02 |
 | 4 | Windowing / baseline / LOCF decision rules | Part 17 (+ Part 7) | planned |
 | 5 | RAG over TLF template libraries | benchmarking-rag post + paper | planned |
 

@@ -14,6 +14,8 @@
 //   F  JavaScript disabled: full final state visible, captions readable (S6)
 //   G  beat reveal causes no layout change (body height identical before/after full reveal) (S7)
 //   H  keyboard contract present (Space/ArrowLeft/ArrowRight/R handlers) — static scan
+//   I  SVG text sanity: no rendered <text> escapes its svg's painted box (final state)
+//   J  SVG text sanity: no two <text> elements in one svg overlap by >35% of the smaller box
 //
 // Playwright resolution: tools/explainer/node_modules (own deps, site build untouched;
 // mirrors the tools/video pattern). Browsers are expected in the default
@@ -128,6 +130,50 @@ async function auditPage(browser, file) {
 				else ok(`scene beats within 5-10 (${sceneStats.join(',')})`);
 			}
 		}
+		await ctx.close();
+	}
+
+	// I/J: SVG text sanity at final state (all beats revealed), 1280 viewport
+	{
+		const ctx = await browser.newContext({ viewport: { width: 1280, height: 860 } });
+		const page = await ctx.newPage();
+		await page.goto(url, { waitUntil: 'load' });
+		await page.waitForTimeout(250);
+		const sanity = await page.evaluate(() => {
+			document.querySelectorAll('svg [data-beat]').forEach(g => g.classList.add('on'));
+			const outOfBox = [], overlaps = [];
+			const TOL = 2; // px, rendering rounding
+			[...document.querySelectorAll('svg[viewBox]')].forEach((s, si) => {
+				const sr = s.getBoundingClientRect();
+				const texts = [...s.querySelectorAll('text')]
+					.map(t => ({ label: (t.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 28), r: t.getBoundingClientRect() }))
+					.filter(t => t.label && t.r.width > 0 && t.r.height > 0);
+				for (const t of texts) {
+					if (t.r.left < sr.left - TOL || t.r.right > sr.right + TOL ||
+						t.r.top < sr.top - TOL || t.r.bottom > sr.bottom + TOL)
+						outOfBox.push(`svg ${si + 1} "${t.label}"`);
+				}
+				for (let i = 0; i < texts.length; i++) for (let j = i + 1; j < texts.length; j++) {
+					const a = texts[i].r, b = texts[j].r;
+					// deliberate overprint: identical text re-drawn at the same spot (e.g. red highlight pass)
+					if (texts[i].label === texts[j].label &&
+						Math.abs(a.left - b.left) <= TOL && Math.abs(a.top - b.top) <= TOL) continue;
+					const iw = Math.min(a.right, b.right) - Math.max(a.left, b.left);
+					const ih = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
+					if (iw <= 0 || ih <= 0) continue;
+					const ratio = (iw * ih) / Math.min(a.width * a.height, b.width * b.height);
+					if (ratio > 0.35)
+						overlaps.push(`svg ${si + 1} "${texts[i].label}" x "${texts[j].label}" (${Math.round(ratio * 100)}%)`);
+				}
+			});
+			return { outOfBox, overlaps };
+		});
+		if (sanity.outOfBox.length)
+			fail(rel, `SVG text outside viewBox (${sanity.outOfBox.length}): ${sanity.outOfBox.slice(0, 5).join(' | ')}`);
+		else ok('SVG text within viewBox (I)');
+		if (sanity.overlaps.length)
+			fail(rel, `SVG text overlap >35% (${sanity.overlaps.length}): ${sanity.overlaps.slice(0, 5).join(' | ')}`);
+		else ok('SVG text pairwise overlap <=35% (J)');
 		await ctx.close();
 	}
 
