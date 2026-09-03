@@ -7,6 +7,7 @@ kind: tutorial
 series: clinical-sp-bootcamp
 seriesOrder: 8
 canonicalPath: /blog/adam-occds-adae-tutorial.html
+videoId: RMOF0kWNe_8
 
 ---
 
