@@ -1,13 +1,13 @@
 ---
 title: "ADaM OCCDS Explained: Programming ADAE with Treatment Flags"
-date: 2026-08-30
+date: 2026-09-03
 description: "ADAE from the OCCDS side: one row per event, the AE-to-ADSL merge, treatment-emergent flags driven by TRT01SDT, serious flags, and the QC defects reviewers catch."
 tags: ["clinical-sas", "adam", "occds", "adae", "safety"]
 kind: tutorial
 series: clinical-sp-bootcamp
 seriesOrder: 8
 canonicalPath: /blog/adam-occds-adae-tutorial.html
-draft: true
+
 ---
 
 A safety table reports 312 treatment-emergent adverse events. The independent QC program counts 315. The gap is three events with onset before first dose, every one flagged treatment-emergent because the flag compared onset against the randomization date instead of TRT01SDT. That is what an OCCDS flag defect looks like: invisible in the code, visible in the counts.
@@ -141,4 +141,4 @@ No. That shape is a summary output derived from ADAE, not ADAE itself. When an a
 
 ---
 
-Next in the bootcamp: [Part 9, ADTTE and time-to-event programming](/blog/adtte-survival-tutorial.html). Earlier in the arc: [Part 7, BDS structure for ADLB and ADVS](/blog/adam-bds-adlb-advs-tutorial.html) and [Part 2, the ADSL walkthrough](/blog/adsl-derivation-tutorial-trtstdt.html). The [series roadmap](/blog/clinical-sp-bootcamp-roadmap.html) tracks what is published.
+Next in the bootcamp: Part 9, ADTTE and time-to-event programming. Earlier in the arc: [Part 7, BDS structure for ADLB and ADVS](/blog/adam-bds-adlb-advs-tutorial.html) and [Part 2, the ADSL walkthrough](/blog/adsl-derivation-tutorial-trtstdt.html). The [series roadmap](/blog/clinical-sp-bootcamp-roadmap.html) tracks what is published.

@@ -68,7 +68,7 @@ The series runs four lines. The SDTM/TLF line is the production spine: raw data 
 | [5 — SDTM AE domain mapping](/blog/sdtm-ae-domain-mapping-example.html) | SDTM/TLF | Build the AE domain end to end: MedDRA coding, flags, dates, and --SEQ |
 | [6 — SDTM mapping specifications](/blog/sdtm-mapping-spec-walkthrough.html) | SDTM/TLF | Read and write the spec that lets someone else reproduce your mapping |
 | [7 — ADaM BDS: ADLB and ADVS](/blog/adam-bds-adlb-advs-tutorial.html) | ADaM | Structure BDS datasets with parameters, baselines, and analysis visits |
-| 8 — ADaM OCCDS: ADAE | ADaM | Build occurrence datasets that answer who had what, and when |
+| [8 — ADaM OCCDS: ADAE](/blog/adam-occds-adae-tutorial.html) | ADaM | Build occurrence datasets that answer who had what, and when |
 | 9 — ADaM ADTTE: time to event | ADaM | Derive a time-to-event dataset that survives a statistician's questions |
 | [10 — Clinical SAS interview questions](/blog/clinical-sas-interview-questions-guide.html) | Career | Walk into the interview knowing the four rounds and the signals they grade |
 | 11 — The career guide | Career | Plan your entry with a realistic skill ladder and a 90-day study plan |
