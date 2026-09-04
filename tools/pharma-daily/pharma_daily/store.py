@@ -150,3 +150,29 @@ def counts(conn: sqlite3.Connection) -> dict:
         "items": conn.execute("SELECT COUNT(*) FROM items").fetchone()[0],
         "deals": conn.execute("SELECT COUNT(*) FROM deals").fetchone()[0],
     }
+
+
+def trailing_daily_average(conn: sqlite3.Connection, table: str, end: str, days: int = 28,
+                           category: str | None = None) -> float | None:
+    """Mean per-day row count over the `days` before `end`.
+
+    Returns None when the DB covers fewer than 14 distinct days — a young DB
+    makes the baseline meaningless (a 2-day-old DB would report nonsense like
+    "38x average"), and no insight is better than a fake one.
+    """
+    import datetime as dt
+    end_d = dt.date.fromisoformat(end)
+    start_d = (end_d - dt.timedelta(days=days)).isoformat()
+    date_col = "date"
+    where = f"{date_col} >= ? AND {date_col} < ?"
+    params: tuple = (start_d, end)
+    if table != "deals":
+        where += " AND category = ?"
+        params = (start_d, end, category or "")
+    n, distinct_days = conn.execute(
+        f"SELECT COUNT(*), COUNT(DISTINCT {date_col}) FROM {table} WHERE {where}",
+        params,
+    ).fetchone()
+    if distinct_days < 14:
+        return None
+    return (n / days) if n else None

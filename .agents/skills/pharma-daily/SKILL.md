@@ -81,6 +81,16 @@ first and follow it exactly.
    three columns of each table — the video extractor narrates only those.
    Every figure gets a takeaway caption (a conclusion).
 
+   **Insight-first drafting (EDITORIAL.md §3, binding):** read
+   `pack.insights[]` before writing anything. The TL;DR's "most important
+   pattern" and the One Take must each lean on at least one computed insight,
+   citing its numbers; Key takeaways must contain at least one computed
+   relationship (ratio, percentile, delta vs baseline) rather than raw counts
+   alone. If `insights[]` is empty, say so in the review-gate summary and
+   write the One Take from comp/market relationships you compute yourself —
+   never restate the deal table as prose. A draft that lists numbers without
+   a "so what" fails review.
+
 5. **Self fact-check pass (mandatory, separate from drafting).** Re-read the
    draft. For every number and factual claim: locate the exact pack field it
    came from, or the step-3 Datasource query result it came from (query text

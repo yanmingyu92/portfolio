@@ -16,7 +16,7 @@ import sys
 from pathlib import Path
 
 from pharma_daily import analyze, build_post, extract, fetch, market, pack, store
-from pharma_daily.analysis import comps, readouts as readout_rank
+from pharma_daily.analysis import comps, insights as insight_mod, readouts as readout_rank
 
 TOOL_DIR = Path(__file__).resolve().parent
 SITE_ROOT = TOOL_DIR.parents[1]
@@ -88,6 +88,13 @@ def main() -> int:
     tickers = [d["ticker"] for d in period_deals if d.get("ticker")]
     quotes = market.fetch_quotes(tickers) if tickers else []
 
+    # candidate insights (EDITORIAL.md §3): deterministic, pack-traceable
+    insights = insight_mod.compute_insights(
+        period_deals, res.approvals, ranked_readouts, quotes, end.isoformat(),
+        trailing_deals=store.trailing_daily_average(conn, "deals", s),
+        trailing_approvals=store.trailing_daily_average(conn, "items", s, category="approval"),
+    )
+
     period_items = store.items_between(conn, s, e)
     cat_counts = store.category_counts(conn, s, e)
     # readouts carry future dates so the windowed count misses them; add explicitly
@@ -134,6 +141,7 @@ def main() -> int:
         readouts=ranked_readouts,
         market=quotes,
         comps=comps_block,
+        insights=insights,
         figures=figures_meta,
         sources_ok=res.ok,
         sources_failed=res.failed,

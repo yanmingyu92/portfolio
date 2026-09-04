@@ -66,7 +66,47 @@ than disappearing.
 10. **Sources** — every item linked to its first-hand source, plus a
     provenance footer (collection window, `fetched_at`, failed sources).
 
-## 3. Voice rules
+## 3. Insight doctrine — numbers are raw material, not the product
+
+An **insight** is a claim that (a) is not stated in any single source we link,
+(b) rests on a computed relationship in the day's data, and (c) changes what a
+practitioner thinks or watches next. Listing numbers is the input to writing,
+never the output.
+
+**The seven canonical moves** (use at least two per post; the pipeline computes
+candidates for each in `pack.insights[]`):
+
+1. **Structure over headline** — split upfront cash from contingent milestones;
+   an upfront share outside the 5–10% license band is the story, not the total.
+2. **Historical position** — where this deal/approval rate sits vs the
+   accumulated comp base (percentile, median distance), with thin-sample flags.
+3. **Window pattern** — concentration by origin, therapeutic area, or modality:
+   "3 of 4 largest checks went to China-originated assets" is insight;
+   listing the three deals is not.
+4. **Market verdict vs terms** — price/volume reaction read against deal
+   structure (a +15% re-rate on an 8.5% upfront says the market prices the
+   platform, not the cash).
+5. **Calendar consequence** — what the item sets up: a readout, a PDUFA date,
+   a milestone trigger, a competitive collision on the same target.
+6. **Delta vs baseline** — today's counts against trailing-window averages from
+   the deals DB; direction and magnitude, not vibes.
+7. **Absence as signal** — zero approvals on a weekday, a hot TA going quiet;
+   say what the absence means and what would confirm it.
+
+**Anti-patterns (rejected at review):**
+
+- Restating a table in prose ("Medicus announced X, Attovia announced Y").
+- Momentum adjectives without a computed quantity behind them.
+- Both-sides filler ("time will tell whether…").
+- A prediction with no falsifier — every forward claim must name the evidence
+  that would kill it.
+
+**Placement rules:** every section either answers "so what" in ≤2 sentences or
+stays a bare table. The One Take must lean on at least one `pack.insights[]`
+item and cite its numbers. Key takeaways must include at least one computed
+relationship (ratio, percentile, delta), not raw counts alone.
+
+## 4. Voice rules
 
 - **Evidence before opinion.** Number first, interpretation second.
 - Short sentences. Concrete, sourced numbers over adjectives.
@@ -87,7 +127,7 @@ than disappearing.
   as signals to act on. Do not add a boilerplate disclaimer line either —
   the discipline is in never writing advice, not in disclaiming it.
 
-## 4. Figure rules
+## 5. Figure rules
 
 - Every figure has a **takeaway caption**: a conclusion ("Disclosed totals
   cluster below $500M, with one outlier") not a description ("bar chart of
@@ -96,7 +136,7 @@ than disappearing.
   from collected data). Never redraw, annotate, or alter them.
 - Every figure must be referenced from the text it supports.
 
-## 5. Fact-check protocol (two passes, both mandatory)
+## 6. Fact-check protocol (two passes, both mandatory)
 
 **Pass 1 — during drafting.** Every number, date, company name, and claim in
 the draft must trace to a specific pack field, and that pack field carries a
@@ -117,7 +157,7 @@ confirm the figure captions match the figure takeaways in the pack. Produce a
 list of any claim without pack provenance — then delete or fix each one. Only
 then hand to the human review gate.
 
-## 6. Copyright
+## 7. Copyright
 
 - Summarize and link. Never reproduce full text (or near-verbatim chunks)
   from filings, press releases, or wire articles; short quoted fragments only
@@ -125,7 +165,7 @@ then hand to the human review gate.
 - No images from sources. Figures are always our own pipeline output.
 - Every external claim links the original source, not another aggregator.
 
-## 7. What we do NOT do
+## 8. What we do NOT do
 
 - **No breaking-news speed competition.** We publish when the data is
   verified; being second and correct beats being first and wrong.

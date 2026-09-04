@@ -75,6 +75,7 @@ def build_pack(
     readouts: list[dict],
     market: list[dict],
     comps: dict,
+    insights: list[dict],
     figures: list[dict],
     sources_ok: list[str],
     sources_failed: list[str],
@@ -101,6 +102,7 @@ def build_pack(
         "readouts": [_readout_row(r) for r in readouts],
         "market": [{k: m.get(k) for k in MARKET_KEYS} for m in market],
         "comps": {k: comps.get(k) for k in COMPS_KEYS},
+        "insights": insights,
         "figures": figures,
         "sources": list(source_links.values()),
         "provenance": {
@@ -115,9 +117,13 @@ def validate_pack(pack: dict) -> list[str]:
     """Contract check. Returns a list of violations (empty = valid)."""
     errors: list[str] = []
     for key in ("date", "window", "deals", "approvals", "readouts", "market",
-                "comps", "figures", "sources", "provenance"):
+                "comps", "insights", "figures", "sources", "provenance"):
         if key not in pack:
             errors.append(f"missing top-level key: {key}")
+    for i, ins in enumerate(pack.get("insights", [])):
+        for k in ("move", "text", "numbers", "confidence"):
+            if k not in ins:
+                errors.append(f"insights[{i}] missing key: {k}")
     for section, keys, url_field in (
         ("deals", DEAL_KEYS, "source_url"),
         ("approvals", APPROVAL_KEYS, "url"),

@@ -511,6 +511,49 @@
     "median_total_usd": 666200000.0,
     "thin_sample": true
   },
+  "insights": [
+    {
+      "move": "structure-over-headline",
+      "text": "Medicus Pharma Ltd.: upfront is 1.5% of the headline total — below the classic 5–10% license band; the headline overstates near-term cash.",
+      "numbers": {
+        "company": "Medicus Pharma Ltd.",
+        "upfront_usd": 15000000.0,
+        "total_usd": 1000000000.0,
+        "share": 0.015
+      },
+      "confidence": "computed"
+    },
+    {
+      "move": "window-pattern",
+      "text": "2 of 6 disclosed-value deals involve China-originated assets, 26% of the window's disclosed dollars.",
+      "numbers": {
+        "cn_deals": 2,
+        "disclosed_deals": 6,
+        "cn_total_usd": 851000000.0,
+        "all_total_usd": 3327000000.0
+      },
+      "confidence": "computed"
+    },
+    {
+      "move": "market-verdict",
+      "text": "CLYM moved +6.4% on the day (on a deal ticker, as of 2026-09-04).",
+      "numbers": {
+        "ticker": "CLYM",
+        "change_1d_pct": 6.37,
+        "as_of": "2026-09-04",
+        "deal_linked": true
+      },
+      "confidence": "computed"
+    },
+    {
+      "move": "absence-as-signal",
+      "text": "Zero FDA approvals in a weekday window — quiet days cluster before PDUFA batches; watch the next 5 sessions for a catch-up.",
+      "numbers": {
+        "approvals": 0
+      },
+      "confidence": "computed"
+    }
+  ],
   "figures": [
     {
       "path": "out\\figures\\2026-09-04\\deal-sizes.png",
@@ -720,7 +763,7 @@
     }
   ],
   "provenance": {
-    "fetched_at": "2026-09-04T21:16:07.238629+00:00",
+    "fetched_at": "2026-09-04T21:28:46.023315+00:00",
     "sources_ok": [
       "sec-edgar",
       "openfda",
