@@ -74,6 +74,9 @@ const manifestPath = path.join(outRoot, 'manifest.json');
 const inputHash = sha1(JSON.stringify({
   v: PIPELINE_VERSION, md: sha1(md), settings: script.settings,
   css: sha1(fs.readFileSync(path.join(TOOL_ROOT, 'templates', 'slide.css'), 'utf8')),
+  cssPharma: fs.existsSync(path.join(TOOL_ROOT, 'templates', 'slide-pharma.css'))
+    ? sha1(fs.readFileSync(path.join(TOOL_ROOT, 'templates', 'slide-pharma.css'), 'utf8'))
+    : null,
 }));
 const prev = fs.existsSync(manifestPath) ? JSON.parse(readUtf8(manifestPath)) : null;
 const upToDate = !FORCE && prev && prev.inputHash === inputHash && fs.existsSync(outMp4) && fs.existsSync(outSrt);

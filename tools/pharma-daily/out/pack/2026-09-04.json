@@ -514,15 +514,7 @@
   "figures": [
     {
       "path": "out\\figures\\2026-09-04\\deal-sizes.png",
-      "takeaway": "Largest disclosed total $1.0B — p100 of 2 comps"
-    },
-    {
-      "path": "out\\figures\\2026-09-04\\categories.png",
-      "takeaway": "other is the largest slice: 34 of 78 first-hand items"
-    },
-    {
-      "path": "out\\figures\\2026-09-04\\market-reaction.png",
-      "takeaway": "1 of 1 deal tickers rose on the day; moves span +6.4% to +6.4%"
+      "takeaway": "Largest disclosed total $1.3B — vs 2 accumulated comps"
     }
   ],
   "sources": [
@@ -728,7 +720,7 @@
     }
   ],
   "provenance": {
-    "fetched_at": "2026-09-04T20:22:24.896849+00:00",
+    "fetched_at": "2026-09-04T21:16:07.238629+00:00",
     "sources_ok": [
       "sec-edgar",
       "openfda",

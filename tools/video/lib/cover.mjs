@@ -1,8 +1,14 @@
 import path from 'node:path';
 import fs from 'node:fs';
 import { TOOL_ROOT } from './util.mjs';
+import { themeOf } from './slides-html.mjs';
 
 const FONT_DIR = path.join(TOOL_ROOT, 'assets', 'fonts');
+
+const COVER_THEMES = {
+  tech:   { bg: '#1c1917', accent: '#9f1239', kicker: '#fda4af', bigNum: '#292524', pill: '#9f1239', text: '#fafaf9', sub: '#d6d3d1' },
+  pharma: { bg: '#0c1714', accent: '#0f766e', kicker: '#5eead4', bigNum: '#14201c', pill: '#0f766e', text: '#f8faf9', sub: '#c6d4ce' },
+};
 
 function esc(s) {
   return String(s ?? '')
@@ -19,6 +25,7 @@ function splitTitle(title) {
 
 export function coverHtml(meta) {
   const { main, sub } = splitTitle(meta.title);
+  const T = COVER_THEMES[themeOf(meta)] || COVER_THEMES.tech;
   const fonts = [
     ['inter', 400], ['inter', 600], ['inter', 700],
     ['fraunces', 500], ['fraunces', 600],
@@ -33,35 +40,35 @@ html, body { width: 1280px; height: 720px; overflow: hidden; }
 .cover {
   position: relative;
   width: 1280px; height: 720px;
-  background: #1c1917;
+  background: ${T.bg};
   font-family: 'Inter', 'Segoe UI', sans-serif;
-  color: #fafaf9;
+  color: ${T.text};
   padding: 72px 72px 56px 72px;
   display: flex; flex-direction: column;
 }
-.accent { position: absolute; left: 0; top: 0; bottom: 0; width: 14px; background: #9f1239; }
+.accent { position: absolute; left: 0; top: 0; bottom: 0; width: 14px; background: ${T.accent}; }
 .big-num {
   position: absolute; right: 34px; top: -60px;
   font-family: 'Fraunces', Georgia, serif;
   font-size: 400px; font-weight: 600; line-height: 1;
-  color: #292524;
+  color: ${T.bigNum};
 }
 .kicker {
   font-family: 'JetBrains Mono', Consolas, monospace;
   font-size: 24px; letter-spacing: 0.16em; text-transform: uppercase;
-  color: #fda4af; font-weight: 600;
+  color: ${T.kicker}; font-weight: 600;
   margin-left: 42px;
 }
 h1 {
   font-family: 'Fraunces', Georgia, serif;
   font-weight: 500; font-size: 96px; line-height: 1.08;
   letter-spacing: -0.015em;
-  color: #fafaf9;
+  color: ${T.text};
   margin-top: 34px; margin-left: 42px;
   max-width: 1000px;
 }
 .sub {
-  font-size: 40px; color: #d6d3d1; margin-top: 26px; margin-left: 42px;
+  font-size: 40px; color: ${T.sub}; margin-top: 26px; margin-left: 42px;
   font-weight: 400;
 }
 .foot {
@@ -72,7 +79,7 @@ h1 {
   border-top: 1px solid #44403c; padding-top: 22px;
 }
 .part-pill {
-  color: #fafaf9; border: 2px solid #9f1239; border-radius: 9999px;
+  color: ${T.text}; border: 2px solid ${T.pill}; border-radius: 9999px;
   padding: 8px 24px; font-weight: 600;
 }
 </style></head><body>

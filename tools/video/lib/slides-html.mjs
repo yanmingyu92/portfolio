@@ -3,8 +3,15 @@ import fs from 'node:fs';
 import { SITE_ROOT, TOOL_ROOT } from './util.mjs';
 
 const CSS_PATH = path.join(TOOL_ROOT, 'templates', 'slide.css');
+const CSS_PATH_PHARMA = path.join(TOOL_ROOT, 'templates', 'slide-pharma.css');
 const FONT_DIR = path.join(TOOL_ROOT, 'assets', 'fonts');
 const cssCache = fs.readFileSync(CSS_PATH, 'utf8');
+const cssCachePharma = fs.existsSync(CSS_PATH_PHARMA) ? fs.readFileSync(CSS_PATH_PHARMA, 'utf8') : cssCache;
+
+/** Pharma Daily videos use the teal financial theme, not the tech rose. */
+export function themeOf(meta) {
+  return meta?.seriesLabel === 'Pharma Daily' ? 'pharma' : 'tech';
+}
 
 function esc(s) {
   return String(s ?? '')
@@ -139,7 +146,7 @@ function renderSlideHtml(slide, state, ctx) {
 }
 
 export function slideToHtml(slide, state, ctx) {
-  let css = cssCache;
+  let css = themeOf(ctx?.meta) === 'pharma' ? cssCachePharma : cssCache;
   const fontUrl = FONT_DIR.replace(/\\/g, '/');
   css = css.replace('{{FONT_DIR}}', `file:///${fontUrl}/`);
   const fonts = [

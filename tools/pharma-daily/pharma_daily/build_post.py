@@ -154,14 +154,6 @@ def build_markdown(
     else:
         parts += ["No qualifying readouts in the next 90 days.", ""]
 
-    if "categories" in fig_names:
-        parts += [
-            f"![Bar chart of collected news items by category](/figures/{slug}-categories.png)",
-            "",
-            "*Figure 2: Volume of first-hand items collected, by category.*",
-            "",
-        ]
-
     src_links = {}
     for coll in (deals, approvals, readouts):
         for it in coll:

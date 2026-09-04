@@ -30,9 +30,9 @@ Two days of first-hand filings and wire releases, no aggregator in between: 15 d
 
 Comp context: our license-comp base holds only 2 deals with disclosed totals (median $666M), so percentiles this week are directional at best. Structure note: GSK-Hutchmed's upfront is 8.5% of headline total, Medicus's is 1.5% — milestone-heavy structures dominate, and headline totals overstate near-term cash.
 
-![Largest disclosed total $1.0B — p100 of 2 comps](/figures/pharma-daily-2026-09-04-deal-sizes.png)
+![Largest disclosed total $1.3B — vs 2 accumulated comps](/figures/pharma-daily-2026-09-04-deal-sizes.png)
 
-*Figure 1: Largest disclosed total $1.0B — p100 of 2 comps (thin base; treat as ranking, not valuation evidence).*
+*Figure 1: Largest disclosed total $1.3B — vs 2 accumulated comps (thin base; treat as ranking, not valuation evidence).*
 
 ## Approvals
 
@@ -56,10 +56,6 @@ openFDA's Drugs@FDA feed recorded no approvals in this window — a genuinely qu
 **CLYM (Climb Bio)** — +6.4% on the day (as of 2026-09-04).
 
 **INBX** — −0.9% on the day (as of 2026-09-04).
-
-![1 of 2 deal tickers rose on the day; moves span −0.9% to +6.4%](/figures/pharma-daily-2026-09-04-market-reaction.png)
-
-*Figure 2: 1 of 2 US-listed deal tickers rose; the day's real market verdict was in Hong Kong, on Hutchmed.*
 
 ## One Take
 

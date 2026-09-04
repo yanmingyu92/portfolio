@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import logging
+import re
 import shutil
 import sys
 from pathlib import Path
@@ -102,10 +103,18 @@ def main() -> int:
     fig_out.mkdir(parents=True, exist_ok=True)
     figs: dict[str, Path] = {}
     figures_meta: list[dict] = []
+    # figure input: all types feed the size ranking, but 'other' rows need a
+    # deal-action word in the headline — keeps trend pieces off the chart
+    DEAL_ACTION = re.compile(
+        r"\b(deal|signs?|wagers?|pens?|offloads?|partner\w*|licen[cs]e\w*|acqui\w*|buys?|sells?)\b", re.I)
+    figure_deals = [
+        d for d in period_deals
+        if d.get("deal_type") != "other" or DEAL_ACTION.search(d.get("headline", ""))
+    ]
     for name, result in (
+        # percentiles stay comp-type-scoped and only render once n >= 30
         ("deal-sizes", analyze.chart_deal_sizes(
-            comp_deals, fig_out / "deal-sizes.png", n_historical=comps_block["n_historical"])),
-        ("categories", analyze.chart_category_counts(cat_counts, fig_out / "categories.png")),
+            figure_deals, fig_out / "deal-sizes.png", n_historical=comps_block["n_historical"])),
         ("market-reaction", analyze.chart_market_reaction(quotes, fig_out / "market-reaction.png")),
     ):
         if result:
