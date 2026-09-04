@@ -1,0 +1,102 @@
+# Daily pharma brief: pipeline -> draft -> audio -> QC -> PR (human gate).
+#
+# The PR is the review gate: merging it deploys via Vercel. The optional
+# LLM polish step runs only when repo variable PHARMA_AGENT=1 is set AND
+# repo secret KIMI_API_KEY holds a Kimi Platform API key (platform.kimi.com)
+# — without them the deterministic draft from build_post.py ships as-is.
+name: pharma-daily
+
+on:
+  schedule:
+    # 13:07 UTC = 09:07 US Eastern: yesterday's EDGAR/RSS are complete,
+    # today's early items are in. Off the :00/:30 herd marks on purpose.
+    - cron: "7 13 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: pharma-daily
+  cancel-in-progress: false
+
+jobs:
+  brief:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve run date (UTC)
+        run: echo "RUN_DATE=$(date -u +%F)" >> "$GITHUB_ENV"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install site deps
+        run: npm ci
+
+      - uses: astral-sh/setup-uv@v6
+
+      - name: Install pipeline deps
+        run: cd tools/pharma-daily && uv sync
+
+      - name: Run pipeline (fetch -> DB -> analysis -> pack -> draft post)
+        run: cd tools/pharma-daily && uv run python daily.py --days 2 --filing-text
+
+      - name: LLM polish via Kimi Code headless (optional)
+        # Enable: set repo variable PHARMA_AGENT=1 and secret KIMI_API_KEY.
+        if: ${{ vars.PHARMA_AGENT == '1' }}
+        env:
+          KIMI_MODEL_NAME: kimi-for-coding
+          KIMI_MODEL_API_KEY: ${{ secrets.KIMI_API_KEY }}
+          KIMI_MODEL_BASE_URL: https://api.moonshot.ai/v1
+          KIMI_CODE_NO_AUTO_UPDATE: "1"
+          KIMI_DISABLE_TELEMETRY: "1"
+        run: |
+          npm install -g @moonshot-ai/kimi-code
+          kimi -p "Read .agents/skills/pharma-daily/SKILL.md and follow its steps 4-8 for the pack at tools/pharma-daily/out/pack/${RUN_DATE}.json. Skip step 3 (Kimi Datasource is not available in CI — no enrichment). Redraft content/posts/pharma-daily-${RUN_DATE}.md from templates/daily-template.md under the rules in tools/pharma-daily/EDITORIAL.md, run the mandatory fact-check pass against the pack, and fix any issues you find. Stop before the human review gate: no video, no git."
+
+      - name: Generate audio narration (best effort)
+        continue-on-error: true
+        run: cd tools/pharma-daily && uv run python make_audio.py "pharma-daily-${RUN_DATE}"
+
+      - name: QC and build
+        run: npm run qc:blog && npm run build
+
+      - name: Compose PR body from the pack
+        run: |
+          cd tools/pharma-daily && uv run python - <<EOF > "$GITHUB_WORKSPACE/pr_body.md"
+          import json, pathlib
+          p = json.loads(pathlib.Path("out/pack/${RUN_DATE}.json").read_text(encoding="utf-8"))
+          c = p["comps"]
+          print(f"## Pharma Daily — {p['date']}")
+          print()
+          print(f"- **{len(p['deals'])}** deals · **{len(p['approvals'])}** approvals · **{len(p['readouts'])}** readouts (90d)")
+          print(f"- comps: n={c['n_historical']} historical, thin_sample={c['thin_sample']}")
+          print(f"- sources ok: {', '.join(p['provenance']['sources_ok'])}")
+          if p["provenance"]["sources_failed"]:
+              print(f"- **FAILED SOURCES: {', '.join(p['provenance']['sources_failed'])}**")
+          print()
+          print("Review checklist: TL;DR accuracy vs pack · One Take is judgment not fact · "
+                "undisclosed fields stay undisclosed · thin-sample caveats present.")
+          print()
+          print("Pack: `tools/pharma-daily/out/pack/" + p["date"] + ".json`")
+          EOF
+
+      - name: Open review PR
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: pharma-daily/${{ env.RUN_DATE }}
+          delete-branch: true
+          commit-message: "feat(pharma-daily): daily brief ${{ env.RUN_DATE }}"
+          title: "Pharma Daily — ${{ env.RUN_DATE }}"
+          body-path: pr_body.md
+          add-paths: |
+            content/posts
+            public/figures
+            public/audio
+            tools/pharma-daily/data/pharma.db
+            tools/pharma-daily/out/pack

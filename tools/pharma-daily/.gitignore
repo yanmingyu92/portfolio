@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+uv.lock
+# keep the accumulated deals DB and the daily packs in git — they are the
+# longitudinal asset (comps percentiles) and the PR review artifact
+data/*
+!data/pharma.db
+out/*
+!out/pack/
+out/pack/*
+!out/pack/*.json

@@ -1,0 +1,21 @@
+# pharma-daily figure style: stone/rose palette, no chartjunk.
+# Mirrors the site theme — stone-800 text, rose-500 accents.
+# NOTE: rc files treat '#' as a comment starter, so hex colors are quoted.
+font.family: DejaVu Sans
+font.size: 10
+text.color: "#292524"
+axes.edgecolor: "#d6d3d1"
+axes.labelcolor: "#292524"
+axes.facecolor: white
+axes.spines.top: False
+axes.spines.right: False
+axes.grid: True
+axes.axisbelow: True
+grid.color: "#d6d3d1"
+grid.linewidth: 0.6
+grid.alpha: 0.7
+xtick.color: "#78716c"
+ytick.color: "#78716c"
+figure.facecolor: white
+savefig.facecolor: white
+savefig.dpi: 160

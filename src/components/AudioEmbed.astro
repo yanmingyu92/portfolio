@@ -1,0 +1,23 @@
+---
+// "Listen to this article" audio player — static <audio>, no JS required.
+// Mounted under the TL;DR by a small move script in [slug].astro.
+interface Props {
+	src: string;
+}
+const { src } = Astro.props;
+---
+
+<div
+	class="audio-embed my-6 rounded-lg border border-stone-200 bg-stone-50 p-4"
+	id="audio-embed-mount"
+>
+	<p class="mb-2 text-xs font-semibold uppercase tracking-widest text-stone-600">
+		Listen to this article
+	</p>
+	<audio controls preload="none" src={src} class="w-full">
+		Your browser does not support the audio element.
+	</audio>
+	<p class="mt-2 text-xs text-stone-500">
+		AI-generated narration · tables and figures are omitted — the text below is the canonical version
+	</p>
+</div>

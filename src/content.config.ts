@@ -19,6 +19,8 @@ const posts = defineCollection({
 		skillArtifact: z.string().optional(),
 		/** YouTube video id of the companion video (set after upload-video.mjs / manual upload) */
 		videoId: z.string().optional(),
+		/** Site-relative path to the AI-narrated audio version, e.g. /audio/my-post.mp3 ("Listen to this article" player) */
+		audioPath: z.string().optional(),
 		/** Path to the companion interactive explainer, e.g. /explainers/clinical-data-journey.html (entry card renders under the TL;DR) */
 		explainer: z.string().optional(),
 		/** Site-relative canonical path, e.g. /blog/my-post.html */

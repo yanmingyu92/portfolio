@@ -12,7 +12,8 @@ const posts = (await getCollection('posts', ({ data }) => !data.draft))
 const explainers = posts.filter(p => p.data.kind === 'explainer');
 const surveys = posts.filter(p => p.data.kind === 'survey');
 const deepDives = posts.filter(p => p.data.kind === 'deep-dive');
-const notes = posts.filter(p => p.data.kind === 'note');
+const pharmaDaily = posts.filter(p => p.data.tags.includes('daily-brief'));
+const notes = posts.filter(p => p.data.kind === 'note' && !p.data.tags.includes('daily-brief'));
 const tutorials = posts.filter(p => p.data.kind === 'tutorial')
 	.sort((a, b) => (a.data.seriesOrder ?? 99) - (b.data.seriesOrder ?? 99));
 ---
@@ -41,6 +42,16 @@ const tutorials = posts.filter(p => p.data.kind === 'tutorial')
 				Notes on LLM agents, clinical trial programming automation, and CDISC data standards —
 				extended companions to my <a href="/#publications" class="text-rose-800 hover:underline">published research</a>.
 			</p>
+
+			{pharmaDaily.length > 0 && (
+				<section class="mt-12" id="pharma-daily">
+					<p class="eyebrow mb-1">Pharma Daily</p>
+					<p class="text-sm text-stone-600 mb-4">A daily pharma/biotech finance brief built from first-hand sources only — SEC filings, FDA and trial registries, wire releases — with deal comps, readout calendars and market reaction, charted by an open pipeline. Every article has an audio version and a video companion.</p>
+					<div class="divide-y divide-stone-200 border-t border-b border-stone-200">
+						{pharmaDaily.map(post => <PostCard post={post} />)}
+					</div>
+				</section>
+			)}
 
 			{surveys.length > 0 && (
 				<section class="mt-12">

@@ -7,6 +7,7 @@ import { seriesLines, seriesSlugify } from '../../data/bootcamp-lines';
 import { getExplainerByPath } from '../../data/explainers';
 import Newsletter from '../../components/Newsletter.astro';
 import VideoEmbed from '../../components/VideoEmbed.astro';
+import AudioEmbed from '../../components/AudioEmbed.astro';
 
 export async function getStaticPaths() {
 	const posts = await getCollection('posts', ({ data }) => !data.draft);
@@ -155,6 +156,17 @@ if (post.data.kind === 'tutorial') jsonLd.articleSection = SERIES_TITLE;
 				// Move the video embed up, right below the TL;DR (first blockquote). Runs before first paint.
 				(function () {
 					var m = document.getElementById('video-embed-mount');
+					var b = document.querySelector('.prose-custom blockquote');
+					if (m && b && b.parentNode) b.after(m);
+				})();
+			</script>
+		)}
+		{post.data.audioPath && <AudioEmbed src={post.data.audioPath} />}
+		{post.data.audioPath && (
+			<script is:inline>
+				// Move the audio player up, right below the TL;DR (runs after the video move, so audio lands above the video).
+				(function () {
+					var m = document.getElementById('audio-embed-mount');
 					var b = document.querySelector('.prose-custom blockquote');
 					if (m && b && b.parentNode) b.after(m);
 				})();

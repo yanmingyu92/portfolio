@@ -1,0 +1,15 @@
+[project]
+name = "pharma-daily"
+version = "0.1.0"
+description = "Daily pharma/biotech news pipeline: first-hand sources -> SQLite -> charts -> blog post"
+requires-python = ">=3.11"
+dependencies = [
+    "requests>=2.32",
+    "feedparser>=6.0",
+    "matplotlib>=3.9",
+    "yfinance>=0.2",
+    "edge-tts>=7.0",
+]
+
+[tool.uv]
+package = false
