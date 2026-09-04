@@ -65,11 +65,18 @@ audio → QC/build → **opens a review PR** (`pharma-daily/<date>`). The PR is
 the human gate; merging deploys via Vercel. PR body carries pack stats,
 failed sources, and the review checklist.
 
-Optional LLM polish step: set repo variable `PHARMA_AGENT=1` and secret
-`DEEPSEEK_KEY` (DeepSeek OpenAI-compatible API; runs `deepseek-v4-pro`, the
-strongest model on the account). It runs `kimi -p` headless against the
-pharma-daily skill (datasource enrichment is skipped in CI — no OAuth).
-Without these, the deterministic draft ships.
+Optional LLM polish step: set repo variable `PHARMA_AGENT=1` and secrets
+`KIMI_API` (Kimi Platform key; runs `kimi-k2.7-code`) and `DEEPSEEK_KEY`
+(fallback: `deepseek-v4-pro` via OpenAI-compatible API). It runs `kimi -p`
+headless against the pharma-daily skill with insight-first drafting
+(datasource enrichment is skipped in CI — no OAuth). Without these, the
+deterministic draft ships.
+
+A second workflow, `pharma-video.yml`, closes the loop: merging a
+`pharma-daily/*` PR triggers video rendering (teal theme) + YouTube upload
+(public) + videoId writeback + push. Requires secrets
+`YOUTUBE_CLIENT_SECRET_JSON` / `YOUTUBE_TOKEN_JSON` (contents of the
+gitignored `tools/video/.google-*.json`).
 
 Deals DB and packs are committed to the repo via the PR — they are the
 longitudinal asset behind the comp percentiles.

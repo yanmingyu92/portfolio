@@ -1,0 +1,71 @@
+# Post-merge video companion: when a pharma-daily/* PR is merged, render the
+# video (teal pharma theme), upload to YouTube public, write videoId into the
+# post frontmatter, and push — Vercel then deploys the embed. This closes the
+# full auto loop: daily PR -> human merge -> video -> site.
+#
+# Required repo secrets: YOUTUBE_CLIENT_SECRET_JSON, YOUTUBE_TOKEN_JSON
+# (the contents of tools/video/.google-client-secret.json / .google-token.json).
+name: pharma-video
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: "post slug, e.g. pharma-daily-2026-09-05"
+        required: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pharma-video
+  cancel-in-progress: false
+
+jobs:
+  video:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.pull_request.merged == true &&
+       startsWith(github.event.pull_request.head.ref, 'pharma-daily/'))
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve slug
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "SLUG=${{ inputs.slug }}" >> "$GITHUB_ENV"
+          else
+            REF="${{ github.event.pull_request.head.ref }}"
+            echo "SLUG=pharma-daily-${REF#pharma-daily/}" >> "$GITHUB_ENV"
+          fi
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Chrome for slide rendering
+        id: chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - uses: astral-sh/setup-uv@v6
+
+      - name: Install video tool deps
+        run: cd tools/video && npm install && uv sync
+
+      - name: Restore YouTube OAuth files
+        env:
+          YT_CLIENT: ${{ secrets.YOUTUBE_CLIENT_SECRET_JSON }}
+          YT_TOKEN: ${{ secrets.YOUTUBE_TOKEN_JSON }}
+        run: |
+          printf '%s' "$YT_CLIENT" > tools/video/.google-client-secret.json
+          printf '%s' "$YT_TOKEN" > tools/video/.google-token.json
+          test -s tools/video/.google-token.json
+
+      - name: Render + upload + write back videoId
+        env:
+          VIDEO_CHROME: ${{ steps.chrome.outputs.chrome-path }}
+        run: npm run video:release -- "$SLUG" --public

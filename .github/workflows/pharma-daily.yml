@@ -47,20 +47,27 @@ jobs:
         run: cd tools/pharma-daily && uv run python daily.py --days 2 --filing-text
 
       - name: LLM polish via Kimi Code headless (optional)
-        # Enable: set repo variable PHARMA_AGENT=1 and secret DEEPSEEK_KEY.
-        # DeepSeek OpenAI-compatible API, strongest model (deepseek-v4-pro,
-        # verified against /models 2026-09-04).
+        # Enable: repo variable PHARMA_AGENT=1. Model cascade: Kimi
+        # kimi-k2.7-code (secret KIMI_API) first, DeepSeek deepseek-v4-pro
+        # (secret DEEPSEEK_KEY) as fallback — the Kimi Platform account was
+        # balance-suspended on 2026-09-04; the fallback carries the run.
         if: ${{ vars.PHARMA_AGENT == '1' }}
         env:
-          KIMI_MODEL_NAME: deepseek-v4-pro
-          KIMI_MODEL_PROVIDER_TYPE: openai
-          KIMI_MODEL_API_KEY: ${{ secrets.DEEPSEEK_KEY }}
-          KIMI_MODEL_BASE_URL: https://api.deepseek.com
+          KIMI_API: ${{ secrets.KIMI_API }}
+          DEEPSEEK_KEY: ${{ secrets.DEEPSEEK_KEY }}
           KIMI_CODE_NO_AUTO_UPDATE: "1"
           KIMI_DISABLE_TELEMETRY: "1"
         run: |
           npm install -g @moonshot-ai/kimi-code
-          kimi -p "Read .agents/skills/pharma-daily/SKILL.md and follow its steps 4-8 for the pack at tools/pharma-daily/out/pack/${RUN_DATE}.json. Skip step 3 (Kimi Datasource is not available in CI — no enrichment). Redraft content/posts/pharma-daily-${RUN_DATE}.md from templates/daily-template.md under the rules in tools/pharma-daily/EDITORIAL.md, run the mandatory fact-check pass against the pack, and fix any issues you find. Stop before the human review gate: no video, no git."
+          PROMPT="Read .agents/skills/pharma-daily/SKILL.md and follow its steps 4-8 for the pack at tools/pharma-daily/out/pack/${RUN_DATE}.json. Skip step 3 (Kimi Datasource is not available in CI — no enrichment). Redraft content/posts/pharma-daily-${RUN_DATE}.md from templates/daily-template.md under the rules in tools/pharma-daily/EDITORIAL.md — insight-first drafting (section 3) is binding: use pack.insights[]. Run the mandatory fact-check pass against the pack, and fix any issues you find. Stop before the human review gate: no video, no git."
+          KIMI_MODEL_NAME=kimi-k2.7-code KIMI_MODEL_PROVIDER_TYPE=kimi \
+          KIMI_MODEL_API_KEY="$KIMI_API" KIMI_MODEL_BASE_URL=https://api.moonshot.ai/v1 \
+            kimi -p "$PROMPT" || {
+              echo "::warning::Kimi polish failed (suspended balance?) — falling back to DeepSeek"
+              KIMI_MODEL_NAME=deepseek-v4-pro KIMI_MODEL_PROVIDER_TYPE=openai \
+              KIMI_MODEL_API_KEY="$DEEPSEEK_KEY" KIMI_MODEL_BASE_URL=https://api.deepseek.com \
+                kimi -p "$PROMPT"
+            }
 
       - name: Generate audio narration (best effort)
         continue-on-error: true
