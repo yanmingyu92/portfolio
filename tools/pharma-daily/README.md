@@ -66,9 +66,10 @@ the human gate; merging deploys via Vercel. PR body carries pack stats,
 failed sources, and the review checklist.
 
 Optional LLM polish step: set repo variable `PHARMA_AGENT=1` and secret
-`KIMI_API_KEY` (a Kimi Platform key from platform.kimi.com). It runs
-`kimi -p` headless against the pharma-daily skill (datasource enrichment is
-skipped in CI — no OAuth). Without these, the deterministic draft ships.
+`DEEPSEEK_KEY` (DeepSeek OpenAI-compatible API; runs `deepseek-v4-pro`, the
+strongest model on the account). It runs `kimi -p` headless against the
+pharma-daily skill (datasource enrichment is skipped in CI — no OAuth).
+Without these, the deterministic draft ships.
 
 Deals DB and packs are committed to the repo via the PR — they are the
 longitudinal asset behind the comp percentiles.
