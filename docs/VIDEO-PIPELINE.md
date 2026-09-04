@@ -27,6 +27,11 @@ Narration and subtitles are English; code samples stay the article's Study XYZ
 generic versions. The extractor hard-fails on training-set identifiers
 (AIRIS / ROSHE / Shiva / 043-1810 / MK-0616 / …) — the build refuses to run.
 
+Non-series posts (no `seriesOrder` in frontmatter, e.g. `pharma-daily-*`) are
+supported: the series kicker / "Part N" badge / outro line / YouTube title
+suffix all degrade to a plain label (`Pharma Daily` when tagged
+`daily-brief`, else the site name) instead of rendering "Part undefined".
+
 ## One-time setup (already done on this machine)
 
 | Step | Command / Location |
@@ -131,7 +136,7 @@ Re-running an unchanged build completes in ~1s and rewrites nothing.
 | Symptom | Fix |
 |---|---|
 | edge-tts 403 / "NoAudioReceived" | transient service blocks: retry the build (cache resumes). Keep `edge-tts` current (`uv sync`). |
-| ffmpeg "Cannot allocate memory" in `fps` filter, dies mid/late encode | fixed in `assemble.mjs` (2026-09-02): mid-stream last-frame repeat lines now carry an explicit tiny duration — a bare `file` line made the concat demuxer emit a NOPTS packet that `fps` gap-filled until OOM. If it recurs, check `work/frames-list.txt` for bare repeats. |
+| ffmpeg "Cannot allocate memory" in `fps` filter, dies mid/late encode | fixed in `assemble.mjs` (2026-09-04): the `fps=30` filter's dup-fill queue can accumulate on concat-of-stills input until malloc fails — recurrence of the 2026-09-02 NOPTS class despite explicit durations. `fps` filter removed; rate conversion now via `-fps_mode cfr -r 30` (streaming, no queue). x264 threads also capped (`-threads 4`): default 1.5× core count (34 on this box) OOMs on memory-pressured runs. |
 | Chrome not found | `set VIDEO_CHROME=C:\path\to\chrome.exe` |
 | First build slow | uv creates the TTS venv once; later builds are fast |
 | YouTube `quotaExceeded` | default 10k units/day ≈ 6 uploads; wait or request quota increase |

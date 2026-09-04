@@ -169,7 +169,7 @@ function renderScriptMd(script) {
   const lines = [];
   lines.push(`# Video script — ${script.meta.title}`);
   lines.push('');
-  lines.push(`- Slug: \`${script.meta.slug}\` · Part ${script.meta.part} · asOf ${script.meta.asOf}`);
+  lines.push(`- Slug: \`${script.meta.slug}\`${script.meta.part != null ? ` · Part ${script.meta.part}` : ''} · asOf ${script.meta.asOf}`);
   lines.push(`- Voice: \`${script.settings.voice}\` · rate \`${script.settings.rate}\``);
   lines.push(`- ~${script.stats.words} words ≈ ${script.stats.estMinutes} min @150wpm`);
   lines.push(`- Post: ${script.meta.postUrl}`);

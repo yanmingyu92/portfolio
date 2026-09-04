@@ -78,11 +78,11 @@ h1 {
 </style></head><body>
 <div class="cover">
   <div class="accent"></div>
-  <div class="big-num">${String(meta.part).padStart(2, '0')}</div>
-  <div class="kicker">Clinical SP Bootcamp</div>
+  ${meta.part !== null && meta.part !== undefined ? `<div class="big-num">${String(meta.part).padStart(2, '0')}</div>` : ''}
+  <div class="kicker">${esc(meta.seriesLabel || 'jaimeyan.com')}</div>
   <h1>${esc(main)}</h1>
   ${sub ? `<div class="sub">${esc(sub)}</div>` : ''}
-  <div class="foot"><span>jaimeyan.com</span><span class="part-pill">Part ${esc(meta.part)}</span></div>
+  <div class="foot"><span>jaimeyan.com</span>${meta.part !== null && meta.part !== undefined ? `<span class="part-pill">Part ${esc(meta.part)}</span>` : ''}</div>
 </div>
 </body></html>`;
 }

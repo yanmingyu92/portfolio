@@ -79,8 +79,17 @@ export async function assembleVideo({ timeline, ttsMap, script, outDir, outMp4 }
     '-f', 'concat', '-safe', '0', '-i', vlist,
     '-i', narration,
     '-map', '0:v', '-map', '1:a',
-    '-vf', `fps=30,format=yuv420p,fade=t=in:st=0:d=0.4,fade=t=out:st=${fadeOutStart.toFixed(2)}:d=0.8`,
-    '-c:v', 'libx264', '-tune', 'stillimage', '-preset', 'veryfast', '-crf', '20',
+    // fps filter removed: on concat-of-stills inputs its dup-fill queue can
+    // accumulate until "Cannot allocate memory" (seen 2026-09-04, died mid-
+    // stream at ~4:39 despite the NOPTS duration fix). `-fps_mode cfr -r 30`
+    // converts frame rate at output sync — streaming, no queue, verified on
+    // this timeline (full 432s encode at ~5.5GB free RAM).
+    '-vf', `format=yuv420p,fade=t=in:st=0:d=0.4,fade=t=out:st=${fadeOutStart.toFixed(2)}:d=0.8`,
+    '-fps_mode', 'cfr', '-r', '30',
+    // cap encoder threads: x264 defaults to 1.5x core count (34 here) and its
+    // per-thread frame buffers OOM on memory-pressured boxes ("malloc of size
+    // N failed" mid-encode). 4 threads is plenty for stillimage 1080p.
+    '-c:v', 'libx264', '-tune', 'stillimage', '-preset', 'veryfast', '-crf', '20', '-threads', '4',
     '-c:a', 'copy',
     '-movflags', '+faststart',
     '-t', total.toFixed(3),

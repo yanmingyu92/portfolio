@@ -47,7 +47,10 @@ export function buildYouTubeMeta(slug, { videoFile, thumbFile }) {
   const { meta } = script;
   const keyword = TARGET_KEYWORDS[slug] || '';
 
-  const baseTitle = `${meta.title} | Clinical SP Bootcamp Part ${meta.part}`;
+  const hasSeries = meta.part !== null && meta.part !== undefined;
+  const baseTitle = hasSeries
+    ? `${meta.title} | Clinical SP Bootcamp Part ${meta.part}`
+    : meta.title;
   const title = baseTitle.length <= 100 ? baseTitle : `${meta.title} — Bootcamp P${meta.part}`;
 
   const chapters = timeline.chapters.map((c) => `${fmtTs(c.start)} ${c.title}`).join('\n');
@@ -60,9 +63,10 @@ export function buildYouTubeMeta(slug, { videoFile, thumbFile }) {
     '',
     'CHAPTERS',
     chapters,
-    '',
-    'CONTINUE THE SERIES',
-    `Full Clinical SP Bootcamp roadmap (all parts): https://jaimeyan.com/blog/clinical-sp-bootcamp-roadmap.html`,
+    ...(hasSeries
+      ? ['', 'CONTINUE THE SERIES',
+         `Full Clinical SP Bootcamp roadmap (all parts): https://jaimeyan.com/blog/clinical-sp-bootcamp-roadmap.html`]
+      : []),
     '',
     `Narration is AI-generated (synthetic media disclosure per YouTube policy). Article content verified as of ${meta.asOf}.`,
   ].join('\n');

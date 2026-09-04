@@ -27,7 +27,10 @@ function highlightCode(src) {
 }
 
 function footer(meta, extra = '') {
-  return `<div class="footer"><span>jaimeyan.com</span><span>${esc(meta.seriesLabel)} · Part ${esc(meta.part)}${extra}</span></div>`;
+  const right = meta.part !== null && meta.part !== undefined
+    ? `${esc(meta.seriesLabel)} · Part ${esc(meta.part)}${extra}`
+    : `${esc(meta.seriesLabel)}${extra}`;
+  return `<div class="footer"><span>jaimeyan.com</span><span>${right}</span></div>`;
 }
 
 function kicker(text) {
@@ -84,10 +87,10 @@ function renderSlideHtml(slide, state, ctx) {
       return `
       <div class="slide dark intro-title">
         <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding-bottom:60px">
-          ${kicker(meta.seriesLabel + ' · PART ' + meta.part)}
+          ${kicker(meta.part !== null && meta.part !== undefined ? meta.seriesLabel + ' · PART ' + meta.part : meta.seriesLabel)}
           <h1 class="slide-title">${esc(meta.title)}</h1>
           <div class="intro-meta">
-            <span class="badge">Part ${esc(meta.part)}</span>
+            ${meta.part !== null && meta.part !== undefined ? `<span class="badge">Part ${esc(meta.part)}</span>` : ''}
             <span class="asof-chip">content verified ${esc(meta.asOf)}</span>
           </div>
         </div>

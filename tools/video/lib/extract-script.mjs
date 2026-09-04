@@ -211,7 +211,9 @@ function buildIntroSlides(introNodes, meta) {
   return [{
     id: 'intro', type: 'intro', title: meta.title,
     narration, items: [],
-    badge: `${meta.seriesLabel} · Part ${meta.part}`,
+    badge: meta.part !== null && meta.part !== undefined
+      ? `${meta.seriesLabel} · Part ${meta.part}`
+      : (meta.seriesLabel || 'jaimeyan.com'),
     asof: meta.asOf,
   }];
 }
@@ -379,24 +381,32 @@ export function extractScript(md, slug, options = {}) {
   const { intro, chapters: outline } = toOutline(nodes);
 
   const eraNode = nodes.find((n) => n.kind === 'era');
+  const hasSeries = fm.seriesOrder !== undefined && fm.seriesOrder !== null;
   const meta = {
     slug,
     title: fm.title,
     description: fm.description || '',
     tags: fm.tags || [],
-    seriesLabel: 'Clinical SP Bootcamp',
-    part: fm.seriesOrder,
+    seriesLabel: hasSeries
+      ? 'Clinical SP Bootcamp'
+      : (fm.tags || []).includes('daily-brief')
+        ? 'Pharma Daily'
+        : '',
+    part: hasSeries ? fm.seriesOrder : null,
     asOf: eraNode?.asof || (fm.date ? String(fm.date).slice(0, 10) : null),
     postUrl: `https://jaimeyan.com${fm.canonicalPath || `/blog/${slug}.html`}`,
   };
 
   const introSlides = buildIntroSlides(intro, meta);
+  const seriesNarration = meta.part !== null
+    ? ` This has been Part ${meta.part} of the ${meta.seriesLabel}.`
+    : '';
   const outro = {
     id: 'outro', type: 'outro', title: meta.title,
-    narration: `Read the full article, with the code and the comparison table, at jaimeyan.com — the link is in the description. This has been Part ${meta.part} of the ${meta.seriesLabel}. This narration is AI-generated; the article on jaimeyan.com is the source of truth.`,
+    narration: `Read the full article, with the code and the comparison table, at jaimeyan.com — the link is in the description.${seriesNarration} This narration is AI-generated; the article on jaimeyan.com is the source of truth.`,
     items: [],
     url: meta.postUrl,
-    badge: `${meta.seriesLabel} · Part ${meta.part}`,
+    badge: meta.part !== null ? `${meta.seriesLabel} · Part ${meta.part}` : (meta.seriesLabel || 'jaimeyan.com'),
   };
 
   // Pass 1: default density. Pass 2 (only when over the 8-min budget):
