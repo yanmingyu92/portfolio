@@ -5,7 +5,7 @@ description: "Sep 3–4: GSK-Hutchmed $110M upfront license, Medicus $1B ADC dea
 tags: ["pharma", "biotech", "daily-brief", "deal-comps"]
 kind: note
 canonicalPath: /blog/pharma-daily-2026-09-04.html
-videoId: iOCKRsWrbbg
+videoId: CGA2KbG-9tU
 audioPath: /audio/pharma-daily-2026-09-04.mp3
 ---
 
