@@ -117,7 +117,9 @@ the collection window, and the one pattern that matters. No generic opening.>
      non-empty, say which coverage is missing today. NEVER mention internal
      tooling (tools/pharma-daily, pack files, idempotency, extraction
      heuristics) — readers must not see pipeline internals. Keep exactly one
-     inward link to a related /blog/ post (site QC requires one). -->
+     inward link to a related /blog/ post (site QC requires one). The linked
+     post MUST be published — the bootcamp series is drip-fed, so linking a
+     draft gives readers a 404. Verify the URL returns 200 before using it. -->
 
 All items above are drawn from first-hand public sources — SEC filings, trial
 registries, and company releases — collected <provenance.fetched_at>. <If any

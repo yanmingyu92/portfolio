@@ -95,4 +95,4 @@ By our transparent score (phase × enrollment × sponsor): Takeda's TAK-788 firs
 - [Felzartamab Phase 3 (NCT06685757)](https://clinicaltrials.gov/study/NCT06685757) — ClinicalTrials.gov
 - Hutchmed 0013.HK daily prices, Aug 28–Sep 4 — THS via Kimi Datasource
 
-All items above are drawn from first-hand public sources — SEC filings, trial registries, and company releases — collected 2026-09-04. openFDA recorded no approvals in this window; the agency was quiet, not missed. The same source-first discipline is what I apply to [AI in validated environments](/blog/ai-in-validated-environments.html).
+All items above are drawn from first-hand public sources — SEC filings, trial registries, and company releases — collected 2026-09-04. openFDA recorded no approvals in this window; the agency was quiet, not missed. The same source-first discipline is what I apply to [LLM agents in regulated programming](/blog/why-llm-agents-fail-regulated-programming.html).

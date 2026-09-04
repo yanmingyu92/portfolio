@@ -9,7 +9,9 @@ from __future__ import annotations
 import datetime as dt
 import statistics
 
-SITE_INWARD_LINK = "[AI in validated environments](/blog/ai-in-validated-environments.html)"
+# Must point to a PUBLISHED (non-draft) post — the bootcamp series is drip-fed,
+# so most series posts 404. Check with: curl -sI https://jaimeyan.com<path>
+SITE_INWARD_LINK = "[LLM agents in regulated programming](/blog/why-llm-agents-fail-regulated-programming.html)"
 
 
 def _money(usd: float | None) -> str:
