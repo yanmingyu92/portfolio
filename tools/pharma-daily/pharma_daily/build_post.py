@@ -165,10 +165,9 @@ def build_markdown(
         parts.append(f"- [{_esc(label)[:90]}]({url})")
     parts += [
         "",
-        "Raw items, structured deals and the charts are produced by `tools/pharma-daily` "
-        "in the site repo; re-running the same day is idempotent. The same heuristic-first "
-        "discipline — deterministic extraction over model guesses — is what I apply to "
-        f"{SITE_INWARD_LINK}.",
+        "All items above are drawn from first-hand public sources — SEC filings, "
+        "trial registries, and company releases. The same source-first discipline "
+        f"is what I apply to {SITE_INWARD_LINK}.",
         "",
     ]
     return "\n".join(parts)

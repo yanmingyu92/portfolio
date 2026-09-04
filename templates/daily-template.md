@@ -112,12 +112,14 @@ the collection window, and the one pattern that matters. No generic opening.>
 
 - [<source title>](<source url>) — <outlet>
 
-<!-- Provenance footer (plain paragraph): collection window, pack
-     provenance.fetched_at, and — if provenance.sources_failed is non-empty —
-     name the failed source(s) and what coverage is missing. Keep exactly one
+<!-- Provenance footer (plain paragraph, READER-FACING): state the collection
+     date and that sources are first-hand. If provenance.sources_failed is
+     non-empty, say which coverage is missing today. NEVER mention internal
+     tooling (tools/pharma-daily, pack files, idempotency, extraction
+     heuristics) — readers must not see pipeline internals. Keep exactly one
      inward link to a related /blog/ post (site QC requires one). -->
 
-Data collected <provenance.fetched_at> from first-hand public sources by the
-`tools/pharma-daily` pipeline; re-running the same day is idempotent. <If any
-source failed: "<source> was unreachable; coverage of <X> is incomplete today.">
+All items above are drawn from first-hand public sources — SEC filings, trial
+registries, and company releases — collected <provenance.fetched_at>. <If any
+source failed: "Coverage of <X> is incomplete today; <source> was unreachable.">
 Related: [<related post>](/blog/<related-slug>.html).

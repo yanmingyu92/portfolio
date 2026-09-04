@@ -58,7 +58,7 @@ scripts/syndicate(API 平台)      scripts/syndicate(草稿平台)
 - [x] **Zenodo**:token 已配置;**15 篇无 DOI 论文已全部存缴并获得 DOI**(10.5281/zenodo.22182xxx 系列),创作者含 ORCID,DOI 已回填 `publications.ts`,论文页 `citation_doi` 标签已生效。新论文用 `npm run zenodo-kit -- <slug> [--pdf path] --publish` 一条命令存缴。剩:关联 GitHub 账号可自动存档代码仓库 release。
 - [ ] **Google Scholar 个人页**:确认所有新论文被收录后手动补录漏网条目;开启自动合并更新。
 - [x] **dev.to RSS 自动导入**已开(canonical 已验证全部指回主站);发布由 `.github/workflows/devto-publish.yml` 每周四自动发 2 篇。
-- [ ] **Newsletter**:注册 Buttondown → 把用户名填进 `src/components/Newsletter.astro` 的 `BUTTONDOWN_USER` → 重新部署,订阅框自动出现在博客首页和每篇文章底部。
+- [x] **Newsletter**:Buttondown 账号已注册(用户名 `yanmingyunmt`),已填入 `src/components/Newsletter.astro` 的 `BUTTONDOWN_USER`,构建验证通过,部署后订阅框自动出现在博客首页和每篇文章底部。
 
 ## 四点五、内容生产管线(2026-08-30 起)
 
