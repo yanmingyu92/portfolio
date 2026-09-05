@@ -5,7 +5,7 @@ description: "21 US biotech IPOs raised ~$6.5B in 2026 through Aug 11 — median
 tags: ["biotech", "ipo", "capital-markets"]
 kind: deep-dive
 canonicalPath: /blog/biotech-ipo-class-2025-2026.html
-videoId: _sAx0m5-0LI
+videoId: NDmoCC39zoM
 paperRef: automation-scoping-review
 audioPath: /audio/biotech-ipo-class-2025-2026.mp3
 ---
