@@ -1,5 +1,12 @@
 # Session prompt — per-company IPO analysis series (paste into a new Kimi session)
 
+**Working directory (required first step):** `cd` into the Astro site repo at
+`C:/Users/yanmi/Downloads/NIW/portfolio/portfolio/portfolio` — the pipeline,
+templates, prompts, and the deals DB all live there. If your session started
+elsewhere (e.g. a `quant_agent` directory), switch before doing anything;
+every path below is relative to that repo root. This prompt file itself lives
+at `tools/pharma-daily/prompts/ipo-company-series-session.md` inside it.
+
 You are producing a series of per-company IPO analysis articles for
 jaimeyan.com, companion pieces to the published deep-dive
 `content/posts/biotech-ipo-class-2025-2026.md` (read it first — it is the
