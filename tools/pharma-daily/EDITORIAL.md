@@ -135,6 +135,13 @@ relationship (ratio, percentile, delta), not raw counts alone.
 - Figures come only from the pack (`figures[]`, rendered by the pipeline
   from collected data). Never redraw, annotate, or alter them.
 - Every figure must be referenced from the text it supports.
+- **Chart of the day (optional, spec-driven).** The writer may propose ONE
+  bespoke figure tied to the day's dominant insight — but only as a JSON
+  spec rendered by `pharma_daily/custom_chart.py` (whitelisted query builder
+  over the deals DB; LLM never writes code or SQL). The figure must carry a
+  "Method:" footnote describing the query. If spec validation or rendering
+  fails, the post ships with template figures only — a missing custom figure
+  never blocks publication.
 
 ## 6. Fact-check protocol (three passes, all mandatory)
 
