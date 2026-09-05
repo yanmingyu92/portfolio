@@ -422,11 +422,17 @@ export function extractScript(md, slug, options = {}) {
   const totalWords = wordBudget(built);
 
   const allSlides = [...introSlides, ...built.flatMap((c) => c.slides), outro];
-  for (const s of allSlides) {
-    redLineScan(s.narration || '', `slide ${s.id} narration`);
-    redLineScan(s.title || '', `slide ${s.id} title`);
-    if (s.code) redLineScan(s.code.text, `slide ${s.id} code`);
-    for (const it of s.items ?? []) redLineScan(it.lead || '', `slide ${s.id} item lead`), redLineScan(it.text || '', `slide ${s.id} item`);
+  // The red-line token list protects BOOTCAMP tutorials from leaking
+  // training-set identifiers. Market-analysis posts (IPO classes, deal
+  // briefs) legitimately name real public companies that collide with that
+  // list (e.g. Kardigan) — gate the scan to series posts only.
+  if (hasSeries) {
+    for (const s of allSlides) {
+      redLineScan(s.narration || '', `slide ${s.id} narration`);
+      redLineScan(s.title || '', `slide ${s.id} title`);
+      if (s.code) redLineScan(s.code.text, `slide ${s.id} code`);
+      for (const it of s.items ?? []) redLineScan(it.lead || '', `slide ${s.id} item lead`), redLineScan(it.text || '', `slide ${s.id} item`);
+    }
   }
 
   return {

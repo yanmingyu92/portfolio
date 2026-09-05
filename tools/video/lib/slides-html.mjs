@@ -8,9 +8,15 @@ const FONT_DIR = path.join(TOOL_ROOT, 'assets', 'fonts');
 const cssCache = fs.readFileSync(CSS_PATH, 'utf8');
 const cssCachePharma = fs.existsSync(CSS_PATH_PHARMA) ? fs.readFileSync(CSS_PATH_PHARMA, 'utf8') : cssCache;
 
-/** Pharma Daily videos use the teal financial theme, not the tech rose. */
+/** Pharma/market-analysis videos use the teal financial theme, not the tech
+ *  rose. Series posts keep their own label; pharma content is identified by
+ *  its tags. */
+const PHARMA_TAGS = new Set(['daily-brief', 'ipo', 'capital-markets', 'deal-comps']);
+
 export function themeOf(meta) {
-  return meta?.seriesLabel === 'Pharma Daily' ? 'pharma' : 'tech';
+  if (meta?.seriesLabel === 'Pharma Daily') return 'pharma';
+  if ((meta?.tags || []).some((t) => PHARMA_TAGS.has(t))) return 'pharma';
+  return 'tech';
 }
 
 function esc(s) {
