@@ -277,6 +277,23 @@ function bulletsSlide(id, title, sec) {
       else if (wordCount(ls) <= 20) closers.push(ls);
     }
   }
+  // Sources chapters: never read the full reference list aloud — a 25-item
+  // link list is minutes of blank-slide narration (seen 2026-09-05: 199s).
+  // Cap the on-screen list and narrate a summary instead.
+  if ((title || '').trim().toLowerCase().startsWith('sources')) {
+    const shown = items.slice(0, 5);
+    const pieces = [
+      { t: `${items.length} first-hand sources are linked in the article.`, s: 0 },
+      ...shown.map((i, idx) => ({ t: `${i.lead ? i.lead + ': ' : ''}${i.text}`, s: idx + 1 })),
+      { t: 'The full list, with links, is on jaimeyan.com.', s: shown.length },
+    ];
+    return {
+      id, type: 'bullets', title: title ?? null,
+      narration: speak(pieces.map((p) => p.t).join(' ')),
+      sentStates: pieces.map((p) => p.s),
+      items: shown,
+    };
+  }
   const pieces = [];
   if (opener) pieces.push({ t: opener, s: 0 });
   items.forEach((i, idx) => pieces.push({ t: `${i.lead ? i.lead + (i.punc === ':' ? ': ' : ': ') : ''}${i.text}`, s: idx + 1 }));
@@ -363,7 +380,7 @@ function buildChapterSlides(chapterIndex, chapter, opts = {}) {
     } else if (has('code')) {
       slides.push(codeSlide(id(), sec.title, sec, compact));
     } else if (has('list') || boldParas.length >= 2) {
-      slides.push(bulletsSlide(id(), sec.title, sec));
+      slides.push(bulletsSlide(id(), sec.title ?? chapter.title, sec));
     } else {
       paras.slice(0, 2).forEach((p, j) => {
         slides.push(statementSlide(id(), j === 0 ? sec.title : null, p, compact ? 1 : 2));

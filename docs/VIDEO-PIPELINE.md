@@ -141,6 +141,9 @@ Re-running an unchanged build completes in ~1s and rewrites nothing.
 | First build slow | uv creates the TTS venv once; later builds are fast |
 | YouTube `quotaExceeded` | default 10k units/day ≈ 6 uploads; wait or request quota increase |
 | Subtitle drift after manual script.json edit | regenerate with `--force` so TTS + timeline re-derive from the edited script |
+| Blank/near-blank stretch while narration continues (minutes) | fixed in `extract-script.mjs` (2026-09-05): a `Sources` bullets chapter read the full reference list aloud over 2 frames (199s of white slide). Sources chapters now cap at 5 on-screen items + summary narration; chapter title is passed through (`sec.title ?? chapter.title`) because a lone-H2 chapter has `sec.title = null`. |
+| Outro audio truncated mid-word | fixed in `assemble.mjs` (2026-09-05): silence assets come in fixed durations, so narration runs slightly longer than `timeline.total` and `-t` cut the tail. The final frame now stretches by the ffprobe-measured surplus and the encode target is `timeline.total + surplus`. |
+| "PART NULL" on outro slide of non-series posts | fixed in `slides-html.mjs` (2026-09-05): the outro renderer had its own hard-coded `Part ${meta.part}` kicker, missed by the earlier non-series patch. |
 
 ## File map
 

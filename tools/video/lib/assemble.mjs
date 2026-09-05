@@ -1,6 +1,7 @@
 import path from 'node:path';
 import fs from 'node:fs';
 import ffmpeg from 'ffmpeg-static';
+import ffprobe from 'ffprobe-static';
 import { run, ensureDir } from './util.mjs';
 
 const FFMPEG = ffmpeg;
@@ -51,6 +52,17 @@ export async function assembleVideo({ timeline, ttsMap, script, outDir, outMp4 }
   await run(FFMPEG, ['-y', '-i', rawAudio, '-af', 'loudnorm=I=-16:TP=-1.5:LRA=11', '-ar', '44100', '-ac', '2', '-codec:a', 'aac', '-b:a', '192k', narration]);
 
   // ---- video frame playlist ----
+  // Silence assets come in fixed durations, so the assembled narration runs
+  // slightly LONGER than timeline.total (rounding adds ~0.03s per gap).
+  // `-t timeline.total` then cuts the outro mid-word (seen 2026-09-05: final
+  // 2.7s lost). Measure the real audio and stretch the final frame to cover it.
+  const { out: durStr } = await run(ffprobe.path, [
+    '-v', 'error', '-show_entries', 'format=duration',
+    '-of', 'default=noprint_wrappers=1:nokey=1', narration,
+  ]);
+  const audioDur = parseFloat(String(durStr).trim());
+  const surplus = Number.isFinite(audioDur) ? Math.max(0, audioDur - timeline.total + 0.15) : 0;
+
   const vlist = path.join(outDir, 'frames-list.txt');
   const lines = [];
   timeline.slides.forEach((sl, si) => {
@@ -58,6 +70,7 @@ export async function assembleVideo({ timeline, ttsMap, script, outDir, outMp4 }
       let d = sl.frames[k].dur;
       if (k === 0) d += sl.leadPad;
       if (k === sl.framePngs.length - 1) d += sl.gapAfter;
+      if (surplus > 0 && si === timeline.slides.length - 1 && k === sl.framePngs.length - 1) d += surplus;
       lines.push(`file '${toFileUrl(png)}'`);
       lines.push(`duration ${d.toFixed(3)}`);
     });
@@ -72,7 +85,7 @@ export async function assembleVideo({ timeline, ttsMap, script, outDir, outMp4 }
   });
   fs.writeFileSync(vlist, lines.join('\n') + '\n', 'utf8');
 
-  const total = timeline.total;
+  const total = timeline.total + surplus;
   const fadeOutStart = Math.max(0, total - 0.8);
   await run(FFMPEG, [
     '-y',

@@ -122,10 +122,10 @@ function renderSlideHtml(slide, state, ctx) {
       return `
       <div class="slide dark">
         <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding-bottom:60px">
-          ${kicker(meta.seriesLabel + ' · PART ' + meta.part + ' — READ THE FULL ARTICLE')}
+          ${kicker((meta.part !== null && meta.part !== undefined ? meta.seriesLabel + ' · PART ' + meta.part : (meta.seriesLabel || 'jaimeyan.com')) + ' — READ THE FULL ARTICLE')}
           <div class="outro-host">jaimeyan.com</div>
           <div class="outro-path mono">${esc(slide.url.replace(/^https?:\/\/[^/]+/, ''))}</div>
-          <div class="outro-note">Full code, the comparison table, and the downloadable companion skill.<br>Narration is AI-generated — the article is the source of truth.</div>
+          <div class="outro-note">Full tables, figures, and sources are in the article.<br>Narration is AI-generated — the article is the source of truth.</div>
         </div>
         ${footer(meta)}
       </div>`;
