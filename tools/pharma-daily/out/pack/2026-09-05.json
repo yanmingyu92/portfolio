@@ -1,0 +1,298 @@
+{
+  "date": "2026-09-05",
+  "window": {
+    "start": "2026-09-04",
+    "end": "2026-09-05"
+  },
+  "deals": [
+    {
+      "company": "",
+      "ticker": null,
+      "licensor": null,
+      "licensee": null,
+      "type": "other",
+      "upfront_usd": null,
+      "total_usd": 771000000.0,
+      "therapeutic_area": null,
+      "modality": null,
+      "phase": null,
+      "target": null,
+      "percentile_total": null,
+      "source_url": "https://www.fiercebiotech.com/biotech/menarini-group-signs-771m-deal-take-gan-lee-glp-1-european-market",
+      "source_title": "Menarini signs $771M deal to take Gan &amp; Lee GLP-1 to European market"
+    },
+    {
+      "company": "",
+      "ticker": null,
+      "licensor": null,
+      "licensee": null,
+      "type": "financing",
+      "upfront_usd": null,
+      "total_usd": 80000000.0,
+      "therapeutic_area": null,
+      "modality": null,
+      "phase": null,
+      "target": null,
+      "percentile_total": null,
+      "source_url": "https://endpoints.news/us-china-biotech-neushen-gets-80m-to-develop-brain-health-drugs/",
+      "source_title": "US-China biotech NeuShen gets $80M to develop brain-health drugs"
+    },
+    {
+      "company": "",
+      "ticker": null,
+      "licensor": null,
+      "licensee": null,
+      "type": "collaboration",
+      "upfront_usd": null,
+      "total_usd": null,
+      "therapeutic_area": null,
+      "modality": null,
+      "phase": null,
+      "target": null,
+      "percentile_total": null,
+      "source_url": "https://www.fiercebiotech.com/biotech/novartis-lpa-drug-fails-lower-cardiovascular-risk-closely-watched-ph-3-trial",
+      "source_title": "Novartis Lp(a) drug fails to lower cardiovascular risk in closely watched ph. 3 trial"
+    }
+  ],
+  "approvals": [],
+  "readouts": [
+    {
+      "nct": "NCT04129502",
+      "phase": "Phase 3",
+      "sponsor": "Takeda",
+      "title": "TAK-788 as First-Line Treatment Versus Platinum-Based Chemotherapy for Non-Small Cell Lung Cancer (NSCLC) With EGFR Exon 20 Insertion Mutations",
+      "primary_completion": "2026-10-31",
+      "enrollment": 354,
+      "score": 30.92,
+      "url": "https://clinicaltrials.gov/study/NCT04129502"
+    },
+    {
+      "nct": "NCT06635447",
+      "phase": "Phase 3",
+      "sponsor": "AstraZeneca",
+      "title": "Capivasertib+Fulvestrant asTreatment for Locally Advanced(Inoperable) or Metastatic HR+/HER2- Breast Cancer in Chinese Patients",
+      "primary_completion": "2026-10-31",
+      "enrollment": 293,
+      "score": 30.08,
+      "url": "https://clinicaltrials.gov/study/NCT06635447"
+    },
+    {
+      "nct": "NCT06685757",
+      "phase": "Phase 3",
+      "sponsor": "Biogen",
+      "title": "A Study to Learn More About the Effects and Safety of Felzartamab Infusions in Adults With Kidney Transplants Who Have Antibody-Mediated Rejection (AMR)",
+      "primary_completion": "2026-12-01",
+      "enrollment": 132,
+      "score": 26.51,
+      "url": "https://clinicaltrials.gov/study/NCT06685757"
+    },
+    {
+      "nct": "NCT04704921",
+      "phase": "Phase 2",
+      "sponsor": "AbbVie",
+      "title": "Pivotal 1 Study of ABBV-RGX-314 (Also Known as RGX-314) Gene Therapy Administered Via Subretinal Delivery One Time in Participants With nAMD",
+      "primary_completion": "2026-12",
+      "enrollment": 671,
+      "score": 22.53,
+      "url": "https://clinicaltrials.gov/study/NCT04704921"
+    },
+    {
+      "nct": "NCT06126822",
+      "phase": "Phase 3",
+      "sponsor": "Institute of Tropical Medicine, Belgium",
+      "title": "Safety and Immunogenicity of Ervebo® and Zabdeno® Booster Vaccines Against Ebola Virus Following Previous Vaccination with the Zabdeno/Mvabea® or Ervebo® Vaccine Schedules in DRC",
+      "primary_completion": "2026-10",
+      "enrollment": 624,
+      "score": 22.31,
+      "url": "https://clinicaltrials.gov/study/NCT06126822"
+    },
+    {
+      "nct": "NCT05116462",
+      "phase": "Phase 3",
+      "sponsor": "Innovent Biologics (Suzhou) Co. Ltd.",
+      "title": "Neoadjuvant and Adjuvant Therapy Studies of Sindilizumab in Resectable Lung Cancer",
+      "primary_completion": "2026-09-30",
+      "enrollment": 506,
+      "score": 21.69,
+      "url": "https://clinicaltrials.gov/study/NCT05116462"
+    },
+    {
+      "nct": "NCT07487103",
+      "phase": "Phase 3",
+      "sponsor": "Qilu Pharmaceutical Co., Ltd.",
+      "title": "Efficacy and Safety of QLG1091 vs Rybelsus as add-on to Metformin in Subjects With Type 2 Diabetes",
+      "primary_completion": "2026-12",
+      "enrollment": 478,
+      "score": 21.52,
+      "url": "https://clinicaltrials.gov/study/NCT07487103"
+    },
+    {
+      "nct": "NCT05226169",
+      "phase": "Phase 3",
+      "sponsor": "Asan Medical Center",
+      "title": "Efficacy and Safety oF FErric CarboxymalTose in Patients With Advanced Gastric Cancer(EFFECT-AGC)",
+      "primary_completion": "2026-11-30",
+      "enrollment": 330,
+      "score": 20.41,
+      "url": "https://clinicaltrials.gov/study/NCT05226169"
+    },
+    {
+      "nct": "NCT06316531",
+      "phase": "Phase 3",
+      "sponsor": "Sichuan Baili Pharmaceutical Co., Ltd.",
+      "title": "A Study Comparing BL-M07D1 With T-DM1 in Patients With Unresectable Locally Advanced or Metastatic HER2-positive Breast Cancer",
+      "primary_completion": "2026-10",
+      "enrollment": 274,
+      "score": 19.85,
+      "url": "https://clinicaltrials.gov/study/NCT06316531"
+    },
+    {
+      "nct": "NCT06859957",
+      "phase": "Phase 3",
+      "sponsor": "Bart Koes",
+      "title": "Melatonin for Patients With Chronic Low Back Pain",
+      "primary_completion": "2026-12",
+      "enrollment": 240,
+      "score": 19.45,
+      "url": "https://clinicaltrials.gov/study/NCT06859957"
+    },
+    {
+      "nct": "NCT06942910",
+      "phase": "Phase 2",
+      "sponsor": "AstraZeneca",
+      "title": "A Study to Investigate the Effects of Zibotentan/Dapagliflozin Combination Compared to Dapagliflozin Alone in Adult Participants With Chronic Kidney Disease and High Proteinuria",
+      "primary_completion": "2026-09-26",
+      "enrollment": 224,
+      "score": 19.25,
+      "url": "https://clinicaltrials.gov/study/NCT06942910"
+    },
+    {
+      "nct": "NCT05884255",
+      "phase": "Phase 3",
+      "sponsor": "Jiangsu HengRui Medicine Co., Ltd.",
+      "title": "An Open-label Phase 3 Study of Lutetium (177Lu) Oxodotreotide Injection in Subjects With Advanced Gastrointestinal Pancreatic Neuroendocrine Tumors.",
+      "primary_completion": "2026-12",
+      "enrollment": 220,
+      "score": 19.19,
+      "url": "https://clinicaltrials.gov/study/NCT05884255"
+    }
+  ],
+  "market": [],
+  "comps": {
+    "n_historical": 2,
+    "median_total_usd": 666200000.0,
+    "thin_sample": true
+  },
+  "insights": [
+    {
+      "move": "window-pattern",
+      "text": "2 of 2 disclosed-value deals involve China-originated assets, 100% of the window's disclosed dollars.",
+      "numbers": {
+        "cn_deals": 2,
+        "disclosed_deals": 2,
+        "cn_total_usd": 851000000.0,
+        "all_total_usd": 851000000.0
+      },
+      "confidence": "computed"
+    }
+  ],
+  "figures": [
+    {
+      "path": "out/figures/2026-09-05/deal-sizes.png",
+      "takeaway": "Largest disclosed deal: $771M (undisclosed party)"
+    }
+  ],
+  "sources": [
+    {
+      "title": "Menarini signs $771M deal to take Gan &amp; Lee GLP-1 to European market",
+      "url": "https://www.fiercebiotech.com/biotech/menarini-group-signs-771m-deal-take-gan-lee-glp-1-european-market",
+      "outlet": "fiercebiotech"
+    },
+    {
+      "title": "US-China biotech NeuShen gets $80M to develop brain-health drugs",
+      "url": "https://endpoints.news/us-china-biotech-neushen-gets-80m-to-develop-brain-health-drugs/",
+      "outlet": "endpoints"
+    },
+    {
+      "title": "Novartis Lp(a) drug fails to lower cardiovascular risk in closely watched ph. 3 trial",
+      "url": "https://www.fiercebiotech.com/biotech/novartis-lpa-drug-fails-lower-cardiovascular-risk-closely-watched-ph-3-trial",
+      "outlet": "fiercebiotech"
+    },
+    {
+      "title": "TAK-788 as First-Line Treatment Versus Platinum-Based Chemotherapy for Non-Small Cell Lung Cancer (NSCLC) With EGFR Exon 20 Insertion Mutati",
+      "url": "https://clinicaltrials.gov/study/NCT04129502",
+      "outlet": "ctgov"
+    },
+    {
+      "title": "Capivasertib+Fulvestrant asTreatment for Locally Advanced(Inoperable) or Metastatic HR+/HER2- Breast Cancer in Chinese Patients",
+      "url": "https://clinicaltrials.gov/study/NCT06635447",
+      "outlet": "ctgov"
+    },
+    {
+      "title": "A Study to Learn More About the Effects and Safety of Felzartamab Infusions in Adults With Kidney Transplants Who Have Antibody-Mediated Rej",
+      "url": "https://clinicaltrials.gov/study/NCT06685757",
+      "outlet": "ctgov"
+    },
+    {
+      "title": "Pivotal 1 Study of ABBV-RGX-314 (Also Known as RGX-314) Gene Therapy Administered Via Subretinal Delivery One Time in Participants With nAMD",
+      "url": "https://clinicaltrials.gov/study/NCT04704921",
+      "outlet": "ctgov"
+    },
+    {
+      "title": "Safety and Immunogenicity of Ervebo® and Zabdeno® Booster Vaccines Against Ebola Virus Following Previous Vaccination with the Zabdeno/Mvabe",
+      "url": "https://clinicaltrials.gov/study/NCT06126822",
+      "outlet": "ctgov"
+    },
+    {
+      "title": "Neoadjuvant and Adjuvant Therapy Studies of Sindilizumab in Resectable Lung Cancer",
+      "url": "https://clinicaltrials.gov/study/NCT05116462",
+      "outlet": "ctgov"
+    },
+    {
+      "title": "Efficacy and Safety of QLG1091 vs Rybelsus as add-on to Metformin in Subjects With Type 2 Diabetes",
+      "url": "https://clinicaltrials.gov/study/NCT07487103",
+      "outlet": "ctgov"
+    },
+    {
+      "title": "Efficacy and Safety oF FErric CarboxymalTose in Patients With Advanced Gastric Cancer(EFFECT-AGC)",
+      "url": "https://clinicaltrials.gov/study/NCT05226169",
+      "outlet": "ctgov"
+    },
+    {
+      "title": "A Study Comparing BL-M07D1 With T-DM1 in Patients With Unresectable Locally Advanced or Metastatic HER2-positive Breast Cancer",
+      "url": "https://clinicaltrials.gov/study/NCT06316531",
+      "outlet": "ctgov"
+    },
+    {
+      "title": "Melatonin for Patients With Chronic Low Back Pain",
+      "url": "https://clinicaltrials.gov/study/NCT06859957",
+      "outlet": "ctgov"
+    },
+    {
+      "title": "A Study to Investigate the Effects of Zibotentan/Dapagliflozin Combination Compared to Dapagliflozin Alone in Adult Participants With Chroni",
+      "url": "https://clinicaltrials.gov/study/NCT06942910",
+      "outlet": "ctgov"
+    },
+    {
+      "title": "An Open-label Phase 3 Study of Lutetium (177Lu) Oxodotreotide Injection in Subjects With Advanced Gastrointestinal Pancreatic Neuroendocrine",
+      "url": "https://clinicaltrials.gov/study/NCT05884255",
+      "outlet": "ctgov"
+    }
+  ],
+  "provenance": {
+    "fetched_at": "2026-09-05T16:00:01.166006+00:00",
+    "sources_ok": [
+      "sec-edgar",
+      "openfda",
+      "ctgov",
+      "fda-press",
+      "ema-news",
+      "fiercepharma",
+      "fiercebiotech",
+      "biopharmadive",
+      "endpoints",
+      "prnewswire"
+    ],
+    "sources_failed": []
+  }
+}
