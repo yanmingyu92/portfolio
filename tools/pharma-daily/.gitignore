@@ -9,3 +9,14 @@ out/*
 !out/pack/
 out/pack/*
 !out/pack/*.json
+# LLM loop artifacts are longitudinal assets too: grill questions, evidence
+# cards, critique reports
+!out/questions/
+out/questions/*
+!out/questions/*.json
+!out/evidence/
+out/evidence/*
+!out/evidence/*.json
+!out/review/
+out/review/*
+!out/review/*.md

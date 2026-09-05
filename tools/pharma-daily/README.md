@@ -65,12 +65,26 @@ audio → QC/build → **opens a review PR** (`pharma-daily/<date>`). The PR is
 the human gate; merging deploys via Vercel. PR body carries pack stats,
 failed sources, and the review checklist.
 
-Optional LLM polish step: set repo variable `PHARMA_AGENT=1` and secrets
+Optional LLM loop: set repo variable `PHARMA_AGENT=1` and secrets
 `KIMI_API` (Kimi Platform key; runs `kimi-k2.7-code`) and `DEEPSEEK_KEY`
-(fallback: `deepseek-v4-pro` via OpenAI-compatible API). It runs `kimi -p`
-headless against the pharma-daily skill with insight-first drafting
-(datasource enrichment is skipped in CI — no OAuth). Without these, the
-deterministic draft ships.
+(fallback: `deepseek-v4-pro` via OpenAI-compatible API). Four headless
+`kimi -p` stages run after the pipeline, orchestrated by
+`tools/pharma-daily/run-llm.sh` (cross-vendor fallback built in):
+
+1. **Grill** (`prompts/grill.md`) — a skeptical-editor model turns the pack
+   into `out/questions/<date>.json`.
+2. **Retrieve** (`prompts/retrieve.md`) — questions are answered from the
+   deals DB and first-hand web sources into `out/evidence/<date>.json`
+   (datasource enrichment is skipped in CI — no OAuth).
+3. **Write** — the draft is rebuilt from pack + questions + evidence under
+   EDITORIAL.md (insight-first).
+4. **Critique** (`prompts/critique.md`) — a cross-vendor adversarial
+   fact-check (DeepSeek preferred, so the reviewer is never the writer's own
+   model) fixes violations in place and reports to `out/review/<date>.md`.
+
+Questions, evidence cards, and review reports are committed to the repo via
+the PR alongside the packs — they are longitudinal assets too. Without
+`PHARMA_AGENT=1`, the deterministic draft ships as-is.
 
 A second workflow, `pharma-video.yml`, closes the loop: merging a
 `pharma-daily/*` PR triggers video rendering (teal theme) + YouTube upload

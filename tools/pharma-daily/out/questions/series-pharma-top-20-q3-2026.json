@@ -1,0 +1,142 @@
+{
+  "slug": "pharma-top-20-q3-2026",
+  "date": "2026-09-04",
+  "questions": [
+    {
+      "id": "q1",
+      "question": "Who actually tops the pharma market-cap ranking as of early September 2026, and how large is the gap between #1 and #2?",
+      "category": "so-what",
+      "reader_value": "BD and strategy teams benchmark against the ranking; the size of the #1-#2 gap tells you whether the top slot is contestable this decade.",
+      "answered": true
+    },
+    {
+      "id": "q2",
+      "question": "Is the GLP-1 duopoly's share of top-20 value still growing, or has Novo Nordisk's de-rating already broken the duopoly as a market-cap fact?",
+      "category": "challenge",
+      "reader_value": "Determines whether 'obesity exposure' still means two names or one when sizing partnership and competitive scenarios.",
+      "answered": true
+    },
+    {
+      "id": "q3",
+      "question": "How many top-20 companies face a >$10B revenue patent-cliff exposure before 2030, and what do their own filings say about timing?",
+      "category": "background",
+      "reader_value": "Cliff exposure drives BD budgets and in-licensing appetite for the next four years; the filing language is the only reliable clock.",
+      "answered": true
+    },
+    {
+      "id": "q4",
+      "question": "Did any China-originated pharma company enter or approach the global top 20 by market cap?",
+      "category": "challenge",
+      "reader_value": "A China-originated name entering the top 20 would confirm the asset-wave signal seen in 2025-26 licensing deal flow at the valuation level.",
+      "answered": true
+    },
+    {
+      "id": "q5",
+      "question": "Which top-20 company moved the most year-to-date, and is there a first-hand documented reason?",
+      "category": "so-what",
+      "reader_value": "Separates documented re-rates (earnings, guidance) from unexplained drift; practitioners only trust moves with a paper trail.",
+      "answered": true
+    },
+    {
+      "id": "q6",
+      "question": "Do the obesity leaders' 2026 fundamentals (revenue growth, guidance, prescription share) justify the ~$1.23T combined market cap, or is price compression already visible in the numbers?",
+      "category": "contradiction",
+      "reader_value": "Tests the 'obesity bubble' headline against first-hand guidance and prescription-share data instead of sentiment.",
+      "answered": true
+    },
+    {
+      "id": "q7",
+      "question": "What share of top-20 market value sits in the US vs Europe vs Asia, and has the geographic mix shifted?",
+      "category": "background",
+      "reader_value": "Geographic mix frames where BD teams should expect counterparties, licensing competition, and regulatory exposure to concentrate.",
+      "answered": true
+    },
+    {
+      "id": "q8",
+      "question": "What is the documented first-hand driver of Johnson & Johnson's +32.6% YTD move to a $663B market cap?",
+      "category": "challenge",
+      "reader_value": "A one-third re-rate of the #2 name without a documented driver would itself be the story; we refuse to invent a cause.",
+      "answered": false
+    },
+    {
+      "id": "q9",
+      "question": "How concentrated is the top 20 — what shares do the top 1, top 2, and top 5 hold — and is concentration rising?",
+      "category": "so-what",
+      "reader_value": "Concentration tells a practitioner how idiosyncratic the 'pharma is up 28.7% YTD' headline really is.",
+      "answered": true
+    },
+    {
+      "id": "q10",
+      "question": "Did any top-20 company's market cap move primarily on non-pipeline events (exchange relisting, M&A reports, acquisition accounting charges)?",
+      "category": "contradiction",
+      "reader_value": "Non-pipeline moves change index membership and comp tables without changing fundamentals; analysts need them labeled correctly.",
+      "answered": true
+    }
+  ],
+  "evidence": [
+    {
+      "question_id": "q1",
+      "answer": "Eli Lilly is #1 at $1.024T market cap (world rank #15) at the Sep 4, 2026 close; Johnson & Johnson is #2 at $663.27B. The gap is ~$361B, larger than #5 Roche's entire $358.26B market cap.",
+      "publisher": "CompaniesMarketCap",
+      "source_url": "https://companiesmarketcap.com/pharmaceuticals/largest-pharmaceutical-companies-by-market-cap/",
+      "as_of": "2026-09-04"
+    },
+    {
+      "question_id": "q2",
+      "answer": "The GLP-1 pair (LLY + NVO) holds 24.0% of top-20 value, but the split is now ~5:1 in Lilly's favor: LLY $1.024T vs NVO $206.01B. At end-2023 the ratio was 1.2x ($553.36B vs $461.21B, same source). Novo fell 39.4% in 2025 and another 11.5% YTD 2026. The duopoly is broken as a market-cap fact.",
+      "publisher": "CompaniesMarketCap (per-company market cap history pages)",
+      "source_url": "https://companiesmarketcap.com/novo-nordisk/marketcap/",
+      "as_of": "2026-09-04"
+    },
+    {
+      "question_id": "q3",
+      "answer": "Merck's FY2025 10-K states Keytruda sales will be 'materially negatively impacted by biosimilar competition between 2028 and 2029'; Keytruda plus Qlex booked $8.4B in Q2 2026 alone. Industry-wide estimates of 2026-2030 revenue at risk run from ~$183B (Morgan Stanley) to ~$300B (EvaluatePharma); BioPharma Dive cites >$200B through 2030, with Eliquis (~$18B line) the other named mega-exposure.",
+      "publisher": "Merck & Co. FY2025 Form 10-K; IntuitionLabs; BioPharma Dive",
+      "source_url": "https://www.merck.com/wp-content/uploads/sites/124/2026/02/MRK-12.31.2025-10K-FINAL.pdf",
+      "as_of": "2026-02-24"
+    },
+    {
+      "question_id": "q4",
+      "answer": "No China-originated drug developer is in the top 20. Closest China-domiciled entry is WuXi AppTec (#18, $73.05B, a CRDMO). Jiangsu Hengrui is #30 globally ($45.58B), BeOne Medicines #33 ($40.52B), Hansoh #42 ($28.02B). STAT's Dec 2025 analysis ranked Hengrui and BeOne as China's top drug innovators.",
+      "publisher": "CompaniesMarketCap; STAT",
+      "source_url": "https://www.statnews.com/2025/12/07/jiangsu-hengrui-beone-chinese-biotech-innovation-ranking/",
+      "as_of": "2026-09-04"
+    },
+    {
+      "question_id": "q5",
+      "answer": "Largest YTD move in the top 20: WuXi AppTec +89.6% (to $73.05B), with a first-hand driver — H1 2026 revenue RMB 28.90B, +38.9% YoY, continuing operations +48.0%, and raised full-year guidance (company release, Aug 3, 2026). Second: Merck +39.1% on Q2 sales $16.6B (+5% ex-FX) and raised FY2026 sales guidance of $66.3-67.3B.",
+      "publisher": "WuXi AppTec press release; CompaniesMarketCap; FL Cube (Merck Q2)",
+      "source_url": "https://www.wuxiapptec.com/news/wuxi-news/wuxi-apptec-delivers-strong-hone-twenty-twenty-six-results-and-raises-full-year-guidance-driven-by-greater-success-of-multiple-customers-products-and-crdmo-model",
+      "as_of": "2026-09-04"
+    },
+    {
+      "question_id": "q6",
+      "answer": "Lilly Q2 2026 revenue +48% to $23.0B (Mounjaro $9.9B +91%, Zepbound $4.9B +46%), FY guidance raised to $85-87B. Novo raised 2026 guidance on Aug 4, 2026 to adjusted sales of 0% to -6% at CER — still flat-to-negative — after a -18% one-day drop on its Feb guidance; Wegovy holds 65% of new US obesity prescriptions while US semaglutide cash prices were cut in late 2025. Price compression, not volume loss, is documented.",
+      "publisher": "Eli Lilly investor relations; Novo Nordisk company announcement via GlobeNewswire; Morningstar/Dow Jones; Manufacturing Chemist",
+      "source_url": "https://investor.lilly.com/news-releases/news-release-details/lilly-reports-second-quarter-2026-financial-results-raises-full",
+      "as_of": "2026-08-05"
+    },
+    {
+      "question_id": "q7",
+      "answer": "Computed from the Sep 4, 2026 snapshot: US-domiciled names are 11 of 20 and hold $3,580.9B = 69.9% of the $5,120.8B total; Europe (7 names) $1,395.2B = 27.2%; Asia (2 names) $144.7B = 2.8%. Both Asian entries are non-originators (WuXi AppTec CRDMO; Chugai, majority Roche-owned). No shift away from US dominance.",
+      "publisher": "Computed from CompaniesMarketCap snapshot",
+      "source_url": "https://companiesmarketcap.com/pharmaceuticals/largest-pharmaceutical-companies-by-market-cap/",
+      "as_of": "2026-09-04"
+    },
+    {
+      "question_id": "q9",
+      "answer": "Top-20 combined market cap is $5,120.8B as of Sep 4, 2026. Lilly alone is 20.0%; top 2 (LLY+JNJ) 33.0%; top 5 56.0%. Sector context: Yahoo Finance's drug-manufacturers industry group is +28.7% YTD vs S&P 500 +12.4%, so the sector rally is real but concentrates at the top.",
+      "publisher": "Computed from CompaniesMarketCap snapshot; Yahoo Finance industry dashboard",
+      "source_url": "https://finance.yahoo.com/sectors/healthcare/drug-manufacturers-general/",
+      "as_of": "2026-09-04"
+    },
+    {
+      "question_id": "q10",
+      "answer": "AstraZeneca: ADR cancellation and direct NYSE listing of ordinary shares completed Feb 2, 2026 (0.5 ordinary share per ADR; shareholder vote 99.36% on Nov 3, 2025), and shares fell ~9.7% on Aug 3, 2026 on press-reported (not filed) BMS merger talks. AZN is -12.4% YTD. Merck booked non-pipeline acquisition charges ($9.2B Cidara in Q1, $5.7B Terns in Q2) that pushed non-GAAP EPS negative in both quarters while the stock rose 39.1% YTD.",
+      "publisher": "Solactive corporate action notice; Yahoo Finance UK; Finsee",
+      "source_url": "https://www.solactive.com/mandatory-conversion-astrazeneca-plc-spons-adr-2nd-february-2026/",
+      "as_of": "2026-08-04"
+    }
+  ],
+  "unanswered": ["q8"]
+}

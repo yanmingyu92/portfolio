@@ -66,7 +66,8 @@ the collection window, and the one pattern that matters. No generic opening.>
 ## Readout Calendar
 
 <!-- Phase 2/3 readouts from pack.readouts[], soonest first. Include the NCT
-     link on the study title. Keep titles trimmed to the drug + indication. -->
+     link on the study title. Keep titles trimmed to the drug + indication.
+     HARD CAP: 8 rows — pick the highest-scored, not the full list. -->
 
 | Primary completion | Phase | Study (sponsor) |
 |---|---|---|

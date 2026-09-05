@@ -83,7 +83,7 @@ def main() -> int:
     comps.annotate_percentiles(comp_deals, historical_totals)
     comps_block = comps.comps_summary(historical_totals)
 
-    ranked_readouts = readout_rank.rank_readouts([dict(r) for r in res.readouts], keep=25)
+    ranked_readouts = readout_rank.rank_readouts([dict(r) for r in res.readouts], keep=12)
 
     tickers = [d["ticker"] for d in period_deals if d.get("ticker")]
     quotes = market.fetch_quotes(tickers) if tickers else []

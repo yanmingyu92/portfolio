@@ -136,12 +136,13 @@ relationship (ratio, percentile, delta), not raw counts alone.
   from collected data). Never redraw, annotate, or alter them.
 - Every figure must be referenced from the text it supports.
 
-## 6. Fact-check protocol (two passes, both mandatory)
+## 6. Fact-check protocol (three passes, all mandatory)
 
 **Pass 1 — during drafting.** Every number, date, company name, and claim in
-the draft must trace to a specific pack field, and that pack field carries a
-`source_url`. Maintain the mapping mentally per sentence; if you cannot name
-the field, the claim does not go in.
+the draft must trace to a specific pack field or an evidence card
+(`out/evidence/<date>.json`), and that source carries a URL. Maintain the
+mapping mentally per sentence; if you cannot name the source, the claim does
+not go in.
 
 - Nulls stay "undisclosed". Missing percentile → say no comp context, don't
   approximate one.
@@ -152,10 +153,18 @@ the field, the claim does not go in.
 
 **Pass 2 — verification pass, after drafting, before publish.** Re-read the
 draft top to bottom. For **each** number and factual claim: locate it in the
-pack JSON, confirm the value matches exactly (units, dates, spellings), and
+pack JSON or the evidence cards, confirm the value matches exactly (units,
+dates, spellings), and
 confirm the figure captions match the figure takeaways in the pack. Produce a
-list of any claim without pack provenance — then delete or fix each one. Only
-then hand to the human review gate.
+list of any claim without provenance — then delete or fix each one. Only
+then hand to the critique pass.
+
+**Pass 3 — independent critique, after pass 2.** A second model session (in
+CI: the other vendor's model, never the writer's own) runs
+`prompts/critique.md` against the draft, the pack, and the evidence cards;
+it fixes violations in place and writes `out/review/<date>.md`. A draft
+whose review file says `needs-human` does not go to the human gate as
+"clean".
 
 ## 7. Copyright
 
@@ -172,7 +181,8 @@ then hand to the human review gate.
 - **No stock recommendations, price targets, or trading signals.**
 - **No anonymous sourcing.** Every claim traces to a first-hand public
   document; we do not have sources "familiar with the matter".
-- **No LLM-invented facts.** The writing agent uses pack data only; outside
-  knowledge may inform the *framing* of the One Take but never introduces a
-  factual claim that is not in the pack.
+- **No LLM-invented facts.** The writing agent uses pack data and retrieved
+  evidence cards only; outside knowledge may inform the *framing* of the One
+  Take but never introduces a factual claim that is not in one of those two
+  places.
 - **No filler to hit length.** A thin day is a short post.

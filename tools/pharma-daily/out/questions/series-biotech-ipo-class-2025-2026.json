@@ -1,0 +1,128 @@
+{
+  "slug": "biotech-ipo-class-2025-2026",
+  "date": "2026-09-04",
+  "questions": [
+    {
+      "id": "q1",
+      "question": "How many biotech IPOs priced in the US from January 2025 through today, and what share currently trade above their offer price?",
+      "category": "so-what",
+      "reader_value": "Sizes the window and gives the aftermarket pass rate a BD analyst needs before quoting 'the IPO window is open'.",
+      "answered": true
+    },
+    {
+      "id": "q2",
+      "question": "What was the median gross raise of the 2026 class, and how does it compare with 2025 and the 2021 boom?",
+      "category": "background",
+      "reader_value": "Check-size distribution, not headline totals, is what tells a CFO whether an IPO can fund a company through readouts.",
+      "answered": true
+    },
+    {
+      "id": "q3",
+      "question": "Which modalities, therapeutic areas, and asset origins actually got funded — obesity, radiopharma, autoimmune, China-originated molecules?",
+      "category": "so-what",
+      "reader_value": "Maps where public capital is concentrated so BD teams can position assets against funded comps.",
+      "answered": true
+    },
+    {
+      "id": "q4",
+      "question": "What clinical stage did the 2026 class carry at pricing — did preclinical or platform-only companies get out at all?",
+      "category": "challenge",
+      "reader_value": "Tests the 'window is open' narrative: open for whom is the question that decides real financing plans.",
+      "answered": true
+    },
+    {
+      "id": "q5",
+      "question": "Which IPOs were pulled, delayed, or forced to retry in 2025–2026, and why?",
+      "category": "contradiction",
+      "reader_value": "The pulled deals reveal the window's actual conditions better than the priced ones do.",
+      "answered": true
+    },
+    {
+      "id": "q6",
+      "question": "How did the flagship 2025 IPOs (Metsera, Sionna, LB Pharmaceuticals) perform after pricing?",
+      "category": "so-what",
+      "reader_value": "The 2025 vintage now has 12–18 months of seasoning — its outcomes are the best evidence on what IPO risk actually paid.",
+      "answered": true
+    },
+    {
+      "id": "q7",
+      "question": "How does the 2025–2026 vintage's aftermarket compare with the 2018–2024 vintages?",
+      "category": "background",
+      "reader_value": "Vintage-level context separates a real reopening from a headline-driven one.",
+      "answered": true
+    },
+    {
+      "id": "q8",
+      "question": "What does the aftermarket of this class say about what public investors will fund in the next 6–12 months?",
+      "category": "so-what",
+      "reader_value": "Converts observed returns into a forward-looking funding hypothesis a practitioner can monitor.",
+      "answered": true
+    },
+    {
+      "id": "q9",
+      "question": "Did Hong Kong (Chapter 18A) or other non-US listings absorb meaningful biotech IPO volume in the same window?",
+      "category": "background",
+      "reader_value": "If HK is absorbing the early-stage cohort the US rejects, the global funding picture is less closed than US counts suggest.",
+      "answered": false
+    }
+  ],
+  "evidence": [
+    {
+      "question_id": "q1",
+      "answer": "2025: nine biopharma IPOs raised $1.6B (lowest annual IPO capital in five years; vs 19 IPOs/$3.8B in 2024). PitchBook's broader count: 15 US-based biopharma IPOs in 2025 vs 75 in 2020 and 103 in 2021. 2026: 21 IPOs priced through Aug 11, ~$6.5B gross, 18 above / 3 below issue as of the Aug 28, 2026 close.",
+      "publisher": "Ropes & Gray; Fierce Biotech (PitchBook data); BioBucks",
+      "source_url": "https://www.ropesgray.com/en/insights/alerts/2026/03/from-volatility-to-vitality-how-2025-reset-the-life-sciences-market-and-whats-next-for-2026",
+      "as_of": "2026-08-30"
+    },
+    {
+      "question_id": "q2",
+      "answer": "Median 2026 gross raise $294.8M across 21 deals (computed from per-deal proceeds; sum $6.52B, mean ~$311M); 14 of 21 (67%) raised $250M+. Compare 2025's $1.6B across nine deals and 2021's 103-deal, small-check class. Two 2026 deals (Kailera $625M, Parabilis $670M) each broke the prior biotech IPO record (Moderna 2018) within one quarter.",
+      "publisher": "BioBucks; BioPharma Dive",
+      "source_url": "https://www.biobucks.co/biotech-ipo-tracker-2026",
+      "as_of": "2026-08-30"
+    },
+    {
+      "question_id": "q3",
+      "answer": "Funded mix: obesity (Kailera), oncology/radiopharma/peptides (Aktis, Parabilis, Eikon, BlossomHill), cardiovascular (Kardigan, Braveheart, Scribe), immunology ($879M of 2026 IPO proceeds by early May vs $174M in all of 2025), neuropsychiatry (Seaport; LB Pharma and MapLight in 2025), plus diagnostics (Alamar) and ophthalmology (SpyGlass). China-originated molecules anchor two of the largest deals: Kailera's ribupatide and Braveheart's BHB-1893 are both in-licensed from Hengrui.",
+      "publisher": "BioPharma Dive; BioBucks; Ropes & Gray",
+      "source_url": "https://www.biopharmadive.com/news/odyssey-ipo-price-biotech-gary-glick-immune-drugs/819465/",
+      "as_of": "2026-05-07"
+    },
+    {
+      "question_id": "q4",
+      "answer": "Almost all of the first 13 2026 IPOs held Phase 2 or later assets (BioPharma Dive, BIO panel). J.P. Morgan's Wonhee Oh: drugmakers learned they are 'not in an environment that entertains the promise of a platform.' Exceptions exist — Scribe priced at Phase 1 ($128.7M) and trades +89.6% — but the three below-issue names as of Aug 28 (Eikon, Agomab, Generate) are all platform/multi-asset stories.",
+      "publisher": "BioPharma Dive; BioBucks",
+      "source_url": "https://www.biopharmadive.com/news/bio-2026-ipo-biotech-performance-predictions/823474/",
+      "as_of": "2026-06-23"
+    },
+    {
+      "question_id": "q5",
+      "answer": "Odyssey Therapeutics pulled its IPO in June 2025 amid the tariff-driven bear market (XBI bottomed April 2025), then re-priced May 7, 2026 at the top of range ($18) for $279M plus a $25M TPG placement. No biotech IPO above $50M priced between February 2025 and LB Pharmaceuticals on Sep 10, 2025 — a seven-month shutdown. As of Aug 30, 2026 the window had been shut four weeks (longest since February); Tarsier Pharma (~$45M) and the Oak Hill Bio SPAC (~$175M) remain pending.",
+      "publisher": "Pharmaceutical Technology; BioBucks; Ropes & Gray",
+      "source_url": "https://www.pharmaceutical-technology.com/news/odyssey-bails-on-public-listing-as-us-ipo-landscape-stutters/",
+      "as_of": "2026-08-30"
+    },
+    {
+      "question_id": "q6",
+      "answer": "Metsera (IPO Feb 3, 2025 at $18, $316M incl. greenshoe) was acquired by Pfizer (closed Nov 13, 2025) at $65.60 cash plus up to $20.65 CVR after a bidding war with Novo Nordisk — 3.6x offer in cash in ~9 months. Sionna (IPO Feb 6, 2025 at $18, $191M upsized) lost ~92% in one session on Aug 10, 2026 after SION-719's Phase 2a miss; $6.76 as of Sep 3, 2026 (−62% vs offer). LB Pharmaceuticals' current-vs-offer level was not reliably tracked here.",
+      "publisher": "Fierce Biotech; Dealforma; Benzinga via Yahoo Finance; Morningstar",
+      "source_url": "https://www.fiercebiotech.com/biotech/pfizer-finalizes-metsera-buy-after-contentious-bidding-war-novo-nordisk",
+      "as_of": "2026-09-03"
+    },
+    {
+      "question_id": "q7",
+      "answer": "Goodwin (Jan 2026): a majority of 2025 IPOs (Ascentage, Evommune, LB Pharmaceuticals, Sionna, MapLight, Maze) performed better than the 2022–2024 debut vintages. J.P. Morgan's Michael Cembalest (Aug 12, 2025): 80% of biotech IPOs since 2018 had 'imploded'. The 2025–2026 vintage is so far an outlier to the upside versus the post-2018 base rate.",
+      "publisher": "Goodwin; J.P. Morgan Asset Management",
+      "source_url": "https://www.goodwinlaw.com/en/insights/publications/2026/01/insights-lifesciences-cm-preparing-for-your-2026-ipo",
+      "as_of": "2026-01-13"
+    },
+    {
+      "question_id": "q8",
+      "answer": "Aftermarket says: fund late-stage, asset-centric stories at scale. Veradermics +476% from offer (positive Phase 2/3 hair-loss data), Hemab +149%, Parabilis +96%, Avalyn +93% — while platform names sit below issue. Kailera round-tripped a +62.5% debut to +1.3%, showing pops don't stick without data delivery. Nasdaq's new-listings head expects ~12 biotech IPOs in Q3 2026; bankers cite M&A recycling capital back into crossover funds as the demand engine.",
+      "publisher": "BioBucks; BioPharma Dive",
+      "source_url": "https://www.biobucks.co/biotech-ipo-tracker-2026",
+      "as_of": "2026-08-30"
+    }
+  ],
+  "unanswered": ["q9"]
+}

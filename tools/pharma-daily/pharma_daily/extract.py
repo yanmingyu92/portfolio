@@ -24,6 +24,16 @@ DEAL_TYPE_RULES = [
     ("financing", re.compile(r"\b(public offering|private placement|pipe|raises? \$|series [a-e])\b", re.I)),
 ]
 
+# law-firm shareholder-investigation spam floods PRNewswire's pharma-keyword
+# matches ("X investigation initiated — Kahn Swick & Foti investigates the
+# officers and directors of Y"). Not news; drop before classification.
+LAWFIRM_SPAM = re.compile(
+    r"\b(investigat\w+ (initiated|the officers)|shareholder (investigation|alert|lawsuit)|"
+    r"kahn swick|pomerantz|rosen law|bernard law|bragar eagel|block & leviton|"
+    r"levi & korsinsky|glancy prongay|faruqi)\b",
+    re.I,
+)
+
 UPFRONT_RE = re.compile(r"\bupfront\b", re.I)
 TOTAL_RE = re.compile(r"\b(up to|total|potentially|milestones?|contingent)\b", re.I)
 
@@ -237,6 +247,9 @@ def extract_deals(items: list[dict], filing_text=None) -> list[dict]:
         if it.get("source") == "openfda":
             continue  # approvals are their own category, not deals
         text = f"{it.get('title', '')} {it.get('summary', '')}"
+        if LAWFIRM_SPAM.search(text):
+            log.debug("dropping law-firm spam: %s", it.get("title", "")[:60])
+            continue
         deal_type = classify(text)
         if it.get("source") == "sec-edgar":
             q = it.get("query", "")
